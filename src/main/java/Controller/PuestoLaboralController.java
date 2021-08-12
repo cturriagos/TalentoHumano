@@ -38,6 +38,7 @@ public class PuestoLaboralController implements Serializable {
     private List<PuestoLaboral> lista;
     private List<Departamento> departamentos;
     private List<Cargo> cargos;
+    private int idDepartamento, idCargo;
 
     public PuestoLaboralController() {
         puestoLaboralDAO = new PuestoLaboralDAO(new PuestoLaboral());
@@ -51,6 +52,8 @@ public class PuestoLaboralController implements Serializable {
     @PostConstruct
     public void constructorDepartamento() {
         lista = puestoLaboralDAO.Listar();
+        departamentos = departamentoDAO.Listar();
+        cargos = cargoDAO.Listar();
     }
 
     public void onCancel(RowEditEvent<PuestoLaboral> event) {
@@ -89,33 +92,64 @@ public class PuestoLaboralController implements Serializable {
         this.cargos = cargos;
     }
 
+    public int getIdDepartamento() {
+        return idDepartamento;
+    }
+
+    public void setIdDepartamento(int idDepartamento) {
+        this.idDepartamento = idDepartamento;
+    }
+
+    public int getIdCargo() {
+        return idCargo;
+    }
+
+    public void setIdCargo(int idCargo) {
+        this.idCargo = idCargo;
+    }
+
     public void abrirNuevo() {
+        idCargo = 0;
+        idDepartamento = 0;
         puestoLaboral = new PuestoLaboral(0, new Cargo(), new Departamento(), new Date(), true, "");
-        departamentos = departamentoDAO.Listar();
-        cargos = cargoDAO.Listar();
+    }
+
+    public void abrirEditar(int idCargo, int idDepartamento) {
+        this.idCargo = idCargo;
+        this.idDepartamento = idDepartamento;
     }
 
     public void enviar() {
-        /*puestoLaboral.getCargo().setId(idCargo);
-        puestoLaboral.getDepartamento().setId(idDepartamento);
-        puestoLaboralDAO = new PuestoLaboralDAO(puestoLaboral);*/
-        puestoLaboralDAO.setPuestoLaboral(puestoLaboral);
-        if (puestoLaboral.getId() == 0) {
-            if (puestoLaboralDAO.insertar() > 0) {
-                mostrarMensajeInformacion("El Puesto Laboral se ha guardado con éxito");
-                lista.add(puestoLaboral);
+        if (idCargo != 0 && idDepartamento != 0) {
+            puestoLaboral.getCargo().setId(idCargo);
+            puestoLaboral.getDepartamento().setId(idDepartamento);
+            puestoLaboralDAO.setPuestoLaboral(puestoLaboral);
+            if (puestoLaboral.getId() == 0) {
+                if (puestoLaboralDAO.insertar() > 0) {
+                    mostrarMensajeInformacion("El Puesto Laboral se ha guardado con éxito");
+                    lista.add(puestoLaboral);
+                } else {
+                    mostrarMensajeError("El Puesto Laboral no se pudo guardar");
+                }
             } else {
-                mostrarMensajeError("El Puesto Laboral no se pudo guardar");
+                if (puestoLaboralDAO.actualizar() > 0) {
+                    mostrarMensajeInformacion("El Puesto Laboral se ha editado con éxito");
+                } else {
+                    mostrarMensajeError("El Puesto Laboral no se pudo editar");
+                }
             }
-        } else {
-            if (puestoLaboralDAO.actualizar() > 0) {
-                mostrarMensajeInformacion("El Puesto Laboral se ha editado con éxito");
-            } else {
-                mostrarMensajeError("El Puesto Laboral no se pudo editar");
-            }
+        }else{
+            mostrarMensajeError("Debe de seleccionar un cargo y un departamento");
         }
         PrimeFaces.current().executeScript("PF('managePuestoLaboralDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
+        departamentos.clear();
+        cargos.clear();
+    }
+
+    public void cancelar() {
+        departamentos.clear();
+        cargos.clear();
     }
 
     public void mostrarMensajeInformacion(String mensaje) {

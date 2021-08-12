@@ -31,7 +31,7 @@
                     <p:column headerText="Departamento">
                         <h:outputText value="#{puestoLaboral.departamento.nombre}"/>
                     </p:column>
-                    <p:column headerText="Descripción" width="35%">
+                    <p:column headerText="Descripción">
                         <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
                     </p:column>
                     <p:column headerText="Creado">
@@ -40,13 +40,14 @@
                     <p:column headerText="Creado" width="40%">
                         <h:outputText value="#{puestoLaboral.descripcion}"/>
                     </p:column>
-                    <p:column headerText="Estado">
+                    <p:column headerText="Estado" width="10%">
                         <h:outputText id="inputestado" value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
                     </p:column>
                     <p:column exportable="false" width="5%">
-                        <p:commandButton icon="pi pi-pencil" update=":form:manage-puestoLaboral-content"
-                                         oncomplete="PF('managePuestoLaboralDialog').show()"
+                        <p:commandButton icon="pi pi-pencil"
+                                         update=":form:manage-puestoLaboral-content" oncomplete="PF('managePuestoLaboralDialog').show()"
                                          styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}" />
                             <f:setPropertyActionListener value="#{puestoLaboral}" target="#{puestoLaboralView.puestoLaboral}"/>
                             <p:resetInput target=":form:manage-puestoLaboral-content"/>
                         </p:commandButton>
@@ -60,20 +61,18 @@
                                 <div class="ui-fluid">
                                     <div class="p-field">
                                         <p:outputLabel for="depart" value="Departamento: "/>
-                                        <p:selectOneMenu id="depart" value="#{puestoLaboralView.puestoLaboral.departamento}">
-                                            <!--<p:ajax listener="#{puestoLaboralView.onDepartamentoChange}"/>-->
-                                            <f:selectItem itemLabel="Selecione un departamento" itemValue="" noSelectionOption="true"/>
+                                        <p:selectOneMenu id="depart" value="#{puestoLaboralView.idDepartamento}">
+                                            <f:selectItem itemLabel="Selecione un departamento" itemValue="#{0}" noSelectionOption="true"/>
                                             <f:selectItems value="#{puestoLaboralView.departamentos}" var="departamento" 
-                                                           itemLabel="departamento" itemValue="departamento"/>
+                                                           itemLabel="#{departamento.nombre}" itemValue="#{departamento.id}"/>
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputcargo" value="Cargo: "/>
-                                        <p:selectOneMenu id="inputcargo" value="#{puestoLaboralView.puestoLaboral.cargo}">
-                                            <!--<p:ajax listener="#{puestoLaboralView.onCargoChange}"/>-->
-                                            <f:selectItem itemLabel="Selecione un cargo" itemValue="" noSelectionOption="true"/>
+                                        <p:selectOneMenu id="inputcargo" value="#{puestoLaboralView.idCargo}">
+                                            <f:selectItem itemLabel="Selecione un cargo" itemValue="#{0}" noSelectionOption="true"/>
                                             <f:selectItems value="#{puestoLaboralView.cargos}" var="cargo" 
-                                                           itemLabel="#{cargo.nombre}" itemValue="cargo"/>
+                                                           itemLabel="#{cargo.nombre}" itemValue="#{cargo.id}"/>
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="p-field">
@@ -94,7 +93,7 @@
                     <f:facet name="footer">
                         <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{puestoLaboralView.enviar}"
                                          update="manage-puestoLaboral-content" styleClass="ui-button-success" process="manage-puestoLaboral-content @this"/>
-                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('managePuestoLaboralDialog').hide()"
+                        <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{puestoLaboralView.cancelar}" onclick="PF('managePuestoLaboralDialog').hide()"
                                          process="@none" styleClass="p-mr-2" resetValues="true" />
                     </f:facet>
                 </p:dialog>
@@ -105,89 +104,5 @@
                 </p:confirmDialog>
             </div>
         </h:form>
-        <!--<h:form id="formPuestos">
-            <p:growl id="msgs" showDetail="true"/>
-            <p:dataTable id="tblPuestoLaboral" var="puestoLaboralItem" value="#{puestoLaboralView.lista}" 
-                         rendered="true" editable="true" rows="5" paginator="true" 
-                         emptyMessage="No existen puestos laborales" rowsPerPageTemplate="5,10,25"
-                         paginatorTemplate="{CurrentPageReport} 
-                         {FirstPageLink} {PreviousPageLink} {PageLinks} 
-                         {NextPageLink} {LastPageLink}">
-                <p:ajax event="rowEdit" listener="#{puestoLaboralView.onEditar}" update=":formPuestos:msgs"/>
-                <p:ajax event="rowEditCancel" listener="#{puestoLaboralView.onCancel}" update=":formPuestos:msgs"/>
-
-                <f:facet name="header">
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <h:outputLabel >LISTADO DE PUESTOS LABORALES </h:outputLabel>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton action="NuevoPuesto" value="Nuevo"
-                                             styleClass="ui-button-success" 
-                                             icon="pi pi-plus"/>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                </f:facet>
-                <p:column headerText="Departamento">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{puestoLaboralItem.departamento.nombre}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <h:selectOneMenu id="inputdepartamento" value="#{puestoLaboralItem.departamento.id}" style="width:100%">
-                                <f:selectItems value="#{departamentoView.lista}" var="departamento"
-                                               itemLabel="#{departamento.nombre}" itemValue="#{departamento.id}"/>
-                            </h:selectOneMenu>
-                        </f:facet>
-                    </p:cellEditor>
-                </p:column>
-                <p:column headerText="Cargo">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{puestoLaboralItem.cargo.nombre}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <h:selectOneMenu id="inputcargo" value="#{puestoLaboralItem.cargo.id}" style="width:100%">
-                                <f:selectItems value="#{cargoView.lista}" var="cargo"
-                                               itemLabel="#{cargo.nombre}" itemValue="#{cargo.id}"/>
-                            </h:selectOneMenu>
-                        </f:facet>
-                    </p:cellEditor>
-                </p:column>
-                <p:column headerText="Fecha de creación">
-                    <h:outputText value="#{puestoLaboralItem.fecha_creacion}"/>
-                </p:column>
-                <p:column headerText="Estado">
-                    <h:outputText id="inputmarca" value="#{puestoLaboralItem.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
-                </p:column>
-                <p:column headerText="Descripción">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{puestoLaboralItem.descripcion}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText id="inputdesripcion" value="#{puestoLaboralItem.descripcion}" style="width:100%"/>
-                        </f:facet>
-                    </p:cellEditor>
-                </p:column>
-                <p:column style="width:2rem">
-                    <p:commandButton action="#{puestoLaboralView.anular()}" 
-                                     styleClass="rounded-button #{puestoLaboralItem.estado ? 'ui-button-danger': 'ui-button-success'}"
-                                     update=":formPuestos:msgs"
-                                     icon="pi  #{puestoLaboralItem.estado ? 'pi-times-circle': 'pi-check-circle'}">
-                        <p:confirm header="CONFIRMACIÓN" 
-                                   message="¿Estás seguro que deseas  #{puestoLaboralItem.estado ? 'Deshabilitar': 'Habilitar'} este puesto laboral?" icon="pi pi-exclamation-triangle"/>
-                        <f:setPropertyActionListener value="#{puestoLaboralItem}" target="#{puestoLaboralView.puestoLaboral}"/>
-                    </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
-                    </p:confirmDialog>
-                </p:column>
-                <p:column>
-                    <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row"/>
-                </p:column>
-            </p:dataTable>
-        </h:form>-->
     </ui:define>
 </ui:composition>
