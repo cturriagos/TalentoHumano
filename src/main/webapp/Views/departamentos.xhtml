@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <h:form id="form">
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <p:dataTable id="dt-departamentos" widgetVar="dtDepartamentos" var="departamento" value="#{departamentoView.lista}"
+                             reflow="true" size="small" liveResize="true" styleClass="departamentos-table"
+                             rowKey="#{departamento.id}" paginator="true"
+                             rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <span style="font-weight: bold" icon="pi pi-table">DEPARTAMENTOS</span>
+                            </p:toolbarGroup>
+                            <p:toolbarGroup align="right">
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{departamentoView.abrirNuevo}"
+                                                 update=":form:manage-departamento-content" oncomplete="PF('manageDepartamentoDialog').show()"
+                                                 styleClass="ui-button-success" style="margin-right: .5rem">
+                                    <p:resetInput target=":form:manage-departamento-content"/>
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                    </f:facet>
+                    <p:column headerText="Departamento">
+                        <h:outputText value="#{departamento.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Descripción" width="35%">
+                        <h:outputText value="#{departamento.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Creado">
+                        <h:outputText value="#{departamento.fecha_creacion}"/>
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText id="inputmarca" value="#{departamento.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
+                    </p:column>
+                    <p:column exportable="false" width="5%">
+                        <p:commandButton icon="pi pi-pencil" update=":form:manage-departamento-content"
+                                         oncomplete="PF('manageDepartamentoDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{departamento}" target="#{departamentoView.departamento}"/>
+                            <p:resetInput target=":form:manage-departamento-content"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog header="Departamento" showEffect="fade" modal="true"
+                          widgetVar="manageDepartamentoDialog" responsive="true">
+                    <p:outputPanel id="manage-departamento-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty departamentoView.departamento}">
+                            <div class="card">
+                                <div class="ui-fluid">
+                                    <div class="p-field">
+                                        <p:outputLabel for="departamento" style="font-weight: bold">Nombre</p:outputLabel>
+                                        <p:inputText id="departamento" value="#{departamentoView.departamento.nombre}" style="width:100%"/>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
+                                        <p:inputTextarea id="description" value="#{departamentoView.departamento.descripcion}" 
+                                                         required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-formgroup-inline">
+                                        <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>
+                                        <div class="p-field-checkbox">
+                                            <p:selectBooleanCheckbox id="estado" value="#{departamentoView.departamento.estado}" itemLabel="Habilitar"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{departamentoView.enviar}"
+                                         update="manage-departamento-content" styleClass="ui-button-success" process="manage-departamento-content @this"/>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDepartamentoDialog').hide()"
+                                         process="@none" styleClass="p-mr-2" resetValues="true" />
+                    </f:facet>
+                </p:dialog>
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times"/>
+                </p:confirmDialog>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

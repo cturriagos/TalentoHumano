@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Asistencias</title>
+        <link href="resources/css/styles.css" rel="stylesheet" type="text/css"/>
+    </h:head>
+    <h:body>
+        <div class="principal">
+            <h:form>
+                <p:menubar>
+                    <f:facet name="title">
+                        <p:outputLabel value="My Company"/> 
+                    </f:facet>
+                    <p:submenu label="Empleados" icon="pi pi-fw pi-file">
+                        <p:submenu label="Crear Empleado" icon="pi pi-fw pi-plus">
+                            <p:menuitem value="Desde Persona" icon="pi pi-fw pi-bookmark"/>
+                            <p:menuitem value="Desde 0" icon="pi pi-fw pi-video"/>
+                        </p:submenu>
+                        <p:menuitem value="Delete" icon="pi pi-fw pi-trash"/>
+                        <p:divider />
+                        <p:menuitem value="Export" icon="pi pi-fw pi-external-link"/>
+                    </p:submenu>
+
+                    <p:submenu label="Horarios" icon="pi pi-fw pi-pencil">
+                        <p:menuitem value="Left" icon="pi pi-fw pi-align-left"/>
+                        <p:menuitem value="Right" icon="pi pi-fw pi-align-right"/>
+                        <p:menuitem value="Center" icon="pi pi-fw pi-align-center"/>
+                        <p:menuitem value="Justify" icon="pi pi-fw pi-align-justify"/>
+                    </p:submenu>
+
+                    <p:submenu label="Departamentos" icon="pi pi-fw pi-user">
+                        <p:menuitem value="Cargos" icon="pi pi-fw pi-user-plus"/>
+                        <p:menuitem value="Periodos" icon="pi pi-fw pi-user-minus"/>
+                        <p:submenu label="Search" icon="pi pi-fw pi-users">
+                            <p:submenu label="Filter" icon="pi pi-fw pi-filter">
+                                <p:menuitem value="Print" icon="pi pi-fw pi-print"/>
+                            </p:submenu>
+                            <p:menuitem value="List" icon="pi pi-fw pi-bars"/>
+                        </p:submenu>
+                    </p:submenu>
+
+                    <p:submenu label="Capacitaciones" icon="pi pi-fw pi-calendar">
+                        <p:submenu label="Edit" icon="pi pi-fw pi-pencil">
+                            <p:menuitem value="Save" icon="pi pi-fw pi-calendar-plus"/>
+                            <p:menuitem value="Delete" icon="pi pi-fw pi-calendar-minus"/>
+                        </p:submenu>
+                        <p:submenu label="Archieve" icon="pi pi-fw pi-calendar-times">
+                            <p:menuitem value="Remove" icon="pi pi-fw pi-calendar-minus"/>
+                        </p:submenu>
+                    </p:submenu>
+
+                    <p:menuitem value="Quit" icon="pi pi-fw pi-power-off"/>
+                </p:menubar>
+            </h:form>
+        </div>
+
+        <div class="registros">
+            <div class="encabezado_registro borde_registro">
+                <h1>Asistencias</h1>
+
+                <div class="contenedor-componente">
+                    <div class="componente">
+                        <span class="ui-input-icon-left">
+                            <i class="pi pi-search" />
+                            <p:inputText placeholder="Buscar" />
+                        </span>
+                    </div>
+                    <div class="componente">
+                        <p:selectOneMenu id="option" value="#{selectOneMenuView.selectedOption}">
+                            <f:selectItem itemLabel="Código" itemValue=""/>
+                            <f:selectItem itemLabel="Nombre" itemValue="Option1"/>
+                            <f:selectItem itemLabel="Identificación" itemValue="Option2"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="contenedor-componente">
+                    <div class="componente">
+                        <p:selectOneMenu id="option2" value="#{selectOneMenuView.selectedOption}">
+                            <f:selectItem itemLabel="Elegir Departamento..." itemValue=""/>
+                            <f:selectItem itemLabel="TICs" itemValue="Option1"/>
+                            <f:selectItem itemLabel="RRHH" itemValue="Option2"/>
+                            <f:selectItem itemLabel="Limpieza" itemValue="Option2"/>
+                            <f:selectItem itemLabel="Contabilidad" itemValue="Option2"/>
+                            <f:selectItem itemLabel="Inventario" itemValue="Option2"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="componente">
+                        <p:selectOneMenu id="option3" value="#{selectOneMenuView.selectedOption}">
+                            <f:selectItem itemLabel="Elegir Cargo..." itemValue=""/>
+                            <f:selectItem itemLabel="Jefe de TICs" itemValue="Option1"/>
+                            <f:selectItem itemLabel="Analista de TICs" itemValue="Option2"/>
+                            <f:selectItem itemLabel="Asistente de TICs" itemValue="Option2"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                
+                <i class="pi pi-clock" style="font-size: 3rem"></i>
+            </div>
+
+            <p:dataTable var="datos" value="#{personaBean.listaPersona}">
+                <p:column headerText="Código">
+                    <p:outputLabel value="#{datos.nombre}"/>
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{datos.apellido}" />
+                </p:column>
+
+                <p:column headerText="Identificación">
+                    <h:outputText value="#{datos.cedula}" />
+                </p:column>
+
+                <p:column headerText="Departamento">
+                    <h:outputText value="#{datos.departamento}" />
+                </p:column>
+
+                <p:column headerText="Cargo">
+                    <h:outputText value="#{datos.cargo}" />
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <h:outputText value="#{product.quantity}" />
+                    <!--<p:button style="font-size: 15px" value="Generar Rol de Pago" 
+                              styleClass="ui-button-info"/>-->
+                    <h:form>
+                        <h:commandButton type="button" value="Agregar I/S" 
+                                         styleClass="ui-button-raised 
+                                         ui-button-info" action="reporte"/>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+        </div>
+    </h:body>
+</html>
+

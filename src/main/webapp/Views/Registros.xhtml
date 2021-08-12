@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../Plantilla/Plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <div class="registros">
+                        <div class="encabezado_registro borde_registro">
+                            <h1>ASISTENCIAS</h1>
+
+                            <div class="contenedor-componente">
+                                <div class="componente">
+                                    <span class="ui-input-icon-left">
+                                        <i class="pi pi-search" />
+                                        <p:inputText placeholder="Buscar" />
+                                    </span>
+                                </div>
+                                <div class="componente">
+                                    <p:selectOneMenu id="option" value="#{selectOneMenuView.selectedOption}">
+                                        <f:selectItem itemLabel="Código" itemValue=""/>
+                                        <f:selectItem itemLabel="Nombre" itemValue="Option1"/>
+                                        <f:selectItem itemLabel="Identificación" itemValue="Option2"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+
+                            <div class="contenedor-componente">
+                                <div class="componente">
+                                    <p:selectOneMenu id="option2" value="#{selectOneMenuView.selectedOption}">
+                                        <f:selectItem itemLabel="Elegir Departamento..." itemValue=""/>
+                                        <f:selectItem itemLabel="TICs" itemValue="Option1"/>
+                                        <f:selectItem itemLabel="RRHH" itemValue="Option2"/>
+                                        <f:selectItem itemLabel="Limpieza" itemValue="Option2"/>
+                                        <f:selectItem itemLabel="Contabilidad" itemValue="Option2"/>
+                                        <f:selectItem itemLabel="Inventario" itemValue="Option2"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="componente">
+                                    <p:selectOneMenu id="option3" value="#{selectOneMenuView.selectedOption}">
+                                        <f:selectItem itemLabel="Elegir Cargo..." itemValue=""/>
+                                        <f:selectItem itemLabel="Jefe de TICs" itemValue="Option1"/>
+                                        <f:selectItem itemLabel="Analista de TICs" itemValue="Option2"/>
+                                        <f:selectItem itemLabel="Asistente de TICs" itemValue="Option2"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+
+                            <i class="pi pi-clock" style="font-size: 3rem"></i>
+                        </div>
+
+                        <p:dataTable var="datos" value="#{personaBean.listaPersona}">
+                            <p:column headerText="Código">
+                                <p:outputLabel value="#{datos.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{datos.apellido}" />
+                            </p:column>
+
+                            <p:column headerText="Identificación">
+                                <h:outputText value="#{datos.cedula}" />
+                            </p:column>
+
+                            <p:column headerText="Departamento">
+                                <h:outputText value="#{datos.departamento}" />
+                            </p:column>
+
+                            <p:column headerText="Cargo">
+                                <h:outputText value="#{datos.cargo}" />
+                            </p:column>
+
+                            <p:column headerText="Acciones">
+                                <h:outputText value="#{product.quantity}" />
+                                <!--<p:button style="font-size: 15px" value="Generar Rol de Pago" 
+                                          styleClass="ui-button-info"/>-->
+                                <h:form>
+                                    <p:commandButton value="Agregar I/S" 
+                                                     onclick="PF('BuscarPago').show();"
+                                                     styleClass="ui-button-raised 
+                                                     ui-button-info" action="reporte"/>
+                                </h:form>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </h:form>
+                
+                <!-- CUADRO DE DIÁLOGO EMERGENTE -->
+                <p:dialog header="Buscar Pago " widgetVar="BuscarPago"  
+                          minHeight="40" height="200px" width="400px" 
+                          showEffect="fade" modal="true">
+                    <h:form style="height: 200px">
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="BReferencia" style=" position: relative;
+                                   top: 0px;left: 15px;">
+                                Referencia: 
+                                <p:inputText id="BReferencia" type="text" 
+                                             style="width: 90px" />
+                            </label>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="BProveedor" style="position: relative;
+                                   top: 10px;left: 15px;">
+                                Proveedor:
+                                <p:inputText id="BProveedor" type="text" 
+                                             style="width: 200px;
+                                             background-color:  silver" 
+                                             disabled="false"/>
+                                <p:commandButton icon="pi pi-folder-open" 
+                                                 oncomplete="PF('BuscarProveedor').show()"
+                                                 styleClass="ui-button-warning" 
+                                                 style="margin-right: .6rem;width: 40px">
+                                </p:commandButton>
+                            </label>
+
+                        </div>
+                        <div class="p-field p-col-12 p-md-3" style="width: 200px; position: relative;
+                             top: 28px;left: 100px;">
+                            <p:commandButton type="button" value="OK" 
+                                             style="margin-right: .5rem" />
+                            <p:commandButton type="button" value="Cancelar" 
+                                             styleClass="ui-button-secondary" />
+                        </div>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

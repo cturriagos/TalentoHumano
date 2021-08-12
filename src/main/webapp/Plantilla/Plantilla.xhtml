@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <!--<title>Recursos Humanos</title>
+        <link href="../resources/css/styles.css" rel="stylesheet" type="text/css"/>
+        <link href="../resources/css/primeflex.css" rel="stylesheet" type="text/css"/>
+        <h:outputStylesheet name="css/cssLayout.css" />-->
+        <h:outputStylesheet library="css" name="main.css"/>
+        <h:outputStylesheet library="css" name="default.css"/>
+        <h:outputStylesheet library="css" name="styles.css"/>
+        <h:outputStylesheet library="css" name="primeflex.css"/>
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' />
+    </h:head>
+
+    <h:body>
+        <div class="navbar">
+            <a href="/Modulo_Cuenta_Pagar/">
+                <h:graphicImage name="imag/erpLogo.png"  height="60px" style="margin-right: 10px"/>
+            </a>
+            <h2>ERP CONTABLE</h2>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-2">
+                <h:form class="p-col-2">
+                    <p:panelMenu>
+                        <p:submenu label="Recursos Humanos" expanded="true" >
+                            <p:menuitem value="Empleados" 
+                                        icon="pi pi-users"/>
+                            <p:menuitem value="Cargos" outcome="/Views/cargo"
+                                        icon="pi pi-briefcase"/>
+                            <p:menuitem value="Departamentos" outcome="/Views/departamentos"
+                                        icon="pi pi-sitemap"/>
+                            <p:menuitem value="Puestos Laborales" outcome="/Views/puestosLaborales"
+                                        icon="pi pi-clone"/>
+                            <p:submenu label="Horarios">
+                                <p:menuitem value="Ingreso y Salida" 
+                                            outcome="/Views/ingresoSalidas" 
+                                            icon="pi pi-clock"/>
+                                <p:menuitem value="Horario Laboral" 
+                                            outcome="/Views/ingresoSalidas" 
+                                            icon="pi pi-calendar"/>
+                            </p:submenu>
+                            <p:menuitem value="Asistencias" 
+                                        outcome="/Views/asistencia" 
+                                        icon="pi pi-list"/>
+                            <p:menuitem value="Evaluaciones" 
+                                        outcome="/Views/Registros" 
+                                        icon="pi pi-money-bill"/>
+                            <p:menuitem value="Capacitaciones" 
+                                        outcome="/Views/Registros" 
+                                        icon="pi pi-money-bill"/>
+                            <p:menuitem value="Roles de Pago" 
+                                        outcome="/Views/roldepagos" 
+                                        icon="pi pi-money-bill"/>
+                        </p:submenu>
+                    </p:panelMenu>
+                </h:form>
+            </div>
+            <div class="p-col-10">
+                <ui:insert name="Contenido">
+                </ui:insert>
+            </div>
+        </div>
+        <!--<p:submenu label="Evaluaciones">
+            <p:menuitem value="Evaluadores" 
+                        outcome="/Views/Registros" 
+                        icon="pi pi-user"/> 
+            <p:menuitem value="Evaluaciones" 
+                        outcome="/Views/Registros" 
+                        icon="pi pi-file-o"/>
+            <p:menuitem value="Ev. Empleado" 
+                        outcome="/Views/Registros"
+                        icon="pi pi-user-edit"/>
+        </p:submenu>
+        <p:submenu label="Capacitaciones">
+            <p:menuitem value="Capacitadores" 
+                        outcome="/Views/Registros" 
+                        icon="pi pi-user"/> 
+            <p:menuitem value="Capacitaciones" 
+                        outcome="/Views/Registros" 
+                        icon="pi pi-briefcase"/>
+            <p:menuitem value="Cap. Empleado" 
+                        outcome="/Views/Registros"
+                        icon="pi pi-user-edit"/>
+        </p:submenu>-->
+
+    </h:body>
+
+</html>
