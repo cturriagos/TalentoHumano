@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/Plantilla/Plantilla.xhtml">
-    
+
     <ui:define name="Contenido">
         <h:form id="form">
             <div class="card crud-demo">
@@ -37,32 +37,35 @@
                     <p:column headerText="Observaciones">
                         <h:outputText value="#{ingresoSalida.observaciones}"/>
                     </p:column>
-                    <p:column exportable="false">
-                        <p:commandButton icon="pi pi-pencil" update=":form:manage-ingresoSalidas-content"
-                                         oncomplete="PF('manageIngresoSalidasDialog').show()"
+                    <p:column exportable="false" width="5%">
+                        <p:commandButton icon="pi pi-pencil" update=":form:manage-ingresosSalidas-content"
+                                         oncomplete="PF('manageIngresosSalidasDialog').show()"
                                          styleClass="edit-button rounded-button ui-button-success" process="@this">
                             <f:setPropertyActionListener value="#{ingresoSalida}" target="#{ingresosSalidasView.ingresosSalidas}"/>
-                            <p:resetInput target=":form:manage-ingresoSalidas-content"/>
+                            <p:resetInput target=":form:manage-IngresosSalidas-content"/>
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
                 <p:dialog header="Horario" showEffect="fade" modal="true"
-                          widgetVar="manageIngresoSalidasDialog" responsive="true">
-                    <p:outputPanel id="manage-ingresoSalidas-content" class="ui-fluid">
+                          widgetVar="manageIngresosSalidasDialog" responsive="true">
+                    <p:outputPanel id="manage-ingresosSalidas-content" class="ui-fluid">
                         <p:outputPanel rendered="#{not empty ingresosSalidasView.ingresosSalidas}">
                             <div class="card">
                                 <div class="ui-fluid">
                                     <div class="p-field">
                                         <p:outputLabel for="horaIngreso" style="font-weight: bold">Hora de Ingreso</p:outputLabel>
-                                        <p:inputText id="horaIngreso" value="#{ingresosSalidasView.ingresosSalidas.horaIngreso}" style="width:100%"/>
+                                        <p:inputText id="horaIngreso" value="#{ingresosSalidasView.ingresosSalidas.horaIngreso}"
+                                                     required="true" requiredMessage="Campo requerido"/>
                                     </div>
                                     <div class="p-formgroup-inline">
                                         <p:outputLabel for="horaSalida" style="font-weight: bold">Hora de Salida</p:outputLabel>
-                                        <p:inputText id="horaSalida" value="#{ingresosSalidasView.ingresosSalidas.horaSalida}" style="width:100%"/>
+                                        <p:inputText id="horaSalida" value="#{ingresosSalidasView.ingresosSalidas.horaSalida}"
+                                                     required="true" requiredMessage="Campo requerido"/>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel for="observacion" style="font-weight: bold">Observaciones</p:outputLabel>
-                                        <p:inputText id="observaciones" value="#{ingresosSalidasView.ingresosSalidas.observaciones}" style="width:100%"/>
+                                        <p:outputLabel for="observaciones" style="font-weight: bold">Observaciones</p:outputLabel>
+                                        <p:inputTextarea id="observaciones" value="#{ingresosSalidasView.ingresosSalidas.observaciones}"
+                                                         required="true" requiredMessage="Campo requerido"/>
                                     </div>
                                 </div>
                             </div>
@@ -82,74 +85,5 @@
                 </p:confirmDialog>
             </div>
         </h:form>
-        <!-- <h:form id="formingresoSalidas">
-             <p:growl id="msgs" showDetail="true"/>
-             <p:dataTable id="tblingresoSalidas" var="ingresoSalidasItem" value="#{ingresoSalidasView.lista}" 
-                          rendered="true" editable="true" rows="5" paginator="true" 
-                          emptyMessage="No existen horarios" rowsPerPageTemplate="5,10,25"
-                          paginatorTemplate="{CurrentPageReport} 
-                          {FirstPageLink} {PreviousPageLink} {PageLinks} 
-                          {NextPageLink} {LastPageLink}">
-                 <p:ajax event="rowEdit" listener="#{ingresoSalidasView.onEditar}" update=":formingresoSalidas:msgs"/>
-                 <p:ajax event="rowEditCancel" listener="#{ingresoSalidasView.onCancel}" update=":formingresoSalidas:msgs"/>
-
-
-                 <f:facet name="header">
-                     <p:toolbar>
-                         <p:toolbarGroup>
-                             <h:outputLabel>LISTADO DE HORARIOS QUE MANEJA LA EMPRESA</h:outputLabel>
-                         </p:toolbarGroup>
-                         <p:toolbarGroup align="right">
-                             <p:commandButton action="NuevoIngresoSalida" value="Nuevo"
-                                              styleClass="ui-button-success" 
-                                              icon="pi pi-plus"/>
-                         </p:toolbarGroup>
-                     </p:toolbar>
-                 </f:facet>
-                 <p:column headerText="Hora de Ingreso">
-                     <p:cellEditor>
-                         <f:facet name="output">
-                             
-                         </f:facet>
-                         <f:facet name="input">
-                             
-                                 <f:convertDateTime pattern="HH:mm" type="date"></f:convertDateTime>
-                             </p:inputText>
-                         </f:facet>
-                     </p:cellEditor>
-                 </p:column>
-                 <p:column headerText="Hora de Salida">
-                     <p:cellEditor>
-                         <f:facet name="output">
-                             
-                         </f:facet>
-                         <f:facet name="input">
-                             
-                                 <f:convertDateTime pattern="HH:mm" type="time"></f:convertDateTime>
-                             </p:inputText>
-                         </f:facet>
-                     </p:cellEditor>
-                 </p:column>
-                 <p:column headerText="Observaciones">
-                     <p:cellEditor>
-                         <f:facet name="output">
-                             
-                         </f:facet>
-                         <f:facet name="input">
-                             
-                         </f:facet>
-                     </p:cellEditor>
-                 </p:column>
-                 <p:column style="width:2rem">
-                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                         <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
-                     </p:confirmDialog>
-                 </p:column>
-                 <p:column>
-                     <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row"/>
-                 </p:column>
-             </p:dataTable>
-         </h:form>-->
     </ui:define>
 </ui:composition>

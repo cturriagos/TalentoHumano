@@ -16,7 +16,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -32,7 +31,7 @@ public class IngresoSalidaControlller implements Serializable {
 
     public IngresoSalidaControlller() {
         ingresosSalidas = new IngresosSalidas();
-        ingresosSalidasDAO = new IngresosSalidasDAO(ingresosSalidas);
+        ingresosSalidasDAO = new IngresosSalidasDAO(new IngresosSalidas());
         lista = new ArrayList<>();
     }
 

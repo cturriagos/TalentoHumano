@@ -51,7 +51,8 @@
                                 <div class="ui-fluid">
                                     <div class="p-field">
                                         <p:outputLabel for="nombre" style="font-weight: bold">Nombre</p:outputLabel>
-                                        <p:inputText id="nombre" value="#{cargoView.cargo.nombre}"/>
+                                        <p:inputText id="nombre" value="#{cargoView.cargo.nombre}"
+                                                     required="true" requiredMessage="Campo requerido"/>
                                     </div>
                                 </div>
                             </div>

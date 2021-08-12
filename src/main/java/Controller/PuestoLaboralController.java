@@ -20,6 +20,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -29,6 +30,7 @@ import org.primefaces.event.RowEditEvent;
 @Named(value = "puestoLaboralView")
 @ViewScoped
 public class PuestoLaboralController implements Serializable {
+
     private PuestoLaboral puestoLaboral;
     private PuestoLaboralDAO puestoLaboralDAO;
     private CargoDAO cargoDAO;
@@ -36,100 +38,23 @@ public class PuestoLaboralController implements Serializable {
     private List<PuestoLaboral> lista;
     private List<Departamento> departamentos;
     private List<Cargo> cargos;
-    private int idCargo,idDepartamento;
-    
-    public PuestoLaboralController(){
-        puestoLaboral = new PuestoLaboral(0, new Cargo(), new Departamento(), new Date(), true, "");
-        puestoLaboralDAO = new PuestoLaboralDAO();
-        departamentoDAO = new DepartamentoDAO();
-        cargoDAO = new CargoDAO();
+
+    public PuestoLaboralController() {
+        puestoLaboralDAO = new PuestoLaboralDAO(new PuestoLaboral());
+        departamentoDAO = new DepartamentoDAO(new Departamento());
+        cargoDAO = new CargoDAO(new Cargo());
         lista = new ArrayList<>();
         departamentos = new ArrayList<>();
-        cargos = new ArrayList<>();;
+        cargos = new ArrayList<>();
     }
-    
-   @PostConstruct
-    public void constructorDepartamento (){
+
+    @PostConstruct
+    public void constructorDepartamento() {
         lista = puestoLaboralDAO.Listar();
-        departamentos = departamentoDAO.Listar();
-        cargos = cargoDAO.Listar();
-   }
-
-    public List<Departamento> getDepartamentos() {
-        return departamentos;
     }
 
-    public void setDepartamentos(List<Departamento> departamentos) {
-        this.departamentos = departamentos;
-    }
-
-    public List<Cargo> getCargos() {
-        return cargos;
-    }
-
-    public void setCargos(List<Cargo> cargos) {
-        this.cargos = cargos;
-    }
-
-    public int getIdCargo() {
-        return idCargo;
-    }
-
-    public void setIdCargo(int idCargo) {
-        this.idCargo = idCargo;
-    }
-
-    public int getIdDepartamento() {
-        return idDepartamento;
-    }
-
-    public void setIdDepartamento(int idDepartamento) {
-        this.idDepartamento = idDepartamento;
-    }
-    
-    public String enviar() {
-        puestoLaboral.getCargo().setId(idCargo);
-        puestoLaboral.getDepartamento().setId(idDepartamento);
-        puestoLaboralDAO = new PuestoLaboralDAO(puestoLaboral);
-        
-        if (puestoLaboralDAO.insertar() > 0) {
-            mostrarMensajeInformacion("El Puesto Laboral se ha guardado con éxito");
-            puestoLaboral = new PuestoLaboral();
-            lista = puestoLaboralDAO.Listar();
-            return "PuestosLaborales";
-        } else {
-            mostrarMensajeInformacion("El Puesto Laboral no se pudo guardar");
-            return "";
-        }
-       
-    }
-    
-    public void onEditar(RowEditEvent<PuestoLaboral> event) {
-        PuestoLaboral puestoLaboralEditado = event.getObject();
-        puestoLaboralDAO = new PuestoLaboralDAO(puestoLaboralEditado);
-        
-        if (puestoLaboralDAO.actualizar()> 0) {
-            mostrarMensajeInformacion("El Puesto Laboral se ha editado con éxito");
-            lista = puestoLaboralDAO.Listar();
-        } else {
-            mostrarMensajeInformacion("El Puesto Laboral no se pudo editar");
-        }
-    }
-    
     public void onCancel(RowEditEvent<PuestoLaboral> event) {
         mostrarMensajeInformacion("Se canceló la edición");
-    }
-    
-    public String anular() {
-        puestoLaboralDAO = new PuestoLaboralDAO(puestoLaboral);
-        if (puestoLaboralDAO.cambiarEstado()> 0) {
-            mostrarMensajeInformacion("El Puesto Laboral se ha " + (puestoLaboral.isEstado() ? "Deshabilitado" : "Habilitado") + " con éxito");
-            lista = puestoLaboralDAO.Listar();
-            return "puestosLaborales";
-        } else {
-            mostrarMensajeError("El Puesto Laboral no se pudo anular");
-            return "";
-        }
     }
 
     public PuestoLaboral getPuestoLaboral() {
@@ -147,14 +72,58 @@ public class PuestoLaboralController implements Serializable {
     public void setLista(List<PuestoLaboral> puestos) {
         this.lista = puestos;
     }
-    
+
+    public List<Departamento> getDepartamentos() {
+        return departamentos;
+    }
+
+    public void setDepartamentos(List<Departamento> departamentos) {
+        this.departamentos = departamentos;
+    }
+
+    public List<Cargo> getCargos() {
+        return cargos;
+    }
+
+    public void setCargos(List<Cargo> cargos) {
+        this.cargos = cargos;
+    }
+
+    public void abrirNuevo() {
+        puestoLaboral = new PuestoLaboral(0, new Cargo(), new Departamento(), new Date(), true, "");
+        departamentos = departamentoDAO.Listar();
+        cargos = cargoDAO.Listar();
+    }
+
+    public void enviar() {
+        /*puestoLaboral.getCargo().setId(idCargo);
+        puestoLaboral.getDepartamento().setId(idDepartamento);
+        puestoLaboralDAO = new PuestoLaboralDAO(puestoLaboral);*/
+        puestoLaboralDAO.setPuestoLaboral(puestoLaboral);
+        if (puestoLaboral.getId() == 0) {
+            if (puestoLaboralDAO.insertar() > 0) {
+                mostrarMensajeInformacion("El Puesto Laboral se ha guardado con éxito");
+                lista.add(puestoLaboral);
+            } else {
+                mostrarMensajeError("El Puesto Laboral no se pudo guardar");
+            }
+        } else {
+            if (puestoLaboralDAO.actualizar() > 0) {
+                mostrarMensajeInformacion("El Puesto Laboral se ha editado con éxito");
+            } else {
+                mostrarMensajeError("El Puesto Laboral no se pudo editar");
+            }
+        }
+        PrimeFaces.current().executeScript("PF('managePuestoLaboralDialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
+    }
+
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     //  MENSAJE DE ERROR
-    
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
