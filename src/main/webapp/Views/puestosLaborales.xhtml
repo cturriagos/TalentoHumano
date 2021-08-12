@@ -44,8 +44,8 @@
                         <h:outputText id="inputestado" value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
                     </p:column>
                     <p:column exportable="false" width="5%">
-                        <p:commandButton icon="pi pi-pencil"
-                                         update=":form:manage-puestoLaboral-content" oncomplete="PF('managePuestoLaboralDialog').show()"
+                        <p:commandButton icon="pi pi-pencil" update=":form:manage-puestoLaboral-content"
+                                         oncomplete="PF('managePuestoLaboralDialog').show()"
                                          styleClass="edit-button rounded-button ui-button-success" process="@this">
                             <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}" />
                             <f:setPropertyActionListener value="#{puestoLaboral}" target="#{puestoLaboralView.puestoLaboral}"/>

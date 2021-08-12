@@ -74,7 +74,7 @@ public class DepartamentoDAO implements IDAO<Departamento> {
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("departamento",
-                    "nombre = '" + departamento.getNombre() + "', descripcion = '" + departamento.getDescripcion() + "'",
+                    "nombre = '" + departamento.getNombre() + "', estado = " + departamento.isEstado() + ", descripcion = '" + departamento.getDescripcion() + "'",
                     "id_departamento = " + departamento.getId());
         }
         return -1;

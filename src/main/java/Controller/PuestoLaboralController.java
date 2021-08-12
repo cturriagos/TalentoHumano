@@ -21,7 +21,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -54,10 +53,6 @@ public class PuestoLaboralController implements Serializable {
         lista = puestoLaboralDAO.Listar();
         departamentos = departamentoDAO.Listar();
         cargos = cargoDAO.Listar();
-    }
-
-    public void onCancel(RowEditEvent<PuestoLaboral> event) {
-        mostrarMensajeInformacion("Se canceló la edición");
     }
 
     public PuestoLaboral getPuestoLaboral() {

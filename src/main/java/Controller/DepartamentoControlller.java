@@ -71,10 +71,6 @@ public class DepartamentoControlller implements Serializable {
         this.departamento = new Departamento();
     }
 
-    public void onCancel(RowEditEvent<Departamento> event) {
-        mostrarMensajeInformacion("Se canceló");
-    }
-
     public Departamento getDepartamento() {
         return departamento;
     }

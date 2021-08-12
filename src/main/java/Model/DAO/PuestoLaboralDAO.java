@@ -77,7 +77,7 @@ public class PuestoLaboralDAO implements IDAO<PuestoLaboral>{
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("puesto_laboral",
-                    "id_cargo= " + puestoLaboral.getCargo().getId()+ ", id_departamento = " + puestoLaboral.getDepartamento().getId()+ ", descripcion = '" + puestoLaboral.getDescripcion() + "'",
+                    "id_cargo= " + puestoLaboral.getCargo().getId()+ ", id_departamento = " + puestoLaboral.getDepartamento().getId()+ ", descripcion = '" + puestoLaboral.getDescripcion() + "', estado = " + puestoLaboral.isEstado(),
                     "id_puesto_laboral = " + puestoLaboral.getId());
         }
         return -1;

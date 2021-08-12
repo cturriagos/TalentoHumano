@@ -30,7 +30,6 @@ public class IngresoSalidaControlller implements Serializable {
     private List<IngresosSalidas> lista;
 
     public IngresoSalidaControlller() {
-        ingresosSalidas = new IngresosSalidas();
         ingresosSalidasDAO = new IngresosSalidasDAO(new IngresosSalidas());
         lista = new ArrayList<>();
     }
