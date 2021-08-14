@@ -10,20 +10,35 @@ package Model.Entidad;
  * @author rturr
  */
 public class DetalleHorario {
+
+    private int id;
     private IngresosSalidas ingresoSalida;
     private HorarioLaboral horarioLaboral;
     private DiaSemana diaSemana;
-    
+    private boolean estado;
+
     public DetalleHorario() {
+        id = 0;
         ingresoSalida = new IngresosSalidas();
         horarioLaboral = new HorarioLaboral();
         diaSemana = new DiaSemana();
+        estado = true;
     }
-    
-    public DetalleHorario(IngresosSalidas ingresoSalida, HorarioLaboral horarioLaboral, DiaSemana diaSemana) {
+
+    public DetalleHorario(int id, IngresosSalidas ingresoSalida, HorarioLaboral horarioLaboral, DiaSemana diaSemana, boolean estado) {
+        this.id = id;
         this.ingresoSalida = ingresoSalida;
         this.horarioLaboral = horarioLaboral;
         this.diaSemana = diaSemana;
+        this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public IngresosSalidas getIngresoSalida() {
@@ -48,5 +63,13 @@ public class DetalleHorario {
 
     public void setDiaSemana(DiaSemana diaSemana) {
         this.diaSemana = diaSemana;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 }

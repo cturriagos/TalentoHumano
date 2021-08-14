@@ -5,70 +5,65 @@
  */
 package Controller;
 
+import Model.DAO.DetalleHorarioDAO;
+import Model.DAO.DiaSemanaDAO;
 import Model.DAO.HorarioLaboralDAO;
+import Model.DAO.IngresosSalidasDAO;
+import Model.Entidad.DetalleHorario;
+import Model.Entidad.DiaSemana;
 import Model.Entidad.HorarioLaboral;
+import Model.Entidad.IngresosSalidas;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.event.RowEditEvent;
+import org.primefaces.PrimeFaces;
+import javax.enterprise.context.SessionScoped;
 
 /**
  *
  * @author rturr
  */
 @Named(value = "horarioLaboralView")
-@ViewScoped
+@SessionScoped
 public class HorarioLaboralController implements Serializable {
+
     private HorarioLaboral horarioLaboral;
-    private HorarioLaboralDAO horarioLaboralDAO;
+    private DetalleHorario detalleHorario;
     private List<HorarioLaboral> lista;
-        
+    private List<DetalleHorario> horarios;
+    private List<DiaSemana> dias;
+    private List<IngresosSalidas> horas;
+    private int idDia, idIngresoSalida;
+    private final String INICIO = "HorarioLaboral";
+
+    @Inject
+    private HorarioLaboralDAO horarioLaboralDAO;
+
+    @Inject
+    private DetalleHorarioDAO detalleHorarioDAO;
+
+    @Inject
+    private IngresosSalidasDAO ingresosSalidasDAO;
+
+    @Inject
+    private DiaSemanaDAO diaSemanaDAO;
+
     public HorarioLaboralController() {
-        horarioLaboral = new HorarioLaboral();
-        horarioLaboralDAO = new HorarioLaboralDAO(horarioLaboral);
         lista = new ArrayList<>();
+        horarioLaboral = new HorarioLaboral();
+        horarios = new ArrayList<>();
+        dias = new ArrayList<>();
+        horas = new ArrayList<>();
     }
-    
-   @PostConstruct
-    public void constructorHorarioLaboral (){
+
+    @PostConstruct
+    public void constructorHorarioLaboral() {
         lista = horarioLaboralDAO.Listar();
-   }
-    
-    public String enviar() {
-        
-        horarioLaboralDAO = new HorarioLaboralDAO(horarioLaboral);
-        
-        if (horarioLaboralDAO.insertar() > 0) {
-            mostrarMensajeInformacion("El registro del horario laboral se ha guardado con éxito");
-            horarioLaboral = new HorarioLaboral();
-            lista = horarioLaboralDAO.Listar();
-            return "IngresosSalidas";
-        } else {
-            mostrarMensajeError("El registro de del horario laboral no se pudo guardar");
-            return "";
-        }
-       
-    }
-    
-    public void onEditar(RowEditEvent<HorarioLaboral> event) {
-        HorarioLaboral horarioLaboralEditado = event.getObject();
-        horarioLaboralDAO.setHorarioLaboral(horarioLaboralEditado);
-        
-        if (horarioLaboralDAO.actualizar()> 0) {
-            mostrarMensajeInformacion("El registro de horas de salida e ingreso  se ha editado con éxito");
-            lista = horarioLaboralDAO.Listar();
-        } else {
-            mostrarMensajeError("El registro de horas de salida e ingreso  no se pudo editar");
-        }
-    }
-    
-    public void onCancel(RowEditEvent<HorarioLaboral> event) {
-        mostrarMensajeInformacion("Se canceló");
     }
 
     public HorarioLaboral getHorarioLaboral() {
@@ -83,17 +78,144 @@ public class HorarioLaboralController implements Serializable {
         return lista;
     }
 
-    public void setLista(List<HorarioLaboral> horarios) {
-        this.lista = horarios;
+    public void setLista(List<HorarioLaboral> lista) {
+        this.lista = lista;
+    }
+
+    public DetalleHorario getDetalleHorario() {
+        return detalleHorario;
+    }
+
+    public void setDetalleHorario(DetalleHorario detalleHorario) {
+        this.detalleHorario = detalleHorario;
+    }
+
+    public List<DetalleHorario> getHorarios() {
+        return horarios;
+    }
+
+    public void setHorarios(List<DetalleHorario> horarios) {
+        this.horarios = horarios;
+    }
+
+    public int getIdDia() {
+        return idDia;
+    }
+
+    public void setIdDia(int idDia) {
+        this.idDia = idDia;
+    }
+
+    public int getIdIngresoSalida() {
+        return idIngresoSalida;
+    }
+
+    public void setIdIngresoSalida(int idIngresoSalida) {
+        this.idIngresoSalida = idIngresoSalida;
+    }
+
+    public List<DiaSemana> getDias() {
+        return dias;
+    }
+
+    public void setDias(List<DiaSemana> dias) {
+        this.dias = dias;
+    }
+
+    public List<IngresosSalidas> getHoras() {
+        return horas;
+    }
+
+    public void setHoras(List<IngresosSalidas> horas) {
+        this.horas = horas;
+    }
+
+    public void postLoadDetalle() {
+        horarios = detalleHorarioDAO.Listar(horarioLaboral.getId());
+        dias = diaSemanaDAO.Listar();
+        horas = ingresosSalidasDAO.Listar();
+        if(horarios.isEmpty()){
+             mostrarMensajeError("Debe definir los los dias y horas de este horario");
+        }
+    }
+
+    public void nuevoHorario() {
+        horarioLaboral = new HorarioLaboral();
+    }
+
+    public void nuevoDetalle() {
+        idDia = 0;
+        idIngresoSalida = 0;
+        detalleHorario = new DetalleHorario();
+        detalleHorario.setHorarioLaboral(horarioLaboral);
+    }
+    
+    public String volver(){
+        horarios.clear();
+        dias.clear();
+        horas.clear();
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
+        return INICIO;
+    }
+
+    public void editarDetalle(int idDia, int idIngresoSalida) {
+        this.idDia = idDia;
+        this.idIngresoSalida = idIngresoSalida;
+    }
+
+    public void guardarHorario() {
+        horarioLaboralDAO.setHorarioLaboral(horarioLaboral);
+        if (horarioLaboral.getId() == 0) {
+            if (horarioLaboralDAO.insertar() > 0) {
+                horarioLaboral.setId(horarioLaboralDAO.getHorarioLaboral().getId());
+                lista.add(horarioLaboral);
+            } else {
+                mostrarMensajeError("El horario laboral no se pudo guardar");
+            }
+        } else {
+            if (horarioLaboralDAO.actualizar() > 0) {
+                mostrarMensajeInformacion("El horario laboral se ha editado con éxito");
+            } else {
+                mostrarMensajeError("El horario laboral no se pudo editar");
+            }
+        }
+        PrimeFaces.current().executeScript("PF('managePuestoLaboralDialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
+    }
+
+    public void enviar() {
+        if (idDia != 0 && idIngresoSalida != 0) {
+            detalleHorario.getDiaSemana().setId(idDia);
+            detalleHorario.getIngresoSalida().setId(idIngresoSalida);
+            detalleHorario.setHorarioLaboral(horarioLaboral);
+            detalleHorarioDAO.setDetalleHorario(detalleHorario);
+            if (detalleHorario.getId() == 0) {
+                if (detalleHorarioDAO.insertar() > 0) {
+                    mostrarMensajeInformacion("El horario se ha guardado con éxito");
+                    horarios.add(detalleHorario);
+                } else {
+                    mostrarMensajeError("El horario no se pudo guardar");
+                }
+            } else {
+                if (detalleHorarioDAO.actualizar() > 0) {
+                    mostrarMensajeInformacion("El horario se ha editado con éxito");
+                } else {
+                    mostrarMensajeError("El horario no se pudo editar");
+                }
+            }
+        } else {
+            mostrarMensajeError("Debe de seleccionar un dia y un horaria");
+        }
+        PrimeFaces.current().executeScript("PF('manageDetalleHorarioDialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-detalleHorarios");
     }
 
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     //  MENSAJE DE ERROR
-    
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);

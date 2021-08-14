@@ -60,7 +60,7 @@ public class CargoDAO implements IDAO<Cargo>{
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            cargo.setId(conexion.insertar("cargo", "nombre", "'" + cargo.getNombre() + "'", true));
+            cargo.setId(conexion.insertar("cargo", "nombre", "'" + cargo.getNombre() + "'", "id_cargo"));
             return cargo.getId();
         }
         return -1;

@@ -6,8 +6,6 @@
 package Model.DAO;
 
 import Config.Conexion;
-import Model.Entidad.DetalleHorario;
-import Model.DAO.DiaSemanaDAO;
 import Model.Entidad.HorarioLaboral;
 import Model.Interfaces.IDAO;
 import com.sun.istack.internal.Nullable;
@@ -15,14 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.faces.application.FacesMessage;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author rturr
  */
+@Named
+@ApplicationScoped
 public class HorarioLaboralDAO implements IDAO<HorarioLaboral>{
     protected final Conexion conexion;
     private HorarioLaboral horarioLaboral;
@@ -65,7 +64,8 @@ public class HorarioLaboralDAO implements IDAO<HorarioLaboral>{
         if (conexion.isEstado()) {
             horarioLaboral.setId(conexion.insertar("horario_laboral",
                     "nombre, estado, observaciones, fecha_vigencia",
-                    "'" + horarioLaboral.getNombre() + "', "+ horarioLaboral.isEstado() + ",'" + horarioLaboral.getObservaciones()+ "','" + horarioLaboral.getFechaVigencia() + "'", true));
+                    "'" + horarioLaboral.getNombre() + "', "+ horarioLaboral.isEstado() + ",'" + horarioLaboral.getObservaciones()+ "','" + horarioLaboral.getFechaVigencia() + "'",
+                    "id_horario_laboral"));
             return horarioLaboral.getId();
         }
         return -1;
@@ -127,71 +127,6 @@ public class HorarioLaboralDAO implements IDAO<HorarioLaboral>{
                 }
                 result.close();
                 return horarios;
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            } finally {
-                conexion.cerrarConexion();
-            }
-        }
-        return null;
-    }
-
-    public int cambiarEstado() {
-        if (conexion.isEstado()) {
-            return conexion.modificar("horario_laboral", "estado = NOT estado","id_horario_laboral = " + horarioLaboral.getId());
-        }
-        return -1;
-    }
-    
-    public int insertarDetalle(List<DetalleHorario> detalles){
-        try {
-            if(conexion.iniciarTransaccion()){
-                for( DetalleHorario detalle : detalles ){
-                    conexion.ejecutarInsertarToTrnasaccion("detalle_horario", 
-                            "id_ingreso_salida, id_horario_laboral, id__dia_semana",
-                            detalle.getIngresoSalida() + ", " + detalle.getHorarioLaboral() + "," + detalle.getDiaSemana());
-                }
-            }
-            conexion.finalizarTransaccion(true);
-            return 1;
-        }catch (ClassNotFoundException | SQLException exSQL) {
-            try {
-                conexion.setMensaje(exSQL.getMessage());
-                System.out.println(conexion.getMensaje());
-                conexion.setTipoMensaje(FacesMessage.SEVERITY_FATAL);
-                conexion.finalizarTransaccion(false);
-            } catch (SQLException ex) {
-                Logger.getLogger(HorarioLaboralDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                return -1;
-        }
-    }
-    
-    public List<DetalleHorario> ListarDetalle(HorarioLaboral horarioLaboral){
-        this.horarioLaboral = horarioLaboral;
-        return ListarDetalle();
-    }
-    
-    public List<DetalleHorario> ListarDetalle(){
-        if(conexion.isEstado()){
-            ResultSet result;
-            List<DetalleHorario> detalles;
-            try {
-                result = conexion.ejecutarConsulta("SELECT id_ingreso_salida, id_horario_laboral, id__dia_semana FROM detalle_horario horario_laboral WHERE id_horario_laboral = " + horarioLaboral.getId());
-                detalles = new ArrayList<>();
-                IngresosSalidasDAO ingresosSalidasDAO = new IngresosSalidasDAO(conexion);
-                DiaSemanaDAO diaSemanaDAO = new DiaSemanaDAO(conexion);
-                while (result.next()) {
-                    detalles.add(
-                            new DetalleHorario(
-                                    ingresosSalidasDAO.buscarPorId(result.getInt("id_horario_laboral")),
-                                    horarioLaboral,
-                                    diaSemanaDAO.buscarPorId(result.getInt("id__dia_semana"))
-                            )
-                    );
-                }
-                result.close();
-                return detalles;
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {

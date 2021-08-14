@@ -17,7 +17,7 @@
 #left {
     float: left;
     padding: 5px;
-    width: 210px;
+    width: 250px;
 }
 
 #right {
@@ -31,12 +31,12 @@
     position: relative;
     background-color: #dddddd;
     margin-left: 220px;
-    margin-right: 5px;
     padding: 5px;
 }
 
 .left_content {
-    margin-left: 280px;
+    margin-left: 255px;
+    margin-right: 10px;
 }
 
 .right_content {

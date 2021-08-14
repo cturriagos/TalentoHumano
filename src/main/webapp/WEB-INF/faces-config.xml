@@ -4,27 +4,44 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
     <navigation-rule>
-        <from-view-id>/Views/nuevoCargo.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
         <from-view-id>/Views/cargo.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/Views/nuevoDepartamento.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Views/departamentos.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/Views/nuevoIngresosSalidas.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
         <from-view-id>/Views/ingresoSalidas.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/Views/nuevoPuestoLaboral.xhtml</from-view-id>
+        <from-view-id>/Views/puestosLaborales.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/Views/puestosLaborales.xhtml</from-view-id>
+        <from-view-id>/Views/HorarioLaboral/horarioLaboral.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>DetalleHorario</from-outcome>
+            <to-view-id>/Views/HorarioLaboral/detalleHorarioLaboral.xhtml</to-view-id>
+            <redirect include-view-params="true"></redirect>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>NuevoHorario</from-outcome>
+            <to-view-id>/Views/HorarioLaboral/nuevoHorarioLaboral.xhtml</to-view-id>
+            <redirect include-view-params="true"></redirect>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/HorarioLaboral/detalleHorarioLaboral.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>HorarioLaboral</from-outcome>
+            <to-view-id>/Views/HorarioLaboral/horarioLaboral.xhtml</to-view-id>
+            <redirect include-view-params="true"></redirect>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/HorarioLaboral/nuevoHorarioLaboral.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>HorarioLaboral</from-outcome>
+            <to-view-id>/Views/HorarioLaboral/horarioLaboral.xhtml</to-view-id>
+            <redirect include-view-params="true"></redirect>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

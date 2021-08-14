@@ -58,7 +58,8 @@ public class DepartamentoDAO implements IDAO<Departamento> {
             departamento.setEstado(true);
             departamento.setId(conexion.insertar("departamento",
                     "nombre, estado, fecha_creacion, descripcion",
-                    "'" + departamento.getNombre() + "', " + departamento.isEstado() + ", CURRENT_TIMESTAMP , '" + departamento.getDescripcion() + "'", true));
+                    "'" + departamento.getNombre() + "', " + departamento.isEstado() + ", CURRENT_TIMESTAMP , '" + departamento.getDescripcion() + "'",
+                    "id_departamento"));
             return departamento.getId();
         }
         return -1;

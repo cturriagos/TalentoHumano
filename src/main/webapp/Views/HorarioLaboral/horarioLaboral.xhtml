@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+    
+    <ui:define name="Contenido">
+        <h:form id="form">
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <p:dataTable id="dt-horarioLaborales" widgetVar="dtHorarioLaborales" var="horarioLaboral" value="#{horarioLaboralView.lista}"
+                             reflow="true" size="small" liveResize="true" styleClass="horarioLaborales-table"
+                             rowKey="#{horarioLaboral.id}" paginator="true"
+                             rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                    <f:facet name="header">
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <span style="font-weight: bold" icon="pi pi-table">HORARIOS LABORALES</span>
+                            </p:toolbarGroup>
+                            <p:toolbarGroup align="right">
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{horarioLaboralView.nuevoHorario}"
+                                                 update=":form:manage-horarioLaboral-content" oncomplete="PF('manageHorarioLaboralDialog').show()"
+                                                 styleClass="ui-button-success" style="margin-right: .5rem">
+                                    <p:resetInput target=":form:manage-horarioLaboral-content"/>
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                    </f:facet>
+                    <p:column headerText="Nombre del horario">
+                        <h:outputText value="#{horarioLaboral.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Observaciones" width="35%">
+                        <h:outputText value="#{horarioLaboral.observaciones}"/>
+                    </p:column>
+                    <p:column headerText="Creado">
+                        <h:outputText value="#{horarioLaboral.fechaVigencia}"/>
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <h:outputText id="inputmarca" value="#{horarioLaboral.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
+                    </p:column>
+                    <p:column exportable="false" width="15%">
+                        <p:commandButton icon="pi pi-pencil" update=":form:manage-horarioLaboral-content"
+                                         oncomplete="PF('manageHorarioLaboralDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{horarioLaboral}" target="#{horarioLaboralView.horarioLaboral}"/>
+                            <p:resetInput target=":form:manage-horarioLaboral-content"/>
+                        </p:commandButton>
+                        <p:commandButton value="Detalle" icon="pi pi-list" action="DetalleHorario"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <f:setPropertyActionListener value="#{horarioLaboral}" target="#{horarioLaboralView.horarioLaboral}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog header="Horario Laboral" showEffect="fade" modal="true"
+                          widgetVar="manageHorarioLaboralDialog" responsive="true">
+                    <p:outputPanel id="manage-horarioLaboral-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty horarioLaboralView.horarioLaboral}">
+                            <div class="card">
+                                <div class="ui-fluid">
+                                    <div class="p-field">
+                                        <p:outputLabel for="nombre" style="font-weight: bold">Nombre</p:outputLabel>
+                                        <p:inputText id="nombre" value="#{horarioLaboralView.horarioLaboral.nombre}" 
+                                                     required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
+                                        <p:inputTextarea id="description" value="#{horarioLaboralView.horarioLaboral.observaciones}" 
+                                                         required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="fechav" style="font-weight: bold">Fecha de Vigencia</p:outputLabel>
+                                        <p:datePicker id="fechav" value="#{horarioLaboralView.horarioLaboral.fechaVigencia}" 
+                                                         required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-formgroup-inline">
+                                        <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>
+                                        <div class="p-field-checkbox">
+                                            <p:selectBooleanCheckbox id="estado" value="#{horarioLaboralView.horarioLaboral.estado}" itemLabel="Habilitar"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" icon="pi pi-save" action="DetalleHorario" actionListener="#{horarioLaboralView.guardarHorario}"
+                                         update="manage-horarioLaboral-content" styleClass="ui-button-success"
+                                         process="manage-horarioLaboral-content @this">
+                        </p:commandButton>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageHorarioLaboralDialog').hide()"
+                                         process="@none" styleClass="p-mr-2" resetValues="true" />
+                    </f:facet>
+                </p:dialog>
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times"/>
+                </p:confirmDialog>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -56,4 +56,12 @@ public class IngresosSalidas {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+    
+    public String horario() {
+        return horaIngreso + "-" + horaSalida;
+    }
+    
+    public String resumen() {
+        return observaciones + " (" + horario() + ")";
+    }
 }

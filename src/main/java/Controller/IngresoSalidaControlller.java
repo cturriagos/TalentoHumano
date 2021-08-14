@@ -57,6 +57,7 @@ public class IngresoSalidaControlller implements Serializable {
 
     public void abrirNuevo() {
         this.ingresosSalidas = new IngresosSalidas();
+        PrimeFaces.current().ajax().update("form:messages", "form:manage-ingresosSalidas-content");
     }
 
     public void enviar() {

@@ -12,11 +12,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author rturr
  */
+@Named
+@ApplicationScoped
 public class DiaSemanaDAO {
     protected final Conexion conexion;
     protected DiaSemana diaSemana;

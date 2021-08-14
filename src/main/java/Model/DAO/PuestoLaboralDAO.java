@@ -61,7 +61,8 @@ public class PuestoLaboralDAO implements IDAO<PuestoLaboral>{
             puestoLaboral.setEstado(true);
             puestoLaboral.setId(conexion.insertar("puesto_laboral",
                     "id_cargo, id_departamento, fecha_creacion, estado, descripcion",
-                    puestoLaboral.getCargo().getId()+ "," + puestoLaboral.getDepartamento().getId() + ", CURRENT_DATE, " + puestoLaboral.isEstado() + ", '" + puestoLaboral.getDescripcion() + "'", true));
+                    puestoLaboral.getCargo().getId()+ "," + puestoLaboral.getDepartamento().getId() + ", CURRENT_DATE, " + puestoLaboral.isEstado() + ", '" + puestoLaboral.getDescripcion() + "'",
+                    "id_puesto_laboral"));
             return puestoLaboral.getId();
         }
         return -1;

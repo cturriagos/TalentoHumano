@@ -12,13 +12,16 @@ import com.sun.istack.internal.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author rturr
  */
+@Named
+@ApplicationScoped
 public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
     protected final Conexion conexion;
     protected IngresosSalidas ingresosSalidas;
@@ -61,7 +64,8 @@ public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
         if (conexion.isEstado()) {
             ingresosSalidas.setId(conexion.insertar("ingresos_salidas",
                     "hora_ingreso, hora_salida, observaciones",
-                    "'" + ingresosSalidas.getHoraIngreso()+ "','" + ingresosSalidas.getHoraSalida() + "', '" + ingresosSalidas.getObservaciones()+ "'", true));
+                    "'" + ingresosSalidas.getHoraIngreso()+ "','" + ingresosSalidas.getHoraSalida() + "', '" + ingresosSalidas.getObservaciones()+ "'",
+                    "id_ingreso_salida"));
             return ingresosSalidas.getId();
         }
         return -1;

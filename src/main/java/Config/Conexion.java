@@ -116,45 +116,45 @@ public class Conexion {
         return lector;
 
     }
-    
-    public boolean iniciarTransaccion() throws SQLException, ClassNotFoundException{
-        if (conex == null || !(conex.isClosed())) { 
+
+    public boolean iniciarTransaccion() throws SQLException, ClassNotFoundException {
+        if (conex == null || !(conex.isClosed())) {
             Class.forName(classForName);
             conex = DriverManager.getConnection(url, usuario, clave);
-            conex.setAutoCommit(false); 
+            conex.setAutoCommit(false);
             st = conex.createStatement();
             estado = true;
             transaccionIniciada = true;
             return estado;
-        }else{
+        } else {
             return false;
         }
     }
-    
+
     public void ejecutarInsertarToTrnasaccion(String tabla, String campos, String valores) throws SQLException {
-        if(transaccionIniciada){
-            st.executeUpdate("INSERT INTO public." + tabla + "(" + campos + ")" + "VALUES(" + valores +")");
-        }else{
+        if (transaccionIniciada) {
+            st.executeUpdate("INSERT INTO public." + tabla + "(" + campos + ")" + "VALUES(" + valores + ")");
+        } else {
             throw new SQLException("Debe ejecutar primero la funcion iniciarTransaccion()");
         }
     }
-    
-    public void finalizarTransaccion(boolean conmit) throws SQLException{
-        if(conmit){
+
+    public void finalizarTransaccion(boolean conmit) throws SQLException {
+        if (conmit) {
             conex.commit();
-        }else{
+        } else {
             conex.rollback();
         }
         cerrarConexion();
     }
 
     public ResultSet selecionar(String tabla, String campos, @Nullable String restrinciones, @Nullable String ordenar) {
-        String sql = "SELECT " + campos +" FROM public." + tabla;
-        if (restrinciones != null){
-            sql = sql + " WHERE " + restrinciones ;
+        String sql = "SELECT " + campos + " FROM public." + tabla;
+        if (restrinciones != null) {
+            sql = sql + " WHERE " + restrinciones;
         }
-        if (ordenar != null){
-            sql = sql + " ORDER BY " + ordenar ;
+        if (ordenar != null) {
+            sql = sql + " ORDER BY " + ordenar;
         }
         try {
             if (abrirConexion()) {
@@ -171,19 +171,35 @@ public class Conexion {
 
     }
 
-    public int insertar(String tabla, String campos, String valores, boolean returnId) {
+    public int insertar(String tabla, String campos, String valores) {
         int retorno = -1;
-        String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores +")";
+        String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ")";
         try {
             if (abrirConexion()) {
-                if(returnId){
-                    retorno = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-                    ResultSet resultSet =  st.getGeneratedKeys();
-                    if(resultSet.next()){
-                        retorno = resultSet.getInt(1);
-                    }
-                }else{
-                    retorno = st.executeUpdate(sql);
+                retorno = st.executeUpdate(sql);
+                mensaje = "Se insertó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            cerrarConexion();
+        }
+        return retorno;
+    }
+
+    public int insertar(String tabla, String campos, String valores, String id) {
+        int retorno = -1;
+        String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ");";
+        try {
+            if (abrirConexion()) {
+                retorno = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+                lector = st.executeQuery("SELECT MAX(" + id + ") AS ID FROM public." + tabla + ";");
+                if (lector.next()) {
+                    retorno = lector.getInt("ID");
                 }
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
@@ -199,7 +215,7 @@ public class Conexion {
         return retorno;
     }
 
-   /* public int insertar(String tabla, String[] campos, String[] valores) {
+    /* public int insertar(String tabla, String[] campos, String[] valores) {
         String fields = "", values = "";
         int retorno = -1;
         for (int i = 0; i < campos.length; i++) {
@@ -261,7 +277,6 @@ public class Conexion {
         }
         return retorno;
     }*/
-
     public int modificar(String tabla, String camposModificados, String restrinciones) {
         int retorno = -1;
         String sql = "UPDATE " + tabla + " SET " + camposModificados + " WHERE " + restrinciones;
