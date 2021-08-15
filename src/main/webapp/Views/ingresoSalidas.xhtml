@@ -10,79 +10,79 @@
         <h:form id="form">
             <div class="card crud-demo">
                 <p:growl id="messages" showDetail="true"/>
-                <p:dataTable id="dt-ingresosSalidas" widgetVar="dtIngresosSalidas" var="ingresoSalida" value="#{ingresosSalidasView.lista}"
-                             reflow="true" size="small" liveResize="true" styleClass="ingresosSalidas-table"
-                             rowKey="#{ingresoSalida.id}" paginator="true"
-                             rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                    <f:facet name="header">
-                        <p:toolbar>
-                            <p:toolbarGroup>
-                                <span style="font-weight: bold" icon="pi pi-table">HORARIOS DE INGRESO Y SALIDA</span>
-                            </p:toolbarGroup>
-                            <p:toolbarGroup align="right">
-                                <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{ingresosSalidasView.abrirNuevo}"
-                                                 update=":form:manage-ingresosSalidas-content" oncomplete="PF('manageIngresosSalidasDialog').show()"
-                                                 styleClass="ui-button-success" style="margin-right: .5rem">
-                                    <p:resetInput target=":form:manage-ingresosSalidas-content"/>
-                                </p:commandButton>
-                            </p:toolbarGroup>
-                        </p:toolbar>
-                    </f:facet>
-                    <p:column headerText="Ingreso">
-                        <h:outputText value="#{ingresoSalida.horaIngreso}"/>
-                    </p:column>
-                    <p:column headerText="Salida">
-                        <h:outputText value="#{ingresoSalida.horaSalida}"/>
-                    </p:column>
-                    <p:column headerText="Observaciones" width="45%">
-                        <h:outputText value="#{ingresoSalida.observaciones}"/>
-                    </p:column>
-                    <p:column exportable="false" width="5%">
-                        <p:commandButton icon="pi pi-pencil" update=":form:manage-ingresosSalidas-content"
-                                         oncomplete="PF('manageIngresosSalidasDialog').show()"
-                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
-                            <f:setPropertyActionListener value="#{ingresoSalida}" target="#{ingresosSalidasView.ingresosSalidas}"/>
-                            <p:resetInput target=":form:manage-ingresosSalidas-content"/>
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
-                <p:dialog header="Horario" showEffect="fade" modal="true"
-                          widgetVar="manageIngresosSalidasDialog" responsive="true">
-                    <p:outputPanel id="manage-ingresosSalidas-content" class="ui-fluid">
-                        <p:outputPanel rendered="#{not empty ingresosSalidasView.ingresosSalidas}">
-                            <div class="card">
-                                <div class="ui-fluid">
-                                    <div class="p-field">
-                                        <p:outputLabel for="horaIngreso" style="font-weight: bold">Hora de Ingreso</p:outputLabel>
-                                        <p:inputText id="horaIngreso" value="#{ingresosSalidasView.ingresosSalidas.horaIngreso}"
-                                                     required="true" requiredMessage="Campo requerido"/>
-                                    </div>
-                                    <div class="p-field">
-                                        <p:outputLabel for="horaSalida" style="font-weight: bold">Hora de Salida</p:outputLabel>
-                                        <p:inputText id="horaSalida" value="#{ingresosSalidasView.ingresosSalidas.horaSalida}"
-                                                     required="true" requiredMessage="Campo requerido"/>
-                                    </div>
-                                    <div class="p-field">
-                                        <p:outputLabel for="observaciones" style="font-weight: bold">Observaciones</p:outputLabel>
-                                        <p:inputTextarea id="observaciones" value="#{ingresosSalidasView.ingresosSalidas.observaciones}"
+                <p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <span style="font-weight: bold" icon="pi pi-table">HORARIOS DE INGRESO Y SALIDA</span>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{ingresosSalidasView.abrirNuevo}"
+                                             update=":form:manage-ingresosSalidas-content" oncomplete="PF('manageIngresosSalidasDialog').show()"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <p:resetInput target=":form:manage-ingresosSalidas-content"/>
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:dataTable id="dt-ingresosSalidas" widgetVar="dtIngresosSalidas" var="ingresoSalida" value="#{ingresosSalidasView.lista}"
+                                 reflow="true" size="small" liveResize="true" styleClass="ingresosSalidas-table"
+                                 rowKey="#{ingresoSalida.id}" paginator="true"
+                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                        <p:column headerText="Ingreso">
+                            <h:outputText value="#{ingresoSalida.horaIngreso}"/>
+                        </p:column>
+                        <p:column headerText="Salida">
+                            <h:outputText value="#{ingresoSalida.horaSalida}"/>
+                        </p:column>
+                        <p:column headerText="Observaciones" width="45%">
+                            <h:outputText value="#{ingresoSalida.observaciones}"/>
+                        </p:column>
+                        <p:column exportable="false" width="5%">
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-ingresosSalidas-content"
+                                             oncomplete="PF('manageIngresosSalidasDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                <f:setPropertyActionListener value="#{ingresoSalida}" target="#{ingresosSalidasView.ingresosSalidas}"/>
+                                <p:resetInput target=":form:manage-ingresosSalidas-content"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog header="Horario" showEffect="fade" modal="true"
+                              widgetVar="manageIngresosSalidasDialog" responsive="true">
+                        <p:outputPanel id="manage-ingresosSalidas-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty ingresosSalidasView.ingresosSalidas}">
+                                <div class="card">
+                                    <div class="ui-fluid">
+                                        <div class="p-field">
+                                            <p:outputLabel for="horaIngreso" style="font-weight: bold">Hora de Ingreso</p:outputLabel>
+                                            <p:inputText id="horaIngreso" value="#{ingresosSalidasView.ingresosSalidas.horaIngreso}"
                                                          required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="horaSalida" style="font-weight: bold">Hora de Salida</p:outputLabel>
+                                            <p:inputText id="horaSalida" value="#{ingresosSalidasView.ingresosSalidas.horaSalida}"
+                                                         required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="observaciones" style="font-weight: bold">Observaciones</p:outputLabel>
+                                            <p:inputTextarea id="observaciones" value="#{ingresosSalidasView.ingresosSalidas.observaciones}"
+                                                             required="true" requiredMessage="Campo requerido"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </p:outputPanel>
                         </p:outputPanel>
-                    </p:outputPanel>
-                    <f:facet name="footer">
-                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{ingresosSalidasView.enviar}"
-                                         update="manage-ingresosSalidas-content" styleClass="ui-button-success" process="manage-ingresosSalidas-content @this"/>
-                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageIngresosSalidasDialog').hide()"
-                                         class="ui-button-secondary"/>
-                    </f:facet>
-                </p:dialog>
-                <p:confirmDialog global="true" showEffect="fade" width="300">
-                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                     icon="pi pi-times"/>
-                </p:confirmDialog>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{ingresosSalidasView.enviar}"
+                                             update="manage-ingresosSalidas-content" styleClass="ui-button-success" process="manage-ingresosSalidas-content @this"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageIngresosSalidasDialog').hide()"
+                                             class="ui-button-secondary"/>
+                        </f:facet>
+                    </p:dialog>
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
+                </p:panel>
             </div>
         </h:form>
     </ui:define>

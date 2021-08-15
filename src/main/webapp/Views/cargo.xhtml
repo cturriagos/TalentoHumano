@@ -10,67 +10,70 @@
         <h:form id="form" class="content-section implementation">
             <div class="card crud-demo">
                 <p:growl id="messages" showDetail="true"/>
-                <p:dataTable id="dt-cargos" widgetVar="dtCargos" var="cargo" value="#{cargoView.lista}"
-                             reflow="true" size="small" liveResize="true" styleClass="cargos-table"
-                             rowKey="#{cargo.id}" paginator="true"
-                             rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                    <f:facet name="header">
-                        <p:toolbar>
-                            <p:toolbarGroup>
-                                <span style="font-weight: bold" icon="pi pi-table">CARGOS</span>
-                            </p:toolbarGroup>
-                            <p:toolbarGroup align="right">
-                                <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{cargoView.abrirNuevo}"
-                                                 update=":form:manage-cargo-content" oncomplete="PF('manageCargoDialog').show()"
-                                                 styleClass="ui-button-success" style="margin-right: .5rem">
-                                    <p:resetInput target=":form:manage-cargo-content"/>
-                                </p:commandButton>
-                            </p:toolbarGroup>
-                        </p:toolbar>
-                    </f:facet>
-                    <p:column headerText="Id" width="10%">
-                        <h:outputText value="#{cargo.id}"/>
-                    </p:column>
-                    <p:column headerText="Nombre" sortBy="#{cargo.nombre}" filterBy="#{cargo.nombre}">
-                        <h:outputText value="#{cargo.nombre}"/>
-                    </p:column>
-                    <p:column exportable="false" width="5%">
-                        <p:commandButton icon="pi pi-pencil" update=":form:manage-cargo-content"
-                                         oncomplete="PF('manageCargoDialog').show()"
-                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
-                            <f:setPropertyActionListener value="#{cargo}" target="#{cargoView.cargo}"/>
-                            <p:resetInput target=":form:manage-cargo-content"/>
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
-                <p:dialog header="Cargo" showEffect="fade" modal="true"
-                          widgetVar="manageCargoDialog" responsive="true">
-                    <p:outputPanel id="manage-cargo-content" class="ui-fluid">
-                        <p:outputPanel rendered="#{not empty cargoView.cargo}">
-                            <div class="card">
-                                <div class="ui-fluid">
-                                    <div class="p-field">
-                                        <p:outputLabel for="nombre" style="font-weight: bold">Nombre</p:outputLabel>
-                                        <p:inputText id="nombre" value="#{cargoView.cargo.nombre}"
-                                                     required="true" requiredMessage="Campo requerido"/>
+                <p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <span style="font-weight: bold" icon="pi pi-table">CARGOS</span>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{cargoView.abrirNuevo}"
+                                             update=":form:manage-cargo-content" oncomplete="PF('manageCargoDialog').show()"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <p:resetInput target=":form:manage-cargo-content"/>
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:dataTable id="dt-cargos" widgetVar="dtCargos" var="cargo" value="#{cargoView.lista}"
+                                 reflow="true" size="small" liveResize="true" styleClass="cargos-table"
+                                 rowKey="#{cargo.id}" paginator="true"
+                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                        <f:facet name="header">
+                        </f:facet>
+                        <p:column headerText="Id" width="10%">
+                            <h:outputText value="#{cargo.id}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" sortBy="#{cargo.nombre}" filterBy="#{cargo.nombre}">
+                            <h:outputText value="#{cargo.nombre}"/>
+                        </p:column>
+                        <p:column exportable="false" width="5%">
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-cargo-content"
+                                             oncomplete="PF('manageCargoDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                <f:setPropertyActionListener value="#{cargo}" target="#{cargoView.cargo}"/>
+                                <p:resetInput target=":form:manage-cargo-content"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog header="Cargo" showEffect="fade" modal="true"
+                              widgetVar="manageCargoDialog" responsive="true">
+                        <p:outputPanel id="manage-cargo-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty cargoView.cargo}">
+                                <div class="card">
+                                    <div class="ui-fluid">
+                                        <div class="p-field">
+                                            <p:outputLabel for="nombre" style="font-weight: bold">Nombre</p:outputLabel>
+                                            <p:inputText id="nombre" value="#{cargoView.cargo.nombre}"
+                                                         required="true" requiredMessage="Campo requerido"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </p:outputPanel>
                         </p:outputPanel>
-                    </p:outputPanel>
-                    <f:facet name="footer">
-                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{cargoView.enviar}"
-                                         update="manage-cargo-content" styleClass="ui-button-success" process="manage-cargo-content @this"/>
-                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageCargoDialog').hide()"
-                                         class="ui-button-secondary"/>
-                    </f:facet>
-                </p:dialog>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{cargoView.enviar}"
+                                             update="manage-cargo-content" styleClass="ui-button-success" process="manage-cargo-content @this"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageCargoDialog').hide()"
+                                             class="ui-button-secondary"/>
+                        </f:facet>
+                    </p:dialog>
 
-                <p:confirmDialog global="true" showEffect="fade" width="300">
-                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                     icon="pi pi-times"/>
-                </p:confirmDialog>
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
+
+                </p:panel>
             </div>
         </h:form>
     </ui:define>

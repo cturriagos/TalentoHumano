@@ -7,12 +7,14 @@ package Model.DAO;
 
 import Config.Conexion;
 import Model.Entidad.DiaSemana;
+import Model.Interfaces.IDAO;
 import com.sun.istack.internal.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Named;
 
 /**
@@ -21,7 +23,7 @@ import javax.inject.Named;
  */
 @Named
 @ApplicationScoped
-public class DiaSemanaDAO {
+public class DiaSemanaDAO implements IDAO<DiaSemana>{
     protected final Conexion conexion;
     protected DiaSemana diaSemana;
 
@@ -53,10 +55,12 @@ public class DiaSemanaDAO {
         this.diaSemana = diaSemana;
     }
 
+    @Override
     public Conexion obtenerConexion() {
         return conexion;
     }
-
+    
+    @Override
     public DiaSemana buscarPorId(Object id) {
         List<DiaSemana> lista = buscar("id_dia = " + id, "nombre_dia");
         if(lista != null && !lista.isEmpty()){
@@ -65,10 +69,40 @@ public class DiaSemanaDAO {
         return null;
     }
 
+    @Override
     public List<DiaSemana> Listar() {
         return buscar(null, "nombre_dia");
     }
-    
+
+    @Override
+    public int insertar() {
+           if (conexion.isEstado()) {
+            diaSemana.setId(conexion.insertar("dia_semana", "nombre_dia", "'" + diaSemana.getNombre() + "'", "id_dia"));
+            return diaSemana.getId();
+        }
+        return -1;
+    }
+
+    @Override
+    public int insertar(DiaSemana entity) {
+        this.diaSemana = entity;
+        return insertar();
+    }
+
+    @Override
+    public int actualizar() {
+        if (conexion.isEstado()) {
+            return conexion.modificar("dia_semana", "nombre_dia = '" + diaSemana.getNombre() + "'", "id_dia = " + diaSemana.getId());
+        }
+        return -1;
+    }
+
+    @Override
+    public int actualizar(DiaSemana entity) {
+        this.diaSemana = entity;
+        return actualizar();
+    }
+        
     private List<DiaSemana> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
         if (conexion.isEstado()) {
             ResultSet result;

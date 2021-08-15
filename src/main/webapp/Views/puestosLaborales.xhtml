@@ -10,99 +10,99 @@
         <h:form id="form">
             <div class="card crud-demo">
                 <p:growl id="messages" showDetail="true"/>
-                <p:dataTable id="dt-puestoLaborals" widgetVar="dtPuestoLaborals" var="puestoLaboral" value="#{puestoLaboralView.lista}"
-                             reflow="true" size="small" liveResize="true" styleClass="puestoLaborals-table"
-                             rowKey="#{puestoLaboral.id}" paginator="true"
-                             rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                    <f:facet name="header">
-                        <p:toolbar>
-                            <p:toolbarGroup>
-                                <span style="font-weight: bold" icon="pi pi-table">PUESTOS LABORALES</span>
-                            </p:toolbarGroup>
-                            <p:toolbarGroup align="right">
-                                <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{puestoLaboralView.abrirNuevo}"
-                                                 update=":form:manage-puestoLaboral-content" oncomplete="PF('managePuestoLaboralDialog').show()"
-                                                 styleClass="ui-button-success" style="margin-right: .5rem">
-                                    <p:resetInput target=":form:manage-puestoLaboral-content"/>
-                                </p:commandButton>
-                            </p:toolbarGroup>
-                        </p:toolbar>
-                    </f:facet>
-                    <p:column headerText="Departamento">
-                        <h:outputText value="#{puestoLaboral.departamento.nombre}"/>
-                    </p:column>
-                    <p:column headerText="Cargo">
-                        <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
-                    </p:column>
-                    <p:column headerText="Creado">
-                        <h:outputText value="#{puestoLaboral.fecha_creacion}"/>
-                    </p:column>
-                    <p:column headerText="Descripción" width="40%">
-                        <h:outputText value="#{puestoLaboral.descripcion}"/>
-                    </p:column>
-                    <p:column headerText="Estado" width="10%">
-                        <h:outputText id="inputestado" value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
-                    </p:column>
-                    <p:column exportable="false" width="5%">
-                        <p:commandButton icon="pi pi-pencil" update=":form:manage-puestoLaboral-content"
-                                         oncomplete="PF('managePuestoLaboralDialog').show()"
-                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
-                            <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}" />
-                            <f:setPropertyActionListener value="#{puestoLaboral}" target="#{puestoLaboralView.puestoLaboral}"/>
-                            <p:resetInput target=":form:manage-puestoLaboral-content"/>
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
-                <p:dialog header="Puesto Laboral" showEffect="fade" modal="true"
-                          widgetVar="managePuestoLaboralDialog" responsive="true">
-                    <p:outputPanel id="manage-puestoLaboral-content" class="ui-fluid">
-                        <p:outputPanel rendered="#{not empty puestoLaboralView.puestoLaboral}">
-                            <div class="card">
-                                <div class="ui-fluid">
-                                    <div class="p-field">
-                                        <p:outputLabel for="depart" value="Departamento: "/>
-                                        <p:selectOneMenu id="depart" value="#{puestoLaboralView.idDepartamento}">
-                                            <f:selectItem itemLabel="Selecione un departamento" itemValue="#{0}" noSelectionOption="true"/>
-                                            <f:selectItems value="#{puestoLaboralView.departamentos}" var="departamento" 
-                                                           itemLabel="#{departamento.nombre}" itemValue="#{departamento.id}"/>
-                                        </p:selectOneMenu>
-                                    </div>
-                                    <div class="p-field">
-                                        <p:outputLabel for="inputcargo" value="Cargo: "/>
-                                        <p:selectOneMenu id="inputcargo" value="#{puestoLaboralView.idCargo}">
-                                            <f:selectItem itemLabel="Selecione un cargo" itemValue="#{0}" noSelectionOption="true"/>
-                                            <f:selectItems value="#{puestoLaboralView.cargos}" var="cargo" 
-                                                           itemLabel="#{cargo.nombre}" itemValue="#{cargo.id}"/>
-                                        </p:selectOneMenu>
-                                    </div>
-                                    <div class="p-field">
-                                        <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
-                                        <p:inputTextarea id="description" value="#{puestoLaboralView.puestoLaboral.descripcion}" 
-                                                         required="true" requiredMessage="Campo requerido"/>
-                                    </div>
-                                    <div class="p-formgroup-inline">
-                                        <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>
-                                        <div class="p-field-checkbox">
-                                            <p:selectBooleanCheckbox id="estado" value="#{puestoLaboralView.puestoLaboral.estado}" itemLabel="Habilitar"/>
+                <p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <span style="font-weight: bold" icon="pi pi-table">PUESTOS LABORALES</span>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{puestoLaboralView.abrirNuevo}"
+                                             update=":form:manage-puestoLaboral-content" oncomplete="PF('managePuestoLaboralDialog').show()"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <p:resetInput target=":form:manage-puestoLaboral-content"/>
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:dataTable id="dt-puestoLaborals" widgetVar="dtPuestoLaborals" var="puestoLaboral" value="#{puestoLaboralView.lista}"
+                                 reflow="true" size="small" liveResize="true" styleClass="puestoLaborals-table"
+                                 rowKey="#{puestoLaboral.id}" paginator="true"
+                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                        <p:column headerText="Departamento">
+                            <h:outputText value="#{puestoLaboral.departamento.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Cargo">
+                            <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Creado">
+                            <h:outputText value="#{puestoLaboral.fecha_creacion}"/>
+                        </p:column>
+                        <p:column headerText="Descripción" width="40%">
+                            <h:outputText value="#{puestoLaboral.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Estado" width="10%">
+                            <h:outputText id="inputestado" value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
+                        </p:column>
+                        <p:column exportable="false" width="5%">
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-puestoLaboral-content"
+                                             oncomplete="PF('managePuestoLaboralDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}" />
+                                <f:setPropertyActionListener value="#{puestoLaboral}" target="#{puestoLaboralView.puestoLaboral}"/>
+                                <p:resetInput target=":form:manage-puestoLaboral-content"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog header="Puesto Laboral" showEffect="fade" modal="true"
+                              widgetVar="managePuestoLaboralDialog" responsive="true">
+                        <p:outputPanel id="manage-puestoLaboral-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty puestoLaboralView.puestoLaboral}">
+                                <div class="card">
+                                    <div class="ui-fluid">
+                                        <div class="p-field">
+                                            <p:outputLabel for="depart" value="Departamento: "/>
+                                            <p:selectOneMenu id="depart" value="#{puestoLaboralView.idDepartamento}">
+                                                <f:selectItem itemLabel="Selecione un departamento" itemValue="#{0}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{puestoLaboralView.departamentos}" var="departamento" 
+                                                               itemLabel="#{departamento.nombre}" itemValue="#{departamento.id}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="inputcargo" value="Cargo: "/>
+                                            <p:selectOneMenu id="inputcargo" value="#{puestoLaboralView.idCargo}">
+                                                <f:selectItem itemLabel="Selecione un cargo" itemValue="#{0}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{puestoLaboralView.cargos}" var="cargo" 
+                                                               itemLabel="#{cargo.nombre}" itemValue="#{cargo.id}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
+                                            <p:inputTextarea id="description" value="#{puestoLaboralView.puestoLaboral.descripcion}" 
+                                                             required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                        <div class="p-formgroup-inline">
+                                            <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>
+                                            <div class="p-field-checkbox">
+                                                <p:selectBooleanCheckbox id="estado" value="#{puestoLaboralView.puestoLaboral.estado}" itemLabel="Habilitar"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </p:outputPanel>
                         </p:outputPanel>
-                    </p:outputPanel>
-                    <f:facet name="footer">
-                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{puestoLaboralView.enviar}"
-                                         update="manage-puestoLaboral-content" styleClass="ui-button-success" process="manage-puestoLaboral-content @this"/>
-                        <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{puestoLaboralView.cancelar}"
-                                         onclick="PF('managePuestoLaboralDialog').hide()"
-                                         process="@none" styleClass="p-mr-2" resetValues="true" />
-                    </f:facet>
-                </p:dialog>
-                <p:confirmDialog global="true" showEffect="fade" width="300">
-                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                     icon="pi pi-times"/>
-                </p:confirmDialog>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{puestoLaboralView.enviar}"
+                                             update="manage-puestoLaboral-content" styleClass="ui-button-success" process="manage-puestoLaboral-content @this"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{puestoLaboralView.cancelar}"
+                                             onclick="PF('managePuestoLaboralDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
+                </p:panel>
             </div>
         </h:form>
     </ui:define>

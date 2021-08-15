@@ -15,7 +15,7 @@
         <h:outputStylesheet library="css" name="styles.css"/>
         <h:outputStylesheet library="css" name="primeflex.css"/>
         <h:outputScript library="js" name="scripts.js" target="body"/>
-        
+
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' />
     </h:head>
 
@@ -38,19 +38,24 @@
                             <p:submenu label="Recursos Humanos" expanded="true" >
                                 <p:menuitem value="Empleados" 
                                             icon="pi pi-users"/>
-                                <p:menuitem value="Cargos" outcome="/Views/cargo"
-                                            icon="pi pi-briefcase"/>
-                                <p:menuitem value="Departamentos" outcome="/Views/departamentos"
-                                            icon="pi pi-sitemap"/>
-                                <p:menuitem value="Puestos Laborales" outcome="/Views/puestosLaborales"
-                                            icon="pi pi-clone"/>
+                                <p:submenu label="Areas">
+                                    <p:menuitem value="Puestos Laborales" outcome="/Views/puestosLaborales"
+                                                icon="pi pi-clone"/>
+                                    <p:menuitem value="Cargos" outcome="/Views/cargo"
+                                                icon="pi pi-briefcase"/>
+                                    <p:menuitem value="Departamentos" outcome="/Views/departamentos"
+                                                icon="pi pi-sitemap"/>
+                                </p:submenu>
                                 <p:submenu label="Horarios">
-                                    <p:menuitem value="Ingreso y Salida" 
-                                                outcome="/Views/ingresoSalidas" 
-                                                icon="pi pi-clock"/>
                                     <p:menuitem value="Horario Laboral" 
                                                 outcome="/Views/HorarioLaboral/horarioLaboral" 
                                                 icon="pi pi-calendar"/>
+                                    <p:menuitem value="Ingreso y Salida" 
+                                                outcome="/Views/ingresoSalidas" 
+                                                icon="pi pi-clock"/>
+                                    <p:menuitem value="Dia/Semana" 
+                                                outcome="/Views/diaSemana" 
+                                                icon="pi pi-align-center"/>
                                 </p:submenu>
                                 <p:menuitem value="Asistencias" 
                                             outcome="/Views/asistencia" 

@@ -44,4 +44,7 @@
             <redirect include-view-params="true"></redirect>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/diaSemana.xhtml</from-view-id>
+    </navigation-rule>
 </faces-config>
