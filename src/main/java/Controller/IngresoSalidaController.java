@@ -23,13 +23,13 @@ import org.primefaces.PrimeFaces;
  */
 @Named(value = "ingresosSalidasView")
 @ViewScoped
-public class IngresoSalidaControlller implements Serializable {
+public class IngresoSalidaController implements Serializable {
 
     private IngresosSalidas ingresosSalidas;
     private IngresosSalidasDAO ingresosSalidasDAO;
     private List<IngresosSalidas> lista;
 
-    public IngresoSalidaControlller() {
+    public IngresoSalidaController() {
         ingresosSalidasDAO = new IngresosSalidasDAO(new IngresosSalidas());
         lista = new ArrayList<>();
     }

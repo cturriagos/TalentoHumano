@@ -20,7 +20,7 @@ import org.primefaces.PrimeFaces;
 
 /**
  *
- * @author Lenin
+ * @author Arialdo
  */
 @Named(value = "diaSemanaView")
 @ViewScoped

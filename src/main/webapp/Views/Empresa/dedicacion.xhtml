@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <h:form id="form">
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <span style="font-weight: bold" icon="pi pi-table">DEDICACION DE LA EMPRESA</span>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{dedicacionView.abrirNuevo}"
+                                             update=":form:manage-dedicacion-content" oncomplete="PF('manageDedicacionDialog').show()"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <p:resetInput target=":form:manage-dedicacion-content"/>
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:dataTable id="dt-dedicaciones" widgetVar="dtDedicaciones" var="dedicacion" value="#{dedicacionView.lista}"
+                                 reflow="true" size="small" liveResize="true" styleClass="dedicacion-table"
+                                 rowKey="#{dedicacion.id}" paginator="true"
+                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                        <p:column headerText="Dedicación">
+                            <h:outputText value="#{dedicacion.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Utilidad (%)">
+                            <h:outputText value="#{dedicacion.porcentajeUtilidad}"/>
+                        </p:column>
+                        <p:column headerText="Detalle" width="45%">
+                            <h:outputText value="#{dedicacion.detalle}"/>
+                        </p:column>
+                        <p:column exportable="false" width="5%">
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-dedicacion-content"
+                                             oncomplete="PF('manageDedicacionDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                <f:setPropertyActionListener value="#{dedicacion}" target="#{dedicacionView.dedicacion}"/>
+                                <p:resetInput target=":form:manage-dedicacion-content"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog header="Dedicación" showEffect="fade" modal="true"
+                              widgetVar="manageDedicacionDialog" responsive="true">
+                        <p:outputPanel id="manage-dedicacion-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty dedicacionView.dedicacion}">
+                                <div class="card">
+                                    <div class="ui-fluid">
+                                        <div class="p-field">
+                                            <p:outputLabel for="nombre" style="font-weight: bold">Nombre: </p:outputLabel>
+                                            <p:inputText id="nombre" value="#{dedicacionView.dedicacion.nombre}"
+                                                         required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="utilidad" style="font-weight: bold">Utilidad (%): </p:outputLabel>
+                                            <p:inputNumber id="utilidad" value="#{dedicacionView.dedicacion.porcentajeUtilidad}" symbol="%"
+                                                           symbolPosition="s" required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="detalle" style="font-weight: bold">Detalle: </p:outputLabel>
+                                            <p:inputTextarea id="detalle" value="#{dedicacionView.dedicacion.detalle}"
+                                                             required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{dedicacionView.enviar}"
+                                             update="manage-dedicacion-content" styleClass="ui-button-success" process="manage-dedicacion-content @this"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDedicacionDialog').hide()"
+                                             class="ui-button-secondary"/>
+                        </f:facet>
+                    </p:dialog>
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -23,8 +23,8 @@ import javax.inject.Named;
 @Named
 @ApplicationScoped
 public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
-    protected final Conexion conexion;
-    protected IngresosSalidas ingresosSalidas;
+    private final Conexion conexion;
+    private IngresosSalidas ingresosSalidas;
 
     public IngresosSalidasDAO() {
         conexion = new Conexion();
