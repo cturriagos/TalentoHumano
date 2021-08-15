@@ -13,11 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author Arialdo
  */
+@Named
+@ApplicationScoped
 public class CiudadDAO implements  IDAO<Ciudad>{
     private final Conexion conexion;
     private Ciudad ciudad;

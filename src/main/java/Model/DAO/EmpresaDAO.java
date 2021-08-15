@@ -6,6 +6,7 @@
 package Model.DAO;
 
 import Config.Conexion;
+import Model.Entidad.Dedicacion;
 import Model.Entidad.Empresa;
 import Model.Interfaces.IDAO;
 import com.sun.istack.internal.Nullable;
@@ -22,9 +23,11 @@ import javax.inject.Named;
  */
 @Named
 @ApplicationScoped
-public class EmpresaDAO  implements IDAO<Empresa>{
-    protected final Conexion conexion;
-    protected Empresa empresa;
+public class EmpresaDAO implements IDAO<Empresa> {
+
+    private final Conexion conexion;
+    private final String DEFAUL = "SISTEMA ERPCONTABLE";
+    private Empresa empresa;
 
     public EmpresaDAO() {
         conexion = new Conexion();
@@ -41,7 +44,7 @@ public class EmpresaDAO  implements IDAO<Empresa>{
         empresa = new Empresa();
     }
 
-    public EmpresaDAO(Empresa empresa,Conexion conexion) {
+    public EmpresaDAO(Empresa empresa, Conexion conexion) {
         this.conexion = conexion;
         this.empresa = empresa;
     }
@@ -63,10 +66,10 @@ public class EmpresaDAO  implements IDAO<Empresa>{
     public int insertar() {
         if (conexion.isEstado()) {
             empresa.setId(conexion.insertar("empresa_matriz",
-                    "id_dedicacion, id_ciudad, ruc, tipo, nombre, razon_social, direccion, detalle",
-                    empresa.getDedicacion().getId()+ "," + empresa.getCiudad().getId() + ", '" + empresa.getRuc() +
-                            "', '" + empresa.getTipo() + "', '" + empresa.getNombre() + "', '" + empresa.getRazonSocial() +
-                            "', '" + empresa.getDireccion() + "', '" + empresa.getDetalle()+ "'",
+                    "id_dedicacion, ruc, tipo, nombre, razon_social, detalle",
+                    empresa.getDedicacion().getId() + ", '" + empresa.getRuc() + "', '" + empresa.getTipo()
+                    + "', '" + empresa.getNombre() + "', '" + empresa.getRazonSocial()
+                    + "', '" + empresa.getDetalle() + "'",
                     "id_matriz"));
             return empresa.getId();
         }
@@ -83,10 +86,9 @@ public class EmpresaDAO  implements IDAO<Empresa>{
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("empresa_matriz",
-                    "id_dedicacion = " + empresa.getDedicacion().getId()+ ", id_ciudad = " + empresa.getCiudad().getId() +
-                            ", ruc = '" + empresa.getRuc()+ "', estado = '" + empresa.getTipo() + "', nombre = '" +
-                            empresa.getNombre() + "', razon_social = '" + empresa.getRazonSocial() + "', direccion = '" +
-                            empresa.getDireccion() + "', detalle = '" + empresa.getDetalle() + "'" ,
+                    "id_dedicacion = " + empresa.getDedicacion().getId() + ", ruc = '" + empresa.getRuc() + "', tipo = '"
+                    + empresa.getTipo() + "', nombre = '" + empresa.getNombre() + "', razon_social = '"
+                    + empresa.getRazonSocial() + "', detalle = '" + empresa.getDetalle() + "'",
                     "id_matriz = " + empresa.getId());
         }
         return -1;
@@ -101,8 +103,8 @@ public class EmpresaDAO  implements IDAO<Empresa>{
     @Override
     public Empresa buscarPorId(Object id) {
         List<Empresa> lista = buscar("id_matriz = " + id, null);
-        if(lista != null && !lista.isEmpty()){
-                return lista.get(0);
+        if (lista != null && !lista.isEmpty()) {
+            return lista.get(0);
         }
         return null;
     }
@@ -112,24 +114,30 @@ public class EmpresaDAO  implements IDAO<Empresa>{
         return buscar(null, "nombre ASC");
     }
     
-    private List<Empresa> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
+    public Empresa cargar() {
+        List<Empresa> lista = buscar(null, null);
+        if (lista != null && !lista.isEmpty()) {
+            return lista.get(0);
+        }else{
+            return new Empresa(-1, new Dedicacion(-1, DEFAUL, 0, DEFAUL), "9999999999999", "Comercial", DEFAUL, DEFAUL, DEFAUL);
+        }
+    }
+
+    private List<Empresa> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
         if (conexion.isEstado()) {
             ResultSet result;
             List<Empresa> empresas;
             try {
-                result = conexion.selecionar("puesto_laboral", "id_matriz, id_dedicacion, id_ciudad, ruc, tipo, nombre, razon_social, direccion, detalle", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("empresa_matriz", "id_matriz, id_dedicacion, ruc, tipo, nombre, razon_social, detalle", restricciones, OrdenarAgrupar);
                 empresas = new ArrayList<>();
                 DedicacionDAO ddao = new DedicacionDAO();
-                CiudadDAO cdao = new CiudadDAO();
                 while (result.next()) {
                     empresas.add(new Empresa(result.getInt("id_matriz"),
                             ddao.buscarPorId(result.getInt("id_dedicacion")),
-                            cdao.buscarPorId(result.getInt("id_ciudad")),
                             result.getString("ruc"),
                             result.getString("tipo"),
                             result.getString("nombre"),
                             result.getString("razon_social"),
-                            result.getString("direccion"),
                             result.getString("detalle")
                     ));
                 }

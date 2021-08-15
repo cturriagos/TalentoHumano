@@ -8,30 +8,25 @@ package Model.Entidad;
 public class Empresa {
     private int id;
     private Dedicacion dedicacion;
-    private Ciudad ciudad;
-    private String ruc, tipo, nombre, razonSocial, direccion, detalle;
+    private String ruc, tipo, nombre, razonSocial, detalle;
 
     public Empresa() {
         this.id = 0;
         this.dedicacion = new Dedicacion();
-        this.ciudad = new Ciudad();
         this.ruc = "";
         this.tipo = "";
         this.nombre = "";
         this.razonSocial = "";
-        this.direccion = "";
         this.detalle = "";
     }
 
-    public Empresa(int id, Dedicacion dedicacion, Ciudad ciudad, String ruc, String tipo, String nombre, String razonSocial, String direccion, String detalle) {
+    public Empresa(int id, Dedicacion dedicacion, String ruc, String tipo, String nombre, String razonSocial, String detalle) {
         this.id = id;
         this.dedicacion = dedicacion;
-        this.ciudad = ciudad;
         this.ruc = ruc;
         this.tipo = tipo;
         this.nombre = nombre;
         this.razonSocial = razonSocial;
-        this.direccion = direccion;
         this.detalle = detalle;
     }
 
@@ -49,14 +44,6 @@ public class Empresa {
 
     public void setDedicacion(Dedicacion dedicacion) {
         this.dedicacion = dedicacion;
-    }
-
-    public Ciudad getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(Ciudad ciudad) {
-        this.ciudad = ciudad;
     }
 
     public String getRuc() {
@@ -91,14 +78,6 @@ public class Empresa {
         this.razonSocial = razonSocial;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
     public String getDetalle() {
         return detalle;
     }
@@ -106,5 +85,4 @@ public class Empresa {
     public void setDetalle(String detalle) {
         this.detalle = detalle;
     }
-    
 }

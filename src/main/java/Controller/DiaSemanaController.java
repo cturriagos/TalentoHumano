@@ -24,7 +24,7 @@ import org.primefaces.PrimeFaces;
  */
 @Named(value = "diaSemanaView")
 @ViewScoped
-public class DiaSemanaController  implements Serializable {
+public class DiaSemanaController implements Serializable {
     private DiaSemana diaSemana;
     private List<DiaSemana> lista;
     
@@ -83,7 +83,7 @@ public class DiaSemanaController  implements Serializable {
             }
         }
         PrimeFaces.current().executeScript("PF('manageDiaSemanaDialog').hide()");
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-DiaSemanas");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-diaSemanas");
     }
 
     //  MENSAJE DE AVISO

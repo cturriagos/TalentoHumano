@@ -58,8 +58,8 @@
                                         </div>
                                         <div class="p-field">
                                             <p:outputLabel for="utilidad" style="font-weight: bold">Utilidad (%): </p:outputLabel>
-                                            <p:inputNumber id="utilidad" value="#{dedicacionView.dedicacion.porcentajeUtilidad}" symbol="%"
-                                                           symbolPosition="s" required="true" requiredMessage="Campo requerido"/>
+                                            <p:spinner id="utilidad" value="#{dedicacionView.dedicacion.porcentajeUtilidad}"
+                                                       stepFactor="0.01"/>
                                         </div>
                                         <div class="p-field">
                                             <p:outputLabel for="detalle" style="font-weight: bold">Detalle: </p:outputLabel>

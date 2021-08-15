@@ -13,11 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author Arialdo
  */
+@Named
+@ApplicationScoped
 public class DedicacionDAO  implements  IDAO<Dedicacion>{
     private final Conexion conexion;
     private Dedicacion dedicacion;

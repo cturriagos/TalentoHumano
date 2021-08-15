@@ -17,7 +17,7 @@
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
                             <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{ciudadView.abrirNuevo}"
-                                             update=":form:manage-ciudad-content" oncomplete="PF('manageciudadDialog').show()"
+                                             update=":form:manage-ciudad-content" oncomplete="PF('manageCiudadDialog').show()"
                                              styleClass="ui-button-success" style="margin-right: .5rem">
                                 <p:resetInput target=":form:manage-ciudad-content"/>
                             </p:commandButton>
@@ -63,8 +63,7 @@
                                         </div>
                                         <div class="p-field">
                                             <p:outputLabel for="observaciones" style="font-weight: bold">Detalle: </p:outputLabel>
-                                            <p:inputTextarea id="observaciones" value="#{ciudadView.ciudad.detalle}"
-                                                             required="true" requiredMessage="Campo requerido"/>
+                                            <p:inputTextarea id="observaciones" value="#{ciudadView.ciudad.detalle}"/>
                                         </div>
                                     </div>
                                 </div>

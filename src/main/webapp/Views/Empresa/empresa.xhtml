@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <h:head>
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{empresaView.postLoad}" />
+            </f:metadata>
+        </h:head>
+        <h:form id="form">
+            <p:growl id="messages" showDetail="true"/>
+            <p:panel id="dt-empresa" >
+                <h2>#{empresaView.empresa.razonSocial}</h2>
+                <p:toolbar>
+                    <p:toolbarGroup  style="width: 80%">
+                        <h:panelGrid columns="4" style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <p:outputLabel for="nombreC" style="font-weight: bold; width: 25%;">Nombre Comercial: </p:outputLabel>
+                            <h:outputText id="nombreC" style="width: 30%" value="#{empresaView.empresa.nombre}"/>
+
+                            <p:outputLabel for="ruc" style="font-weight: bold; width: 20%;">RUC: </p:outputLabel>
+                            <h:outputText id="ruc" style="width: 30%" value="#{empresaView.empresa.ruc}"/>
+
+                            <p:outputLabel for="dedicacion" style="font-weight: bold; width: 20%;">Dedicación: </p:outputLabel>
+                            <h:outputText id="dedicacion" style="width: 30%" value="#{empresaView.empresa.dedicacion.nombre}"/>
+
+                            <p:outputLabel for="tipo" style="font-weight: bold; width: 20%;">Tipo: </p:outputLabel>
+                            <h:outputText id="tipo" style="width: 30%" value="#{empresaView.empresa.tipo}"/>
+                        </h:panelGrid>
+                    </p:toolbarGroup>
+                    <p:toolbarGroup align="right">
+                        <p:commandButton value="Editar" icon="pi pi-pencil" update=":form:manage-empresa-content"
+                                         oncomplete="PF('manageEmpresaDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <p:ajax listener="#{empresaView.editar(empresaView.empresa.dedicacion.id)}" />
+                            <p:resetInput target=":form:manage-empresa-content"/>
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <f:facet name="footer">
+                    <h5 class="p-mt-0">#{empresaView.empresa.detalle}</h5>
+                </f:facet>
+                <p:dialog header="Datos de la Empresa" showEffect="fade" modal="true"
+                          widgetVar="manageEmpresaDialog" responsive="true">
+                    <p:outputPanel id="manage-empresa-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty empresaView.empresa}">
+                            <div class="card">
+                                <div class="ui-fluid">
+                                    <div class="p-field">
+                                        <p:outputLabel for="razonSocial" style="font-weight: bold">Razón Social: </p:outputLabel>
+                                        <p:inputText id="razonSocial" value="#{empresaView.empresa.razonSocial}" 
+                                                     required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputnombre" style="font-weight: bold">Nombre Comercial: </p:outputLabel>
+                                        <p:inputText id="inputnombre" value="#{empresaView.empresa.nombre}" 
+                                                     required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputruc" style="font-weight: bold">RUC: </p:outputLabel>
+                                        <p:inputText id="inputruc" value="#{empresaView.empresa.ruc}" maxlength="13" 
+                                                     required="true" requiredMessage="Campo requerido">
+                                        </p:inputText>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputdedicacion" value="Dedicación: "/>
+                                        <p:selectOneMenu id="inputdedicacion" value="#{empresaView.idDedicacion}">
+                                            <f:selectItem itemLabel="Selecione una dedicación" itemValue="#{0}" noSelectionOption="true"/>
+                                            <f:selectItems value="#{empresaView.dedicaciones}" var="dedicacion" 
+                                                           itemLabel="#{dedicacion.nombre}" itemValue="#{dedicacion.id}"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputtipo" style="font-weight: bold">Tipo: </p:outputLabel>
+                                        <p:inputText id="inputtipo" value="#{empresaView.empresa.tipo}" 
+                                                      required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputdetalle" style="font-weight: bold">Detalle: </p:outputLabel>
+                                        <p:inputTextarea id="inputdetalle" value="#{empresaView.empresa.detalle}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empresaView.guardarEmpresa}"
+                                         update="manage-empresa-content" styleClass="ui-button-success"
+                                         process="manage-empresa-content @this">
+                        </p:commandButton>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageEmpresaDialog').hide()"
+                                         process="@none" styleClass="p-mr-2" resetValues="true" />
+                    </f:facet>
+                </p:dialog>
+            </p:panel>
+            <p:panel>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <span style="font-weight: bold" icon="pi pi-table">SUCURSALES</span>
+                    </p:toolbarGroup>
+                    <p:toolbarGroup align="right">
+                        <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{empresaView.nuevaSucursal}"
+                                         update=":form:manage-sucursal-content" oncomplete="PF('manageSucursalDialog').show()"
+                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                            <p:resetInput target=":form:manage-sucursal-content"/>
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <p:panel>
+                    <p:dataTable id="dt-sucursales" widgetVar="dtSucursales" var="sucursal" value="#{empresaView.sucursales}"
+                                 reflow="true" size="small" liveResize="true" styleClass="sucursales-table"
+                                 rowKey="#{sucursal.id}" paginator="true"
+                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                        <p:column headerText="Ciudad" width="20%">
+                            <h:outputText value="#{sucursal.ciudad.resumen()}"/>
+                        </p:column>
+                        <p:column headerText="Dirección">
+                            <h:outputText value="#{sucursal.direccion}"/>
+                        </p:column>
+                        <p:column headerText="Detalle">
+                            <h:outputText value="#{sucursal.detalle}"/>
+                        </p:column>
+                        <p:column exportable="false" width="5%">
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-sucursal-content"
+                                             oncomplete="PF('manageSucursalDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                <p:ajax listener="#{empresaView.editarSucursal(empresaView.idCiudad)}" />
+                                <f:setPropertyActionListener value="#{sucursal}" target="#{empresaView.sucursal}"/>
+                                <p:resetInput target=":form:manage-sucursal-content"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog header="Sucursal" showEffect="fade" modal="true"
+                              widgetVar="manageSucursalDialog" responsive="true">
+                        <p:outputPanel id="manage-sucursal-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty empresaView.sucursal}">
+                                <div class="card">
+                                    <div class="ui-fluid">
+                                        <div class="p-field">
+                                            <p:outputLabel for="inputdia" value="Ciudad: "/>
+                                            <p:selectOneMenu id="inputdia" value="#{empresaView.idCiudad}">
+                                                <f:selectItem itemLabel="Selecione un dia" itemValue="#{0}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{empresaView.ciudades}" var="ciudad" 
+                                                               itemLabel="#{ciudad.resumen()}" itemValue="#{ciudad.id}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="inputdireccion" style="font-weight: bold">Dirección: </p:outputLabel>
+                                            <p:inputTextarea id="inputdireccion" value="#{empresaView.sucursal.direccion}" 
+                                                             required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="inputdetalles" style="font-weight: bold">Detalle: </p:outputLabel>
+                                            <p:inputTextarea id="inputdetalles" value="#{empresaView.sucursal.detalle}" 
+                                                             required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empresaView.guardarSucursal}"
+                                             update="manage-sucursal-content" styleClass="ui-button-success" process="manage-sucursal-content @this"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSucursalDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                </p:panel>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+

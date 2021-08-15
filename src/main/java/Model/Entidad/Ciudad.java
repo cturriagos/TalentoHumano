@@ -55,5 +55,9 @@ public class Ciudad {
     public void setDetalle(String detalle) {
         this.detalle = detalle;
     }
+    
+    public String resumen(){
+        return nombre + "(" + provincia + ")";
+    }
 
 }
