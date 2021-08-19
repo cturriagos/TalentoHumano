@@ -54,7 +54,7 @@
                                     <p:inputText value="#{empleadoCrearView.empleado.apellido1}" required="true" label="Primer apellido"/>
 
                                     <h:outputText style="margin-left: 10PX" value="Segundo apellido: "/>
-                                    <p:inputText value="#{empleadoCrearView.empleado.apellido1}" required="true" label="Segundo apellido"/>
+                                    <p:inputText value="#{empleadoCrearView.empleado.apellido2}" required="true" label="Segundo apellido"/>
 
                                     <h:outputLabel for="phone1" value="Teléfono #1: "/>
                                     <p:inputMask id="phone1" value="#{empleadoCrearView.persona.telefono1}" required="true"
@@ -126,7 +126,7 @@
 
                                     <p:outputLabel for="inSueldo" value="Sueldo: "/>
                                     <p:spinner id="inSueldo" value="#{empleadoCrearView.sueldo.valor}"
-                                               stepFactor="0.01" required="true" label="Sueldo"/>
+                                               stepFactor="1.00" required="true" label="Sueldo"/>
                                 </h:panelGrid>
                                 <h:panelGrid columns="2"  columnClasses="ui-grid-col-2,ui-grid-col-10"
                                              styleClass="ui-panelgrid-blank ui-fluid"

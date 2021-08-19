@@ -118,8 +118,6 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
             try {
                 result = conexion.selecionar("carga_familiar", "id_cargaf, id_empleado, cantidad_carga, fecha_cambio, nombre, documento_validacion, detalle", restricciones, OrdenarAgrupar);
                 EmpleadoDAO edao = new EmpleadoDAO();
-                PuestoLaboralDAO pldao = new PuestoLaboralDAO();
-                HorarioLaboralDAO hldao = new HorarioLaboralDAO();
                 while (result.next()) {
                     cargaFamiliares.add(new CargaFamiliar(
                             result.getInt("id_cargaf"), result.getInt("cantidad_carga"),

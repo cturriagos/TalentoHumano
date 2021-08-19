@@ -5,10 +5,12 @@
  */
 package Controller;
 
+import Model.DAO.CargaFamiliarDAO;
 import Model.DAO.EmpleadoDAO;
 import Model.DAO.EmpleadoPuestoDAO;
 import Model.DAO.EmpleadoSucursalDAO;
 import Model.DAO.SueldoDAO;
+import Model.Entidad.CargaFamiliar;
 import Model.Entidad.Empleado;
 import Model.Entidad.EmpleadoPuesto;
 import Model.Entidad.EmpleadoSucursal;
@@ -41,13 +43,18 @@ public class EmpleadoController implements Serializable {
     private EmpleadoPuesto empleadoPuesto;
     
     @Inject
+    private CargaFamiliarDAO cargaFamiliarDAO;
+    private CargaFamiliar cargaFamiliar;
+    
+    @Inject
     private SueldoDAO sueldoDAO;
     private Sueldo sueldo;
 
     public EmpleadoController() {
         empleado = new Empleado();
-        empleadoSucursal = new EmpleadoSucursal();
         empleadoPuesto = new EmpleadoPuesto();
+        empleadoSucursal = new EmpleadoSucursal();
+        cargaFamiliar = new CargaFamiliar();
         sueldo = new Sueldo();
     }
 
@@ -77,6 +84,14 @@ public class EmpleadoController implements Serializable {
         this.empleadoPuesto = empleadoPuesto;
     }
 
+    public CargaFamiliar getCargaFamiliar() {
+        return cargaFamiliar;
+    }
+
+    public void setCargaFamiliar(CargaFamiliar cargaFamiliar) {
+        this.cargaFamiliar = cargaFamiliar;
+    }
+
     public Sueldo getSueldo() {
         return sueldo;
     }
@@ -94,6 +109,19 @@ public class EmpleadoController implements Serializable {
             sueldo = sueldoDAO.buscar(empleado);
             PrimeFaces.current().ajax().update(null, "form:DATOS");
         }
+    }
+    
+    public void cambiarSueldo(){
+        sueldoDAO.setSueldo(sueldo);
+        sueldoDAO.desactivar();
+        if (sueldoDAO.insertar()>0){
+            sueldo.setId(sueldoDAO.getSueldo().getId());
+            empleadoPuestoDAO.setEmpleadoPuesto(empleadoPuesto);
+            empleadoPuestoDAO.actualizar();
+            mostrarMensajeInformacion("Se ha cambiado el sueldo con éxito");
+        }
+        PrimeFaces.current().executeScript("PF('manageSueldoDialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }
 
     //  MENSAJE DE ERROR

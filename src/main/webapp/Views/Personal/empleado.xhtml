@@ -11,81 +11,174 @@
                 <f:event type="preRenderView" listener="#{empleadoView.postLoad(personaBean.idEmpleado)}" />
             </f:metadata>
         </h:head>
-        <h:form id="form">
-            <p:growl id="messages" showDetail="true"/>
-            <p:panel id="dt-empleado" >
-                <p:toolbar>
-                    <p:toolbarGroup>
-                        <span style="font-weight: bold" icon="pi pi-table">#{empleadoView.sueldo.empleado.nombreCompleto()}</span>
-                    </p:toolbarGroup>
-                    <p:toolbarGroup align="right">
-                        <p:commandButton value="Editar" icon="pi pi-user-edit" action="EditarEmpleado"
-                                         styleClass="ui-button-success" style="margin-right: .5rem">
-                            <f:setPropertyActionListener value="#{empleadoView.sueldo.empleado.id}" target="#{personaBean.idEmpleado}"/>
-                        </p:commandButton>
-                        <p:commandButton value="Volver a la lista" icon="pi pi-list" action="ListaEmpleado"
-                                         styleClass="ui-button-success" style="margin-right: .5rem"/>
-                    </p:toolbarGroup>
-                </p:toolbar>
-                <p:panel class="ui-fluid">
-                    <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-                                 styleClass="ui-panelgrid-blank ui-fluid"
-                                 style="border:0px none; background-color:transparent; width: 100%;">
+        <h:form id="form" class="content-section implementation" >
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <p:panel >
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <span style="font-weight: bold" icon="pi pi-table">#{empleadoView.sueldo.empleado.nombreCompleto()}</span>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Editar" icon="pi pi-user-edit" action="EditarEmpleado"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <f:setPropertyActionListener value="#{empleadoView.sueldo.empleado.id}" target="#{personaBean.idEmpleado}"/>
+                            </p:commandButton>
+                            <p:commandButton value="Volver a la lista" icon="pi pi-list" action="ListaEmpleado"
+                                             styleClass="ui-button-success" style="margin-right: .5rem"/>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:panel id="dt-empleado" class="ui-fluid">
+                        <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="width: 100%;">
 
-                        <h:outputText value="#{empleadoView.sueldo.empleado.persona.tipoIdentificacion}: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.sueldo.empleado.persona.identificacion}" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.persona.tipoIdentificacion}: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.persona.identificacion}" />
 
-                        <h:outputText value="Fecha de nacimiento: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.sueldo.empleado.fechaNacimiento}" />
+                            <h:outputText value="Teléfono: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.persona.telefonos()}" />
 
-                        <h:outputText value="Teléfono: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.sueldo.empleado.persona.telefonos()}" />
+                            <h:outputText value="Puesto: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.empleadoPuesto.puestoLaboral.resumen()}" />
 
-                        <h:outputText value="Correo: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.sueldo.empleado.persona.correo}"/>
-                        
-                        <h:outputText value="Fecha de Ingreso: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.sueldo.empleado.fechaIngreso}" />
+                            <h:outputText value="Sueldo: " style="font-weight: bold;" />
+                            <h:outputText id="outsueldo" value="$ #{empleadoView.sueldo.valor}" />
 
-                        <h:outputText value="Fecha de Salida: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.sueldo.empleado.fechaEgreso}" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-3"
-                                 styleClass="ui-panelgrid-blank ui-fluid"
-                                 style="border:0px none; background-color:transparent; width: 100%;">
+                        </h:panelGrid>
+                        <h:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
 
-                        <h:outputText value="Sueldo: " style="font-weight: bold;" />
-                        <h:outputText value="$ #{empleadoView.sueldo.valor}" />
+                            <h:outputText value="Correo: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.persona.correo}"/>
 
-                        <h:outputText value="Sexo: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.sueldo.empleado.sexo}" />
+                            <h:outputText value="Sexo: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.sexo}" />
 
-                        <h:outputText value="Género: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.sueldo.empleado.genero}" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
-                                 styleClass="ui-panelgrid-blank ui-fluid"
-                                 style="border:0px none; background-color:transparent; width: 100%;">
+                            <h:outputText value="Género: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.genero}" />
 
-                        <h:outputText value="Dirección: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.empleadoPuesto.empleado.persona.direccion}" />
 
-                        <h:outputText value="Puesto: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.empleadoPuesto.puestoLaboral.resumen()}" />
-                        
-                        <h:outputText value="Sucursal: " style="font-weight: bold;" />
-                        <h:outputText value="#{empleadoView.empleadoSucursal.sucursal.direccion}" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="1" columnClasses="ui-grid-col-12"
-                                 styleClass="ui-panelgrid-blank ui-fluid"
-                                 style="border:0px none; background-color:transparent; width: 100%;">
+                        </h:panelGrid>
+                        <h:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
 
-                        <h:outputText value="Observaciones(detalles): " style="font-weight: bold;" />
-                        <h:outputText value="Sobre el puesto: #{empleadoView.empleadoPuesto.observaciones}" />
-                        <h:outputText value="Sobre la sucursal: #{empleadoView.empleadoSucursal.detalle}" />
-                    </h:panelGrid>
+                            <h:outputText value="Fecha de nacimiento: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.fechaNacimiento}" />
+
+                            <h:outputText value="Fecha de Ingreso: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.fechaIngreso}" />
+
+                            <h:outputText value="Fecha de Salida: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.sueldo.empleado.fechaEgreso}" />
+
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{empty empleadoView.cargaFamiliar}" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-1"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <h:outputText value="Cónyuge: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.cargaFamiliar.conyuge}" />
+
+                            <h:outputText value="Familiares a cargo: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.cargaFamiliar.faliares}" />
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <h:outputText value="Dirección: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.empleadoPuesto.empleado.persona.direccion}" />
+
+                            <h:outputText value="Sucursal: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.empleadoSucursal.sucursal.direccion}" />
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" columnClasses="ui-grid-col-12"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <h:outputText value="Observaciones(detalles): " style="font-weight: bold;" />
+                            <h:outputText value="Sobre el puesto: #{empleadoView.empleadoPuesto.observaciones}" />
+                            <h:outputText value="Sobre la sucursal: #{empleadoView.empleadoSucursal.detalle}" />
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:dialog header="Cambiar Sueldo" minHeight="40" width="350" showEffect="fade" modal="true"
+                              widgetVar="manageSueldoDialog" responsive="true">
+                        <p:outputPanel id="manage-sueldo-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{empty empledoView.sueldo}">
+                                <div class="card">
+                                    <div class="ui-fluid">
+                                        <div class="p-field">
+                                            <p:outputLabel for="insueldo" style="font-weight: bold" value="Nuevo Sueldo: " />
+                                            <p:spinner id="insueldo" value="#{empleadoView.sueldo.valor}" stepFactor="1.00"
+                                                       required="true" requiredMessage="Necesita ingresar un valor"/>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="inobservacion" style="font-weight: bold" value="Observaciones del (puesto)"/>
+                                            <p:inputTextarea id="inobservacion" value="#{empleadoView.empleadoPuesto.observaciones}" 
+                                                             required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.cambiarSueldo}"
+                                             update="manage-sueldo-content" styleClass="ui-button-success"
+                                             process="manage-sueldo-content @this">
+                                <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas cambiar el sueldo?"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSueldoDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:dialog header="Carga familiar" showEffect="fade" modal="true"
+                              widgetVar="manageCargaFamiliarDialog" responsive="true">
+                        <p:outputPanel id="manage-cargaFamiliar-content" class="ui-fluid">
+                            <p:outputPanel>
+                                <div class="card">
+                                    <div class="ui-fluid">
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.cambiarSueldo}"
+                                             update="manage-cargaFamiliar-content" styleClass="ui-button-success"
+                                             process="manage-cargaFamiliar-content @this">
+                                <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas cambiar el sueldo?"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageCargaFamiliarDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:panel header="Botones de cambios" class="ui-fluid">
+                        <h:panelGrid columns="12"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <p:commandButton value="Sueldo" icon="pi pi-dollar" update=":form:manage-sueldo-content"
+                                             oncomplete="PF('manageSueldoDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this"/>
+                            <p:commandButton value="Familia" icon="pi pi-list" update=":form:manage-cargaFamiliar-content"
+                                             oncomplete="PF('manageCargaFamiliarDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success" process="@this"/>
+                            <p:commandButton value="Reserva" icon="pi pi-list" 
+                                             styleClass="ui-button-success" style="margin-right: .5rem"/>
+
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
                 </p:panel>
-            </p:panel>
+            </div>
         </h:form>
     </ui:define>
 </ui:composition>

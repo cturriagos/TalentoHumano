@@ -144,6 +144,6 @@ public class Empleado{
     }
     
     public String nombreCompleto(){
-        return nombre1 + " " + nombre2 + " " + apellido1 + "" + apellido2;
+        return nombre1 + " " + nombre2 + " " + apellido1 + " " + apellido2;
     }
 }

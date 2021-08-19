@@ -277,6 +277,24 @@ public class Conexion {
         }
         return retorno;
     }*/
+    
+    public int ejecutarProcedure(String procedure, String parametros) {
+        int retorno = -1;
+        String sql =  "SELECT public." + procedure + "(" + parametros + ");";
+        try {
+            if (abrirConexion()) {
+                st.execute(sql);
+                cerrarConexion();
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        }
+        return retorno;
+    }
+    
     public int modificar(String tabla, String camposModificados, String restrinciones) {
         int retorno = -1;
         String sql = "UPDATE " + tabla + " SET " + camposModificados + " WHERE " + restrinciones;

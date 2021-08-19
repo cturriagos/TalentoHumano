@@ -100,6 +100,12 @@ public class SueldoDAO  implements IDAO<Sueldo> {
         return actualizar();
     }
 
+    public void desactivar() {
+        if (conexion.isEstado()) {
+            conexion.ejecutarProcedure("desactivarsueldo", "" + sueldo.getEmpleado().getId());
+        }
+    }
+
     @Override
     public Sueldo buscarPorId(Object id) {
         List<Sueldo> lista = buscar("id_sueldo = " + id, null);

@@ -42,10 +42,6 @@
             <from-outcome>CrearEmpleado</from-outcome>
             <to-view-id>/Views/Personal/empleadoCrear.xhtml</to-view-id>
         </navigation-case>
-        <navigation-case>
-            <from-outcome>EditarEmpleado</from-outcome>
-            <to-view-id>/Views/Personal/empleadoEditar.xhtml</to-view-id>
-        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Views/Empresa/empresa.xhtml</from-view-id>
