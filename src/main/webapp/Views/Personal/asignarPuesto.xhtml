@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <h:head>
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{empleadoView.postLoad(personaBean.idEmpleado)}" />
+            </f:metadata>
+        </h:head>
+        <h:form id="form">
+            <div class="card crud-demo">
+                <p:panel header="Puesto Laboral">
+                            <h:panelGrid columns="4" columnClasses="label, value">
+                            
+                                <p:outputLabel for="puestoL" value="Puesto Laboral: "/>
+                                <p:selectOneMenu id="puestoL" value="#{empleadoView.emplaPuesto.horarioLaboral.id}">
+                                    <f:selectItem itemLabel="Selecione un puesto" itemValue="#{0}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{empleadoView.puestos}" var="puesto" 
+                                                   itemLabel="#{puesto.resumen()}" itemValue="#{puesto.id}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="horarioL" value="Horario Laboral: "/>
+                                <p:selectOneMenu id="horarioL" value="#{empleadoView.emplaPuesto.horarioLaboral.id}">
+                                    <f:selectItem itemLabel="Selecione un horario" itemValue="#{0}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{empleadoView.horarios}" var="horario" 
+                                                   itemLabel="#{horario.nombre}" itemValue="#{horario.id}"/>
+                                </p:selectOneMenu>
+
+                                <h:outputText value="Sueldo: "/>
+                                <p:inputText value="#{empleadoView.sueldo}" required="true" label="Segundo apellido"/>
+
+                                <h:outputText value="Observación sobre : "/>
+                                <p:inputText value="#{empleadoView.empleado.apellido1}" required="true" label="Segundo apellido"/>
+
+                                <h:outputText value="Observación sobre el puesto: "/>
+                                <p:inputTextarea value="#{empleadoView.emplaPuesto.puestoLaboral.descripcion}" />
+
+                                <h:outputText value="Observación sobre el puesto: "/>
+                                <p:inputTextarea value="#{empleadoView.emplaPuesto.puestoLaboral.descripcion}" />
+                                <h:outputText value="Tiene cargar Laboral? "/>
+                                <p:selectBooleanCheckbox value="#{empleadoView.familia}" itemLabel="Si">
+                                    <p:ajax update="FAMILIA" />
+                                </p:selectBooleanCheckbox>
+                                
+                            </h:panelGrid>
+                            <p:commandButton value="Submit" action="#{userWizard.save}" update="growl" process="@this"/>
+                        </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

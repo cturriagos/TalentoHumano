@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <div class="card">
+            <h:form id="form">
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <span style="font-weight: bold" icon="pi pi-table">Registro de empleado</span>
+                    </p:toolbarGroup>
+                    <p:toolbarGroup align="right">
+                        <p:linkButton value="Volver a la lista" icon="pi pi-list" outcome="ListaEmpleado"
+                                         styleClass="ui-button-success" style="margin-right: .5rem"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <p:growl id="messages" showDetail="true"/>
+                <p:panel id="DATOS">
+                    <p:wizard id="dt-empleado" flowListener="#{empleadoCrearView.onFlowProcess}">
+                        <p:tab id="PERSONA" title="Datos personales">
+                            <p:panel class="ui-fluid">
+                                <p:messages/>
+                                <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; background-color:transparent; width: 100%;">
+
+                                    <h:outputLabel for="tipoI" value="Tipo de identificación: "/>
+                                    <p:selectOneMenu id="tipoI" value="#{empleadoCrearView.persona.tipoIdentificacion}" required="true" label="Tipo Identificación">
+                                        <f:selectItem itemLabel="Selecione el tipo" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="RUC" itemValue="RUC"/>
+                                        <f:selectItem itemLabel="CEDULA" itemValue="CEDULA"/>
+                                        <f:selectItem itemLabel="IDENTIFICACION DEL EXTERIOR" itemValue="IDENTIFICACION DEL EXTERIOR"/>
+                                        <f:selectItem itemLabel="PASAPORTE" itemValue="PASAPORTE"/>
+                                        <f:selectItem itemLabel="PLACA" itemValue="PLACA"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel style="margin-left: 10PX" for="identi" value="Identificación: "/>
+                                    <p:inputText id="identi" value="#{empleadoCrearView.persona.identificacion}" required="true"
+                                                 label="Identificación" maxlength="15">
+                                        <f:validateRegex pattern="^([0-9])*$"/>
+                                    </p:inputText>
+
+                                    <h:outputText value="Primer nombre: "/>
+                                    <p:inputText value="#{empleadoCrearView.empleado.nombre1}" required="true" label="Primer nombre"/>
+
+                                    <h:outputText style="margin-left: 10PX" value="Segundo nombre: "/>
+                                    <p:inputText value="#{empleadoCrearView.empleado.nombre2}" required="true" label="Segundo nombre"/>
+
+                                    <h:outputText value="Primer apellido: "/>
+                                    <p:inputText value="#{empleadoCrearView.empleado.apellido1}" required="true" label="Primer apellido"/>
+
+                                    <h:outputText style="margin-left: 10PX" value="Segundo apellido: "/>
+                                    <p:inputText value="#{empleadoCrearView.empleado.apellido1}" required="true" label="Segundo apellido"/>
+
+                                    <h:outputLabel for="phone1" value="Teléfono #1: "/>
+                                    <p:inputMask id="phone1" value="#{empleadoCrearView.persona.telefono1}" required="true"
+                                                  mask="(999) 999-9999[ x99999]"/>
+
+                                    <h:outputLabel style="margin-left: 10PX" for="phone2" value="Teléfono #2: "/>
+                                    <p:inputMask id="phone2" value="#{empleadoCrearView.persona.telefono2}" mask="(999) 999-9999"/>
+
+                                    <h:outputText value="Fecha de nacimiento: "/>
+                                    <p:datePicker id="fechaN" value="#{empleadoCrearView.empleado.fechaNacimiento}" 
+                                                  monthNavigator="true" yearNavigator="true" mindate="01/01/1960"
+                                                  required="true" label="Fecha de nacimiento"/>
+
+                                    <h:outputText style="margin-left: 10PX" value="Género: "/>
+                                    <p:inputText value="#{empleadoCrearView.empleado.genero}" required="true" label="Género"/>
+
+                                    <h:outputText value="sexo: "/>
+                                    <p:selectOneRadio id="sexo" value="#{empleadoCrearView.empleado.sexo}" required="true" label="Sexo">
+                                        <f:selectItem itemLabel="Maculino" itemValue="Maculino"/>
+                                        <f:selectItem itemLabel="Femenino" itemValue="Femenino"/>
+                                        <f:selectItem itemLabel="Otro" itemValue="Otro"/>
+                                    </p:selectOneRadio>
+
+                                    <h:outputLabel style="margin-left: 10PX" for="estado" value="Estado: "/>
+                                    <p:selectBooleanCheckbox id="estado" value="#{empleadoCrearView.persona.estado}"
+                                                             itemLabel="Habilitar"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; background-color:transparent; width: 100%;">
+
+                                    <h:outputLabel for="email" value="Correo: "/>
+                                    <p:inputText id="email" value="#{empleadoCrearView.persona.correo}" required="true"
+                                                 label="Correo" validatorMessage="Correo no válido"> 
+                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                    </p:inputText>
+
+                                    <h:outputText value="Dirección: "/>
+                                    <p:inputTextarea id="direc" value="#{empleadoCrearView.persona.direccion}" 
+                                                     required="true" label="Dirección"/>
+
+                                    <h:outputText value="Detalle(observacion): "/>
+                                    <p:inputTextarea id="detalle" value="#{empleadoCrearView.empleado.detalle}"/>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:tab>
+                        <p:tab id="PUESTO"  title="Puesto Laboral">
+                            <p:panel header="Puesto Laboral">
+                                <p:messages/>
+                                <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; background-color:transparent; width: 100%;">
+
+                                    <p:outputLabel for="puestoL" value="Puesto de Trabajo: "/>
+                                    <p:selectOneMenu id="puestoL" value="#{empleadoCrearView.empleadoPuesto.puestoLaboral.id}" 
+                                                     required="true" label="Puesto de Trabajo">
+                                        <f:selectItem itemLabel="Selecione un puesto" itemValue="#{0}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{empleadoCrearView.puestos}" var="puesto" 
+                                                       itemLabel="#{puesto.resumen()}" itemValue="#{puesto.id}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="horarioL" style="margin-left: 10px;" value="Horario Laboral: "/>
+                                    <p:selectOneMenu id="horarioL" value="#{empleadoCrearView.empleadoPuesto.horarioLaboral.id}"
+                                                     rendered="true" label="Horario Laboral">
+                                        <f:selectItem itemLabel="Selecione un horario" itemValue="#{0}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{empleadoCrearView.horarios}" var="horario" 
+                                                       itemLabel="#{horario.nombre}" itemValue="#{horario.id}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="inSueldo" value="Sueldo: "/>
+                                    <p:spinner id="inSueldo" value="#{empleadoCrearView.sueldo.valor}"
+                                               stepFactor="0.01" required="true" label="Sueldo"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2"  columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; background-color:transparent; width: 100%;">
+
+                                    <h:outputText value="Observacion (puesto): "/>
+                                    <p:inputTextarea value="#{empleadoCrearView.empleadoPuesto.observaciones}"/>
+                                    
+                                    <p:outputLabel for="sucursalE" value="Sucursal: "/>
+                                    <p:selectOneMenu id="sucursalE" value="#{empleadoCrearView.empleadoSucursal.sucursal.id}"
+                                                     rendered="true" label="Sucursal">
+                                        <f:selectItem itemLabel="Selecione una sucursal" itemValue="#{0}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{empleadoCrearView.sucursales}" var="sucursal" 
+                                                       itemLabel="#{sucursal.direccion}" itemValue="#{sucursal.id}"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputText value="Observacion (sucursal): "/>
+                                    <p:inputTextarea value="#{empleadoCrearView.empleadoSucursal.detalle}"/>
+
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoCrearView.guardar()}"
+                                                     update="dt-empleado" styleClass="p-mr-2 ui-button-success"
+                                                     process="dt-empleado @this">
+                                        <f:setPropertyActionListener value="#{empleadoCrearView.empleado.id}" target="#{personaBean.idEmpleado}"/>
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </p:tab>
+                    </p:wizard>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

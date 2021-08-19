@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <h:head>
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{empleadoEditarView.postLoad(personaBean.idEmpleado)}" />
+            </f:metadata>
+        </h:head>
+        <div class="card">
+            <h:form id="form">
+                <p:panel id="dt-empleado">
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <span style="font-weight: bold" icon="pi pi-table">Registro de empleado</span>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:linkButton value="Cancelar" icon="pi pi-plus" outcome="Empleado"
+                                          styleClass="ui-button-success" style="margin-right: .5rem"/>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:growl id="messages" showDetail="true"/>
+                    <p:panel class="ui-fluid">
+                        <p:messages/>
+                        <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <h:outputLabel for="tipoI" value="Tipo de identificación: "/>
+                            <p:selectOneMenu id="tipoI" value="#{empleadoEditarView.empleado.persona.tipoIdentificacion}" required="true" label="Tipo Identificación">
+                                <f:selectItem itemLabel="Selecione el tipo" itemValue="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="RUC" itemValue="RUC"/>
+                                <f:selectItem itemLabel="CEDULA" itemValue="CEDULA"/>
+                                <f:selectItem itemLabel="IDENTIFICACION DEL EXTERIOR" itemValue="IDENTIFICACION DEL EXTERIOR"/>
+                                <f:selectItem itemLabel="PASAPORTE" itemValue="PASAPORTE"/>
+                                <f:selectItem itemLabel="PLACA" itemValue="PLACA"/>
+                            </p:selectOneMenu>
+
+                            <h:outputLabel style="margin-left: 10PX" for="identi" value="Identificación: "/>
+                            <p:inputText id="identi" value="#{empleadoEditarView.empleado.persona.identificacion}" required="true"
+                                         label="Identificación" maxlength="15">
+                                <f:validateRegex pattern="^([0-9])*$"/>
+                            </p:inputText>
+
+                            <h:outputText value="Primer nombre: "/>
+                            <p:inputText value="#{empleadoEditarView.empleado.nombre1}" required="true" label="Primer nombre"/>
+
+                            <h:outputText style="margin-left: 10PX" value="Segundo nombre: "/>
+                            <p:inputText value="#{empleadoEditarView.empleado.nombre2}" required="true" label="Segundo nombre"/>
+
+                            <h:outputText value="Primer apellido: "/>
+                            <p:inputText value="#{empleadoEditarView.empleado.apellido1}" required="true" label="Primer apellido"/>
+
+                            <h:outputText style="margin-left: 10PX" value="Segundo apellido: "/>
+                            <p:inputText value="#{empleadoEditarView.empleado.apellido1}" required="true" label="Segundo apellido"/>
+
+                            <h:outputLabel for="phone1" value="Teléfono #1: "/>
+                            <p:inputMask id="phone1" value="#{empleadoEditarView.empleado.persona.telefono1}" required="true"
+                                         mask="(999) 999-9999[ x99999]"/>
+
+                            <h:outputLabel style="margin-left: 10PX" for="phone2" value="Teléfono #2: "/>
+                            <p:inputMask id="phone2" value="#{empleadoEditarView.empleado.persona.telefono2}" mask="(999) 999-9999"/>
+
+                            <h:outputText value="Fecha de nacimiento: "/>
+                            <p:datePicker id="fechaN" value="#{empleadoEditarView.empleado.fechaNacimiento}" 
+                                          monthNavigator="true" yearNavigator="true" mindate="01/01/1960"
+                                          required="true" label="Fecha de nacimiento"/>
+
+                            <h:outputText style="margin-left: 10PX" value="Género: "/>
+                            <p:inputText value="#{empleadoEditarView.empleado.genero}" required="true" label="Género"/>
+
+                            <h:outputText value="sexo: "/>
+                            <p:selectOneRadio id="sexo" value="#{empleadoEditarView.empleado.sexo}" required="true" label="Sexo">
+                                <f:selectItem itemLabel="Maculino" itemValue="Maculino"/>
+                                <f:selectItem itemLabel="Femenino" itemValue="Femenino"/>
+                                <f:selectItem itemLabel="Otro" itemValue="Otro"/>
+                            </p:selectOneRadio>
+
+                            <h:outputLabel style="margin-left: 10PX" for="estado" value="Estado: "/>
+                            <p:selectBooleanCheckbox id="estado" value="#{empleadoEditarView.empleado.persona.estado}"
+                                                     itemLabel="Habilitar"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <h:outputLabel for="email" value="Correo: "/>
+                            <p:inputText id="email" value="#{empleadoEditarView.empleado.persona.correo}" required="true"
+                                         label="Correo" validatorMessage="Correo no válido"> 
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+
+                            <h:outputText value="Dirección: "/>
+                            <p:inputTextarea id="direc" value="#{empleadoEditarView.empleado.persona.direccion}" 
+                                             required="true" label="Dirección"/>
+
+                            <h:outputText value="Detalle(observacion): "/>
+                            <p:inputTextarea id="detalle" value="#{empleadoEditarView.empleado.detalle}"/>
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoEditarView.actualizar()}"
+                                             update="dt-empleado" styleClass="p-mr-2 ui-button-success"
+                                             process="dt-empleado @this">
+                                <f:setPropertyActionListener value="#{empleadoEditarView.empleado.id}" target="#{personaBean.idEmpleado}"/>
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                </p:panel>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

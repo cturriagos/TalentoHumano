@@ -107,6 +107,10 @@ public class HorarioLaboralDAO implements IDAO<HorarioLaboral>{
         return buscar(null, "nombre");
     }
     
+    public List<HorarioLaboral> Activos() {
+        return buscar("estado = true", "nombre");
+    }
+    
     private List<HorarioLaboral> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
         if (conexion.isEstado()) {
             ResultSet result;

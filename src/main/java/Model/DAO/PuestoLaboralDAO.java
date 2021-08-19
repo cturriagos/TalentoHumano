@@ -13,11 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author Arialdo
  */
+@Named
+@ApplicationScoped
 public class PuestoLaboralDAO implements IDAO<PuestoLaboral>{
     protected final Conexion conexion;
     protected PuestoLaboral puestoLaboral;
@@ -102,6 +106,10 @@ public class PuestoLaboralDAO implements IDAO<PuestoLaboral>{
     @Override
     public List<PuestoLaboral> Listar() {
         return buscar(null, null);
+    }
+    
+    public List<PuestoLaboral> Activos() {
+        return buscar("estado = true", null);
     }
     
     private List<PuestoLaboral> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){

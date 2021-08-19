@@ -3,11 +3,58 @@
               xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    
+    <navigation-rule>
+        <from-view-id>/Views/Personal/asistencia.xhtml</from-view-id>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/Personal/naturalesLista.xhtml</from-view-id>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/Personal/empleado.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>ListaEmpleado</from-outcome>
+            <to-view-id>/Views/Personal/empleadoLista.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>EditarEmpleado</from-outcome>
+            <to-view-id>/Views/Personal/empleadoEditar.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/Personal/empleadoCrear.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>ListaEmpleado</from-outcome>
+            <to-view-id>/Views/Personal/empleadoLista.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Empleado</from-outcome>
+            <to-view-id>/Views/Personal/empleado.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/Personal/empleadoLista.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>Empleado</from-outcome>
+            <to-view-id>/Views/Personal/empleado.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>CrearEmpleado</from-outcome>
+            <to-view-id>/Views/Personal/empleadoCrear.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>EditarEmpleado</from-outcome>
+            <to-view-id>/Views/Personal/empleadoEditar.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/Empresa/empresa.xhtml</from-view-id>
+    </navigation-rule>
     <navigation-rule>
         <from-view-id>/Views/Empresa/ciudad.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/Views/Empresa/didicacion.xhtml</from-view-id>
+        <from-view-id>/Views/Empresa/dedicacion.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Views/cargo.xhtml</from-view-id>
@@ -28,11 +75,6 @@
             <to-view-id>/Views/HorarioLaboral/detalleHorarioLaboral.xhtml</to-view-id>
             <redirect include-view-params="true"></redirect>
         </navigation-case>
-        <navigation-case>
-            <from-outcome>NuevoHorario</from-outcome>
-            <to-view-id>/Views/HorarioLaboral/nuevoHorarioLaboral.xhtml</to-view-id>
-            <redirect include-view-params="true"></redirect>
-        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Views/HorarioLaboral/detalleHorarioLaboral.xhtml</from-view-id>
@@ -43,14 +85,13 @@
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/Views/HorarioLaboral/nuevoHorarioLaboral.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>HorarioLaboral</from-outcome>
-            <to-view-id>/Views/HorarioLaboral/horarioLaboral.xhtml</to-view-id>
-            <redirect include-view-params="true"></redirect>
-        </navigation-case>
+        <from-view-id>/Views/diaSemana.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/Views/diaSemana.xhtml</from-view-id>
+        <from-view-id>/Views/Personal/empleadoEditar.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>Empleado</from-outcome>
+            <to-view-id>/Views/Personal/empleado.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

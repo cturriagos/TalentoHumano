@@ -2,22 +2,30 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
-        <Node id="Views/reporte.xhtml" x="150" y="150" zoom="true"/>
-        <Node id="Views/roldepagos.xhtml" x="650" y="450" zoom="true"/>
-        <Node id="Views/Registros.xhtml" x="900" y="150" zoom="true"/>
-        <Node id="index.xhtml" x="400" y="450" zoom="true"/>
-        <Node id="Views/HorarioLaboral/detalleHorarioLaboral.xhtml" x="900" y="300" zoom="true"/>
-        <Node id="Views/asistencia.xhtml" x="706" y="73" zoom="true"/>
-        <Node id="Plantilla/Plantilla.xhtml" x="400" y="300" zoom="true"/>
-        <Node id="Views/cargo.xhtml" x="150" y="300" zoom="true"/>
-        <Node id="Views/diaSemana.xhtml" x="650" y="150" zoom="true"/>
-        <Node id="Views/ingresoSalidas.xhtml" x="150" y="750" zoom="true"/>
-        <Node id="Views/roles.xhtml" x="1150" y="150" zoom="true"/>
-        <Node id="Views/puestosLaborales.xhtml" x="400" y="600" zoom="true"/>
-        <Node id="Views/HorarioLaboral/horarioLaboral.xhtml" x="400" y="150" zoom="true"/>
-        <Node id="Views/crearEmpleado.xhtml" x="150" y="600" zoom="true"/>
-        <Node id="Views/departamentos.xhtml" x="150" y="450" zoom="true"/>
-        <Node id="Views/HorarioLaboral/nuevoHorarioLaboral.xhtml" x="589" y="364" zoom="true"/>
+        <Node id="Views/reporte.xhtml" x="680" y="587" zoom="true"/>
+        <Node id="Views/Empresa/ciudad.xhtml" x="10" y="465" zoom="true"/>
+        <Node id="Views/HorarioLaboral/detalleHorarioLaboral.xhtml" x="48" y="83" zoom="true"/>
+        <Node id="Views/Personal/asistencia.xhtml" x="803" y="4" zoom="true"/>
+        <Node id="Views/cargo.xhtml" x="14" y="290" zoom="true"/>
+        <Node id="Views/Personal/empleadoEditar.xhtml" x="513" y="43" zoom="true"/>
+        <Node id="Views/Personal/asignarPuesto.xhtml" x="864" y="401" zoom="true"/>
+        <Node id="Views/ingresoSalidas.xhtml" x="13" y="499" zoom="true"/>
+        <Node id="Views/roles.xhtml" x="969" y="606" zoom="true"/>
+        <Node id="Views/Personal/empleado.xhtml" x="548" y="160" zoom="true"/>
+        <Node id="Views/puestosLaborales.xhtml" x="11" y="432" zoom="true"/>
+        <Node id="Views/Empresa/empresa.xhtml" x="9" y="536" zoom="true"/>
+        <Node id="Views/Personal/empleadoCrear.xhtml" x="360" y="300" zoom="true"/>
+        <Node id="Views/roldepagos.xhtml" x="671" y="636" zoom="true"/>
+        <Node id="Views/Registros.xhtml" x="419" y="595" zoom="true"/>
+        <Node id="index.xhtml" x="37" y="5" zoom="true"/>
+        <Node id="Views/Personal/persona.xhtml" x="493" y="10" zoom="true"/>
+        <Node id="Views/Personal/naturalesLista.xhtml" x="867" y="516" zoom="true"/>
+        <Node id="Plantilla/Plantilla.xhtml" x="38" y="39" zoom="true"/>
+        <Node id="Views/diaSemana.xhtml" x="14" y="360" zoom="true"/>
+        <Node id="Views/Empresa/dedicacion.xhtml" x="9" y="398" zoom="true"/>
+        <Node id="Views/HorarioLaboral/horarioLaboral.xhtml" x="22" y="219" zoom="true"/>
+        <Node id="Views/departamentos.xhtml" x="13" y="324" zoom="true"/>
+        <Node id="Views/Personal/empleadoLista.xhtml" x="458" y="538" zoom="true"/>
     </Scope>
     <Scope Scope="All Faces Configurations"/>
 </Scene>

@@ -17,7 +17,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -189,7 +188,7 @@ public class EmpresaController implements Serializable {
                 }
             }
         } else {
-            mostrarMensajeError("Debe de seleccionar la ciudad en la que esta la empresa");
+            mostrarMensajeError("Debe de seleccionar la ciudad en la que esta la sucursal");
         }
         PrimeFaces.current().executeScript("PF('manageSucursalDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-sucursales");

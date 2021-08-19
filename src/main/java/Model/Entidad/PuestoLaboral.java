@@ -78,4 +78,8 @@ public class PuestoLaboral {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public String resumen() {
+        return cargo.getNombre() + " (" + departamento.getNombre() + ")";
+    }
 }

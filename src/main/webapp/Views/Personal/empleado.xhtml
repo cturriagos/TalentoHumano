@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+    <ui:define name="Contenido">
+        <h:head>
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{empleadoView.postLoad(personaBean.idEmpleado)}" />
+            </f:metadata>
+        </h:head>
+        <h:form id="form">
+            <p:growl id="messages" showDetail="true"/>
+            <p:panel id="dt-empleado" >
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <span style="font-weight: bold" icon="pi pi-table">#{empleadoView.sueldo.empleado.nombreCompleto()}</span>
+                    </p:toolbarGroup>
+                    <p:toolbarGroup align="right">
+                        <p:commandButton value="Editar" icon="pi pi-user-edit" action="EditarEmpleado"
+                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                            <f:setPropertyActionListener value="#{empleadoView.sueldo.empleado.id}" target="#{personaBean.idEmpleado}"/>
+                        </p:commandButton>
+                        <p:commandButton value="Volver a la lista" icon="pi pi-list" action="ListaEmpleado"
+                                         styleClass="ui-button-success" style="margin-right: .5rem"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <p:panel class="ui-fluid">
+                    <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                 style="border:0px none; background-color:transparent; width: 100%;">
+
+                        <h:outputText value="#{empleadoView.sueldo.empleado.persona.tipoIdentificacion}: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.sueldo.empleado.persona.identificacion}" />
+
+                        <h:outputText value="Fecha de nacimiento: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.sueldo.empleado.fechaNacimiento}" />
+
+                        <h:outputText value="Teléfono: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.sueldo.empleado.persona.telefonos()}" />
+
+                        <h:outputText value="Correo: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.sueldo.empleado.persona.correo}"/>
+                        
+                        <h:outputText value="Fecha de Ingreso: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.sueldo.empleado.fechaIngreso}" />
+
+                        <h:outputText value="Fecha de Salida: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.sueldo.empleado.fechaEgreso}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-3"
+                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                 style="border:0px none; background-color:transparent; width: 100%;">
+
+                        <h:outputText value="Sueldo: " style="font-weight: bold;" />
+                        <h:outputText value="$ #{empleadoView.sueldo.valor}" />
+
+                        <h:outputText value="Sexo: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.sueldo.empleado.sexo}" />
+
+                        <h:outputText value="Género: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.sueldo.empleado.genero}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                 style="border:0px none; background-color:transparent; width: 100%;">
+
+                        <h:outputText value="Dirección: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.empleadoPuesto.empleado.persona.direccion}" />
+
+                        <h:outputText value="Puesto: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.empleadoPuesto.puestoLaboral.resumen()}" />
+                        
+                        <h:outputText value="Sucursal: " style="font-weight: bold;" />
+                        <h:outputText value="#{empleadoView.empleadoSucursal.sucursal.direccion}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" columnClasses="ui-grid-col-12"
+                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                 style="border:0px none; background-color:transparent; width: 100%;">
+
+                        <h:outputText value="Observaciones(detalles): " style="font-weight: bold;" />
+                        <h:outputText value="Sobre el puesto: #{empleadoView.empleadoPuesto.observaciones}" />
+                        <h:outputText value="Sobre la sucursal: #{empleadoView.empleadoSucursal.detalle}" />
+                    </h:panelGrid>
+                </p:panel>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <h:head>
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{personaView.cargar(personaBean.idPersona)}" />
+            </f:metadata>
+        </h:head>
+        <h:form id="form">
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <p:panel id="dt-personas">
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <span style="font-weight: bold" icon="pi pi-table">PERSONAS</span>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Volver" icon="pi pi-lista"
+                                             styleClass="ui-button-success" style="margin-right: .5rem">
+                                <f:setPropertyActionListener value="#{personaView.persona.id}" target="#{personaBean.idPersona}"/>
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:panel id="manage-persona-content" class="ui-fluid">
+
+                        <p:panelGrid columns="4"
+                                     columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <p:outputLabel for="tipoI" style="font-weight: bold">Tipo Identificación</p:outputLabel>
+                            <p:inputText id="tipoI" value="#{personaView.persona.tipoIdentificacion}" 
+                                         required="true" requiredMessage="Campo requerido"/>
+
+                            <p:outputLabel for="identi" style="font-weight: bold">Identificación</p:outputLabel>
+                            <p:inputText id="identi" value="#{personaView.persona.identificacion}" 
+                                         required="true" requiredMessage="Campo requerido"/>
+
+                            <p:outputLabel for="phone1" style="font-weight: bold">Teléfono 1</p:outputLabel>
+                            <p:inputText id="phone1" value="#{personaView.persona.telefono1}" 
+                                         required="true" requiredMessage="Campo requerido"/>
+
+                            <p:outputLabel for="phone2" style="font-weight: bold">Teléfono 2</p:outputLabel>
+                            <p:inputText id="phone2" value="#{personaView.persona.telefono2}" 
+                                         required="true" requiredMessage="Campo requerido"/>
+
+                            <p:outputLabel for="email" style="font-weight: bold">Correo</p:outputLabel>
+                            <p:inputText id="email" value="#{personaView.persona.correo}" 
+                                         required="true" requiredMessage="Campo requerido"/>
+
+                            <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>
+                            <p:selectBooleanCheckbox id="estado" value="#{personaView.persona.estado}" itemLabel="Habilitar"/>
+
+                        </p:panelGrid>
+                        <p:panelGrid columns="2"
+                                     columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">   
+
+                            <p:outputLabel for="direc" style="font-weight: bold">Dirección</p:outputLabel>
+                            <p:inputTextarea id="direc" value="#{personaView.persona.direccion}" 
+                                             required="true" requiredMessage="Campo requerido"/>
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{personaView.enviar}"
+                                             update="manage-persona-content" styleClass="p-mr-2 ui-button-success"
+                                             process="manage-persona-content @this"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="p-mr-2"
+                                             process="@none" resetValues="true" />
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
