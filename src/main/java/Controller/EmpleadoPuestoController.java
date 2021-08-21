@@ -11,7 +11,6 @@ import Model.DAO.EmpleadoSucursalDAO;
 import Model.DAO.HorarioLaboralDAO;
 import Model.DAO.PuestoLaboralDAO;
 import Model.DAO.SucursalDAO;
-import Model.Entidad.Empleado;
 import Model.Entidad.EmpleadoPuesto;
 import Model.Entidad.EmpleadoSucursal;
 import Model.Entidad.HorarioLaboral;

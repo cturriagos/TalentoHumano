@@ -1,12 +1,12 @@
 package Config;
 
-import com.sun.istack.internal.Nullable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.faces.application.FacesMessage;
+import org.jetbrains.annotations.Nullable;
 
 public class Conexion {
 

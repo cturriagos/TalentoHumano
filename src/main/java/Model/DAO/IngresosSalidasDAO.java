@@ -8,7 +8,7 @@ package Model.DAO;
 import Config.Conexion;
 import Model.Entidad.IngresosSalidas;
 import Model.Interfaces.IDAO;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

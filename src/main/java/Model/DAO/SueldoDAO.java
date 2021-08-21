@@ -9,7 +9,7 @@ import Config.Conexion;
 import Model.Entidad.Empleado;
 import Model.Entidad.Sueldo;
 import Model.Interfaces.IDAO;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
