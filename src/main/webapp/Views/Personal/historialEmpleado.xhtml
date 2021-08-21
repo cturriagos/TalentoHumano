@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <h:form id="form">
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <span style="font-weight: bold" icon="pi pi-table">Hisorial de sueldos</span>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:linkButton value="Nuevo Empleado" icon="pi pi-user-plus" outcome="/Views/Personal/empleadoCrear"
+                                          styleClass="ui-button-success" style="margin-right: .5rem"/>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:panel header="#{empleadoView.sueldo.empleado.nombreCompleto()}">
+                        <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" var="sueldo" value="#{empleadoView.historialSueldo()}"
+                                     reflow="true" size="small" liveResize="true" styleClass="empleados-table"
+                                     rowKey="#{sueldo.id}" paginator="true"
+                                     rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                            <p:column headerText="Monto">
+                                <h:outputText value="#{sueldo.valor}"/>
+                            </p:column>
+                            <p:column headerText="Fecha de cambio">
+                                <h:outputText value="#{sueldo.fechaActualizacion}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{sueldo.estado ? 'Vigente': 'Anterior'}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

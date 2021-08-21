@@ -120,17 +120,19 @@ public class SueldoDAO  implements IDAO<Sueldo> {
         return buscar(null, "fecha_actualizacion DESC");
     }
     
-    public Sueldo buscar(Empleado empleado) {
+    public Sueldo Actual(Empleado empleado) {
+        sueldo = new Sueldo();
+        sueldo.setEmpleado(empleado);
         if (conexion.isEstado()) {
             ResultSet result;
             try {
                 result = conexion.selecionar("sueldo", "id_sueldo, valor, fecha_actualizacion",
                                              "estado = true AND id_empleado = " + empleado.getId(), null);
-                PuestoLaboralDAO pldao = new PuestoLaboralDAO();
-                HorarioLaboralDAO hldao = new HorarioLaboralDAO();
                 while (result.next()) {
-                    sueldo = new Sueldo(result.getInt("id_sueldo"), empleado, result.getFloat("valor"), 
-                                        result.getDate("fecha_actualizacion"), true);
+                    sueldo.setId(result.getInt("id_sueldo"));
+                    sueldo.setValor(result.getFloat("valor"));
+                    sueldo.setFechaActualizacion(result.getDate("fecha_actualizacion"));
+                    sueldo.setEstado(true);
                 }
                 result.close();
             } catch (SQLException ex) {
@@ -141,6 +143,27 @@ public class SueldoDAO  implements IDAO<Sueldo> {
         }
         return sueldo;
     }
+    
+    public List<Sueldo> historial(Empleado empleado) {
+        List<Sueldo> sueldos = new ArrayList<>();
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("sueldo", "id_sueldo, valor, fecha_actualizacion, estado",
+                                             "id_empleado = " + empleado.getId(), "fecha_actualizacion DESC");
+                while (result.next()) {
+                    sueldos.add( new Sueldo(result.getInt("id_sueldo"), empleado, result.getFloat("valor"), 
+                                        result.getDate("fecha_actualizacion"), result.getBoolean("estado")));
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return sueldos;
+    }
 
     private List<Sueldo> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
         List<Sueldo> sueldos = new ArrayList<>();
@@ -149,8 +172,6 @@ public class SueldoDAO  implements IDAO<Sueldo> {
             try {
                 result = conexion.selecionar("sueldo", "id_sueldo, id_empleado, valor, fecha_actualizacion, estado", restricciones, OrdenarAgrupar);
                 EmpleadoDAO edao = new EmpleadoDAO();
-                PuestoLaboralDAO pldao = new PuestoLaboralDAO();
-                HorarioLaboralDAO hldao = new HorarioLaboralDAO();
                 while (result.next()) {
                     sueldos.add(new Sueldo(
                             result.getInt("id_sueldo"),

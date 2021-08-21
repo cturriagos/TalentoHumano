@@ -11,7 +11,7 @@
                 <f:event type="preRenderView" listener="#{empleadoView.postLoad(personaBean.idEmpleado)}" />
             </f:metadata>
         </h:head>
-        <h:form id="form" class="content-section implementation" >
+        <h:form id="form" class="content-section implementation" enctype="multipart/form-data">
             <div class="card crud-demo">
                 <p:growl id="messages" showDetail="true"/>
                 <p:panel >
@@ -75,7 +75,7 @@
                             <h:outputText value="#{empleadoView.sueldo.empleado.fechaEgreso}" />
 
                         </h:panelGrid>
-                        <h:panelGrid rendered="#{empty empleadoView.cargaFamiliar}" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-1"
+                        <h:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
                                      styleClass="ui-panelgrid-blank ui-fluid"
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
@@ -84,6 +84,7 @@
 
                             <h:outputText value="Familiares a cargo: " style="font-weight: bold;" />
                             <h:outputText value="#{empleadoView.cargaFamiliar.faliares}" />
+
                         </h:panelGrid>
                         <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
                                      styleClass="ui-panelgrid-blank ui-fluid"
@@ -102,12 +103,13 @@
                             <h:outputText value="Observaciones(detalles): " style="font-weight: bold;" />
                             <h:outputText value="Sobre el puesto: #{empleadoView.empleadoPuesto.observaciones}" />
                             <h:outputText value="Sobre la sucursal: #{empleadoView.empleadoSucursal.detalle}" />
+                            <h:outputText value="Sobre la carga Familiar: #{empleadoView.cargaFamiliar.detalle}" />
                         </h:panelGrid>
                     </p:panel>
                     <p:dialog header="Cambiar Sueldo" minHeight="40" width="350" showEffect="fade" modal="true"
                               widgetVar="manageSueldoDialog" responsive="true">
                         <p:outputPanel id="manage-sueldo-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{empty empledoView.sueldo}">
+                            <p:outputPanel rendered="#{empty empleadoView.sueldo}">
                                 <div class="card">
                                     <div class="ui-fluid">
                                         <div class="p-field">
@@ -135,21 +137,47 @@
                                              process="@none" styleClass="p-mr-2" resetValues="true" />
                         </f:facet>
                     </p:dialog>
-                    <p:dialog header="Carga familiar" showEffect="fade" modal="true"
+                    <p:dialog header="Carga familiar" width="750" showEffect="fade" modal="true"
                               widgetVar="manageCargaFamiliarDialog" responsive="true">
                         <p:outputPanel id="manage-cargaFamiliar-content" class="ui-fluid">
                             <p:outputPanel>
                                 <div class="card">
                                     <div class="ui-fluid">
+                                        <h:panelGrid columns="2" columnClasses="ui-grid-col-3,ui-grid-col-9"
+                                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                                     style="width: 100%;">
+
+                                            <h:outputText style="font-weight: bold" value="Cónyuge: " />
+                                            <p:inputText value="#{empleadoView.cargaFamiliar.conyuge}"
+                                                         required="true" requiredMessage="Necesita el nombre del cónyuje"/>
+
+                                            <h:outputText style="font-weight: bold;" value="Personas a cargo"/>
+                                            <p:spinner value="#{empleadoView.cargaFamiliar.faliares}"  min="1" max="10" required="true"
+                                                       requiredMessage="Ingrese el numero de personas a su cargo"/>
+
+                                        </h:panelGrid>
+                                    </div>
+
+                                    <p:fileUpload id="uploadpdf" label="Documento de Verificación" uploadLabel="Subir" cancelLabel="Cancelar"
+                                                  mode="advanced" virusScan="true" multiple="false" sizeLimit="2097152" allowTypes="/(\.|\/)(pdf)$/"
+                                                  invalidSizeMessage="El tamaño máximo de archivo permitido es 2MB"
+                                                  invalidFileMessage="solo PDF esta permitido"
+                                                  listener="#{empleadoView.handleFileUpload}"
+                                                  required="true" requiredMessage="Debe de subir el archivo de verificación"/>
+
+                                    <div class="p-field">
+                                        <p:outputLabel for="detalleCF" style="font-weight: bold" value="Observaciones(detalle)"/>
+                                        <p:inputTextarea id="detalleCF" value="#{empleadoView.cargaFamiliar.detalle}" 
+                                                         required="true" requiredMessage="Campo requerido"/>
                                     </div>
                                 </div>
                             </p:outputPanel>
                         </p:outputPanel>
                         <f:facet name="footer">
-                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.cambiarSueldo}"
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarCargaFamiliar}"
                                              update="manage-cargaFamiliar-content" styleClass="ui-button-success"
                                              process="manage-cargaFamiliar-content @this">
-                                <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas cambiar el sueldo?"
+                                <p:confirm header="CONFIRMACIÓN" message="¿Seguro que deseas guardar los cambios?"
                                            icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageCargaFamiliarDialog').hide()"
@@ -164,9 +192,14 @@
                             <p:commandButton value="Sueldo" icon="pi pi-dollar" update=":form:manage-sueldo-content"
                                              oncomplete="PF('manageSueldoDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this"/>
-                            <p:commandButton value="Familia" icon="pi pi-list" update=":form:manage-cargaFamiliar-content"
+                            <p:commandButton value="Familia" icon="pi #{empleadoView.cargaFamiliar.id == 0 ? 'pi-plus' : 'pi-pencil'}"
+                                             update=":form:manage-cargaFamiliar-content"
                                              oncomplete="PF('manageCargaFamiliarDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this"/>
+                            <p:commandButton value="Puesto Laboral" icon="pi pi-pencil" action="EditarPuesto"
+                                             styleClass="edit-button rounded-button ui-button-success">
+                                <f:setPropertyActionListener value="#{empleadoView.sueldo.empleado.id}" target="#{personaBean.idEmpleado}"/>
+                            </p:commandButton>
                             <p:commandButton value="Reserva" icon="pi pi-list" 
                                              styleClass="ui-button-success" style="margin-right: .5rem"/>
 
