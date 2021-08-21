@@ -9,15 +9,15 @@
     <ui:define name="Contenido">
         <h:head>
             <f:metadata>
-                <f:event type="preRenderView" listener="#{empleadoPuestoEditarView.postLoad(personaBean.idEmpleado)}" />
+                <f:event type="preRenderView" listener="#{empleadoPuestoView.postLoad(personaBean.idEmpleado)}" />
             </f:metadata>
         </h:head>
         <div class="card">
             <h:form id="form">
-                <p:panel id="dt-puesto" header="#{empleadoPuestoEditarView.empleadoPuesto.empleado.nombreCompleto()}">
+                <p:panel id="dt-puesto" header="#{empleadoPuestoView.empleadoPuesto.empleado.nombreCompleto()}">
                     <p:toolbar>
                         <p:toolbarGroup>
-                            <span style="font-weight: bold" icon="pi pi-table">Registro de empleado</span>
+                            <span style="font-weight: bold" icon="pi pi-table">Puesto Laboral</span>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
                             <p:linkButton value="Regresar" icon="pi pi-times" outcome="Empleado"
@@ -25,25 +25,25 @@
                         </p:toolbarGroup>
                     </p:toolbar>
                     <p:growl id="messages" showDetail="true"/>
-                    <p:panel header="Puesto Laboral">
+                    <p:panel >
                         <p:messages/>
                         <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
                                      styleClass="ui-panelgrid-blank ui-fluid"
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
                             <p:outputLabel for="puestoL" value="Puesto de Trabajo: "/>
-                            <p:selectOneMenu id="puestoL" value="#{empleadoPuestoEditarView.empleadoPuesto.puestoLaboral.id}" 
+                            <p:selectOneMenu id="puestoL" value="#{empleadoPuestoView.empleadoPuesto.puestoLaboral.id}" 
                                              required="true" label="Puesto de Trabajo">
                                 <f:selectItem itemLabel="Selecione un puesto" itemValue="#{0}" noSelectionOption="true"/>
-                                <f:selectItems value="#{empleadoPuestoEditarView.puestos}" var="puesto" 
+                                <f:selectItems value="#{empleadoPuestoView.puestos}" var="puesto" 
                                                itemLabel="#{puesto.resumen()}" itemValue="#{puesto.id}"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel for="horarioL" style="margin-left: 10px;" value="Horario Laboral: "/>
-                            <p:selectOneMenu id="horarioL" value="#{empleadoPuestoEditarView.empleadoPuesto.horarioLaboral.id}"
+                            <p:selectOneMenu id="horarioL" value="#{empleadoPuestoView.empleadoPuesto.horarioLaboral.id}"
                                              rendered="true" label="Horario Laboral">
                                 <f:selectItem itemLabel="Selecione un horario" itemValue="#{0}" noSelectionOption="true"/>
-                                <f:selectItems value="#{empleadoPuestoEditarView.horarios}" var="horario" 
+                                <f:selectItems value="#{empleadoPuestoView.horarios}" var="horario" 
                                                itemLabel="#{horario.nombre}" itemValue="#{horario.id}"/>
                             </p:selectOneMenu>
                         </h:panelGrid>
@@ -52,18 +52,18 @@
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
                             <h:outputText value="Observacion (puesto): "/>
-                            <p:inputTextarea value="#{empleadoPuestoEditarView.empleadoPuesto.observaciones}"/>
+                            <p:inputTextarea value="#{empleadoPuestoView.empleadoPuesto.observaciones}"/>
 
                             <p:outputLabel for="sucursalE" value="Sucursal: "/>
-                            <p:selectOneMenu id="sucursalE" value="#{empleadoPuestoEditarView.empleadoSucursal.sucursal.id}"
+                            <p:selectOneMenu id="sucursalE" value="#{empleadoPuestoView.empleadoSucursal.sucursal.id}"
                                              rendered="true" label="Sucursal">
                                 <f:selectItem itemLabel="Selecione una sucursal" itemValue="#{0}" noSelectionOption="true"/>
-                                <f:selectItems value="#{empleadoPuestoEditarView.sucursales}" var="sucursal" 
+                                <f:selectItems value="#{empleadoPuestoView.sucursales}" var="sucursal" 
                                                itemLabel="#{sucursal.direccion}" itemValue="#{sucursal.id}"/>
                             </p:selectOneMenu>
 
                             <h:outputText value="Observacion (sucursal): "/>
-                            <p:inputTextarea value="#{empleadoPuestoEditarView.empleadoSucursal.detalle}"/>
+                            <p:inputTextarea value="#{empleadoPuestoView.empleadoSucursal.detalle}"/>
 
                         </h:panelGrid>
                     </p:panel>
@@ -71,10 +71,10 @@
                         <p:toolbarGroup>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
-                            <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoPuestoEditarView.guardar()}"
-                                             update="dt-empleado" styleClass="p-mr-2 ui-button-success"
-                                             process="dt-empleado @this">
-                                <f:setPropertyActionListener value="#{empleadoPuestoEditarView.empleadoPuesto.empleado.id}" target="#{personaBean.idEmpleado}"/>
+                            <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoPuestoView.guardar()}"
+                                             update="dt-puesto" styleClass="p-mr-2 ui-button-success"
+                                             process="dt-puesto @this">
+                                <f:setPropertyActionListener value="#{empleadoPuestoView.empleadoPuesto.empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>
