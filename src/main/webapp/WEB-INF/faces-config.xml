@@ -20,6 +20,10 @@
             <from-outcome>EditarEmpleado</from-outcome>
             <to-view-id>/Views/Personal/empleadoEditar.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>EditarPuesto</from-outcome>
+            <to-view-id>/Views/Personal/empleadoPuesto.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Views/Personal/empleadoCrear.xhtml</from-view-id>
@@ -85,6 +89,13 @@
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Views/Personal/empleadoEditar.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>Empleado</from-outcome>
+            <to-view-id>/Views/Personal/empleado.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Views/Personal/empleadoPuesto.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>Empleado</from-outcome>
             <to-view-id>/Views/Personal/empleado.xhtml</to-view-id>
