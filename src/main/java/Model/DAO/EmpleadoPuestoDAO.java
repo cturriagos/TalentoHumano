@@ -125,6 +125,8 @@ public class EmpleadoPuestoDAO implements IDAO<EmpleadoPuesto> {
     }
     
     public EmpleadoPuesto buscar(Empleado empleado){
+        empleadoPuesto = new EmpleadoPuesto();
+        empleadoPuesto.setEmpleado(empleado);
         if (conexion.isEstado()) {
             ResultSet result;
             try {
@@ -134,9 +136,11 @@ public class EmpleadoPuestoDAO implements IDAO<EmpleadoPuesto> {
                 PuestoLaboralDAO pldao = new PuestoLaboralDAO();
                 HorarioLaboralDAO hldao = new HorarioLaboralDAO();
                 while (result.next()) {
-                     empleadoPuesto = new EmpleadoPuesto( result.getInt("id_empleado_puesto"), empleado, pldao.buscarPorId(result.getInt("id_puesto")),
-                                         hldao.buscarPorId(result.getInt("id_horario_laboral")),
-                                         result.getDate("fecha_cambio"), true, result.getString("observaciones"));
+                     empleadoPuesto.setId(result.getInt("id_empleado_puesto"));
+                     empleadoPuesto.setPuestoLaboral(pldao.buscarPorId(result.getInt("id_puesto")));
+                     empleadoPuesto.setHorarioLaboral(hldao.buscarPorId(result.getInt("id_horario_laboral")));
+                     empleadoPuesto.setFechaCambio(result.getDate("fecha_cambio"));
+                     empleadoPuesto.setObservaciones(result.getString("observaciones"));
                 }
                 result.close();
             } catch (SQLException ex) {
