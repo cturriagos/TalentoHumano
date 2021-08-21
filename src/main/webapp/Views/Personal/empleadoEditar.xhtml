@@ -20,7 +20,7 @@
                             <span style="font-weight: bold" icon="pi pi-table">Registro de empleado</span>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
-                            <p:linkButton value="Cancelar" icon="pi pi-plus" outcome="Empleado"
+                            <p:linkButton value="Regresar" icon="pi pi-times" outcome="Empleado"
                                           styleClass="ui-button-success" style="margin-right: .5rem"/>
                         </p:toolbarGroup>
                     </p:toolbar>
@@ -108,7 +108,7 @@
                         <p:toolbarGroup>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
-                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoEditarView.actualizar()}"
+                            <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoEditarView.actualizar()}"
                                              update="dt-empleado" styleClass="p-mr-2 ui-button-success"
                                              process="dt-empleado @this">
                                 <f:setPropertyActionListener value="#{empleadoEditarView.empleado.id}" target="#{personaBean.idEmpleado}"/>

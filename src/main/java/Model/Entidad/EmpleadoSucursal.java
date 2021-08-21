@@ -12,7 +12,6 @@ import java.util.Date;
  * @author ClasK7
  */
 public class EmpleadoSucursal {
-    // id_empleado, id_sucursal, fecha_cambio, detalle_cambio, estado, id_empleado_sucursal
     private int id;
     private Empleado empleado;
     private Sucursal sucursal;
