@@ -44,12 +44,12 @@ public class DepartamentoControlller implements Serializable {
      * MÉTODO ENVIAR Hace un llamado al DAO para ejecutar el método
      * insertarDepartamento
      *
-     * @return "index" porque el registro es en la misma página
      */
     public void enviar() {
         departamentoDAO.setDepartamento(departamento);
         if (departamento.getId() == 0) {
             if (departamentoDAO.insertar() > 0) {
+                departamento.setId(departamentoDAO.getDepartamento().getId());
                 mostrarMensajeInformacion("El departamento se ha guardado con éxito");
                 lista.add(departamento);
             } else {
