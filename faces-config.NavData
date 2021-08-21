@@ -13,8 +13,8 @@
         <Node id="Views/roles.xhtml" x="969" y="606" zoom="true"/>
         <Node id="Views/puestosLaborales.xhtml" x="11" y="432" zoom="true"/>
         <Node id="Views/Empresa/empresa.xhtml" x="9" y="536" zoom="true"/>
-        <Node id="Views/roldepagos.xhtml" x="671" y="636" zoom="true"/>
         <Node id="Views/Personal/empleadoCrear.xhtml" x="235" y="260" zoom="true"/>
+        <Node id="Views/roldepagos.xhtml" x="671" y="636" zoom="true"/>
         <Node id="Views/Registros.xhtml" x="419" y="595" zoom="true"/>
         <Node id="index.xhtml" x="37" y="5" zoom="true"/>
         <Node id="Views/Personal/persona.xhtml" x="493" y="10" zoom="true"/>
@@ -22,8 +22,8 @@
         <Node id="Plantilla/Plantilla.xhtml" x="38" y="39" zoom="true"/>
         <Node id="Views/diaSemana.xhtml" x="14" y="360" zoom="true"/>
         <Node id="Views/Empresa/dedicacion.xhtml" x="9" y="398" zoom="true"/>
-        <Node id="Views/HorarioLaboral/horarioLaboral.xhtml" x="22" y="219" zoom="true"/>
         <Node id="Views/Personal/empleadoPuesto.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="Views/HorarioLaboral/horarioLaboral.xhtml" x="22" y="219" zoom="true"/>
         <Node id="Views/departamentos.xhtml" x="13" y="324" zoom="true"/>
         <Node id="Views/Personal/historialEmpleado.xhtml" x="150" y="150" zoom="true"/>
         <Node id="Views/Personal/empleadoLista.xhtml" x="458" y="538" zoom="true"/>

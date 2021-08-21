@@ -32,7 +32,7 @@
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
                             <p:outputLabel for="puestoL" value="Puesto de Trabajo: "/>
-                            <p:selectOneMenu id="puestoL" value="#{empleadoPuestoView.empleadoPuesto.puestoLaboral.id}" 
+                            <p:selectOneMenu id="puestoL" value="#{empleadoPuestoView.idPuesto}" 
                                              required="true" label="Puesto de Trabajo">
                                 <f:selectItem itemLabel="Selecione un puesto" itemValue="#{0}" noSelectionOption="true"/>
                                 <f:selectItems value="#{empleadoPuestoView.puestos}" var="puesto" 
@@ -40,7 +40,7 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel for="horarioL" style="margin-left: 10px;" value="Horario Laboral: "/>
-                            <p:selectOneMenu id="horarioL" value="#{empleadoPuestoView.empleadoPuesto.horarioLaboral.id}"
+                            <p:selectOneMenu id="horarioL" value="#{empleadoPuestoView.idHorario}"
                                              rendered="true" label="Horario Laboral">
                                 <f:selectItem itemLabel="Selecione un horario" itemValue="#{0}" noSelectionOption="true"/>
                                 <f:selectItems value="#{empleadoPuestoView.horarios}" var="horario" 
@@ -55,7 +55,7 @@
                             <p:inputTextarea value="#{empleadoPuestoView.empleadoPuesto.observaciones}"/>
 
                             <p:outputLabel for="sucursalE" value="Sucursal: "/>
-                            <p:selectOneMenu id="sucursalE" value="#{empleadoPuestoView.empleadoSucursal.sucursal.id}"
+                            <p:selectOneMenu id="sucursalE" value="#{empleadoPuestoView.idSucursal}"
                                              rendered="true" label="Sucursal">
                                 <f:selectItem itemLabel="Selecione una sucursal" itemValue="#{0}" noSelectionOption="true"/>
                                 <f:selectItems value="#{empleadoPuestoView.sucursales}" var="sucursal" 

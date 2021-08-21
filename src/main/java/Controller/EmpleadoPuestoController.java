@@ -138,6 +138,7 @@ public class EmpleadoPuestoController implements Serializable {
             empleadoPuesto = empleadoPuestoDAO.buscar(empleadoDAO.getEmpleado());
             idPuesto = empleadoPuesto.getPuestoLaboral().getId();
             idHorario = empleadoPuesto.getHorarioLaboral().getId();
+            idSucursal = empleadoSucursal.getSucursal().getId();
             PrimeFaces.current().ajax().update(null, "form:dt-puesto");
         }
     }
