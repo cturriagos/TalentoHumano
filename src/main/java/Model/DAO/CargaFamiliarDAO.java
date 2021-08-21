@@ -7,11 +7,13 @@ package Model.DAO;
 
 import Config.Conexion;
 import Model.Entidad.CargaFamiliar;
+import Model.Entidad.Empleado;
 import Model.Interfaces.IDAO;
 import com.sun.istack.internal.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
@@ -51,7 +53,7 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         return cargaFamiliar;
     }
 
-    public void setEmpleado(CargaFamiliar cargaFamiliar) {
+    public void setCargaFamiliar(CargaFamiliar cargaFamiliar) {
         this.cargaFamiliar = cargaFamiliar;
     }
 
@@ -65,7 +67,7 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         if (conexion.isEstado()) {
             cargaFamiliar.setId(conexion.insertar("carga_familiar",
                     "id_empleado, cantidad_carga, fecha_cambio, nombre, documento_validacion, detalle",
-                    cargaFamiliar.getEmpleado().getId() + ", " + cargaFamiliar.getFaliares()+ ", CURRENT_TIMESTAMP, '" + cargaFamiliar.getConyuge()+ "', "
+                    cargaFamiliar.getEmpleado().getId() + ", " + cargaFamiliar.getFaliares() + ", CURRENT_TIMESTAMP, '" + cargaFamiliar.getConyuge() + "', '"
                     + cargaFamiliar.getPathValidation() + "', '" + cargaFamiliar.getDetalle() + "'",
                     "id_cargaf"));
             return cargaFamiliar.getId();
@@ -84,8 +86,8 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         if (conexion.isEstado()) {
             return conexion.modificar("carga_familiar",
                     "id_empleado = " + cargaFamiliar.getEmpleado().getId() + ", cantidad_carga = " + cargaFamiliar.getFaliares()
-                    + ", fecha_cambio = '" + cargaFamiliar.getFechaCambio() + "', nombre = '" + cargaFamiliar.getConyuge() 
-                    + "', documento_validacion = " + cargaFamiliar.getPathValidation() + ", detalle = '" + cargaFamiliar.getDetalle()+ "'",
+                    + ", fecha_cambio = '" + cargaFamiliar.getFechaCambio() + "', nombre = '" + cargaFamiliar.getConyuge()
+                    + "', documento_validacion = '" + cargaFamiliar.getPathValidation() + "', detalle = '" + cargaFamiliar.getDetalle() + "'",
                     "id_cargaf = " + cargaFamiliar.getId());
         }
         return -1;
@@ -103,7 +105,33 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         if (lista != null && !lista.isEmpty()) {
             return lista.get(0);
         }
-        return new CargaFamiliar();
+        return new CargaFamiliar(0,0, new Empleado(), "N/D", "N/D", "N/D", new Date() );
+    }
+
+    public CargaFamiliar buscar(Empleado empleado) {
+        cargaFamiliar = new CargaFamiliar(-1,0, empleado, "N/D", "N/D", "N/D", new Date() );
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("carga_familiar",
+                        "id_cargaf, cantidad_carga, fecha_cambio, nombre, documento_validacion, detalle",
+                        "id_empleado = " + empleado.getId(), null);
+                while (result.next()) {
+                    cargaFamiliar.setId(result.getInt("id_cargaf"));
+                    cargaFamiliar.setFaliares(result.getInt("cantidad_carga"));
+                    cargaFamiliar.setConyuge(result.getString("nombre"));
+                    cargaFamiliar.setDetalle(result.getString("detalle"));
+                    cargaFamiliar.setPathValidation(result.getString("documento_validacion"));
+                    cargaFamiliar.setFechaCambio(result.getDate("fecha_cambio"));
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return cargaFamiliar;
     }
 
     @Override
