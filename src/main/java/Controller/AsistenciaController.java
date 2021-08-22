@@ -83,9 +83,10 @@ public class AsistenciaController implements Serializable {
     public void empleadoSeleccionado() {
         asistencia.setEmpleadoPuesto(empleadoPuestoDAO.buscar(asistencia.getEmpleadoPuesto().getEmpleado()));
         horarios = detalleHorarioDAO.buscar(asistencia.getEmpleadoPuesto());
+        cargarDatos();
     }
     
-    public void horarioSeleccionado(){
+    public void cargarDatos(){
         asistencia = asistenciaDAO.buscar(asistencia.getEmpleadoPuesto(), asistencia.getFecha(), asistencia.getDetalleHorario());
     }
 
@@ -100,7 +101,7 @@ public class AsistenciaController implements Serializable {
             }
         } else {
             if (asistencia.getIngreso() != null && asistencia.getSalida() != null) {
-                if (asistenciaDAO.insertar() > 0) {
+                if (asistenciaDAO.actualizar()> 0) {
                     mostrarMensajeInformacion("Se marco la hora de salida");
                 } else {
 

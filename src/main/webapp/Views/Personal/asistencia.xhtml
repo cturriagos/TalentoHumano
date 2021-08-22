@@ -16,23 +16,20 @@
                 </p:toolbar>
                 <p:growl id="messages" showDetail="true"/>
                 <p:panel id="dt-asistencia" class="ui-fluid">
-                    <p:messages/>
                     <h:panelGrid columns="2" columnClasses="ui-grid-col-10,ui-grid-col-2"
                                  styleClass="ui-panelgrid-blank ui-fluid"
                                  style="border:0px none; background-color:transparent; width: 100%;">
-
+                        <h:panelGrid columns="1" columnClasses="ui-grid-col-12"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
                         <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
                                      styleClass="ui-panelgrid-blank ui-fluid"
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
-                            <h:outputLabel for="fecha" value="Fecha: "/>
-                            <p:datePicker id="fecha" value="#{asistenciaView.asistencia.fecha}" 
-                                          monthNavigator="true" yearNavigator="true" mindate="01/01/1960"
-                                          required="true" label="Fecha"/>
-
+                            
                             <h:outputLabel for="inempleado" value="Empleado: "/>
                             <p:selectOneMenu id="inempleado" value="#{asistenciaView.asistencia.empleadoPuesto.empleado.id}"
-                                             required="true" label="Tipo Identificación"
+                                             required="true" label="Empleado"
                                              filter="true" filterMatchMode="startsWith">
                                 <p:ajax listener="#{asistenciaView.empleadoSeleccionado}" update="inhorario"/>
                                 <f:selectItem itemLabel="Selecione a un empleado" itemValue="#{0}" noSelectionOption="true"/>
@@ -40,31 +37,44 @@
                                                var="empleado" itemLabel="#{empleado.nombreCompleto()}" itemValue="#{empleado.id}"/>
                             </p:selectOneMenu>
 
-                            <h:outputLabel for="inhorario" value="Horario: "/>
+                            <h:outputLabel for="inhorario" style="margin-left: 10PX" value="Horario: "/>
                             <p:selectOneMenu id="inhorario" value="#{asistenciaView.asistencia.detalleHorario.id}"
                                              required="true" label="Horario">
-                                <p:ajax listener="#{asistenciaView.horarioSeleccionado}" update="iningreso insalida"/>
+                                <p:ajax listener="#{asistenciaView.cargarDatos}" update="iningreso insalida"/>
                                 <f:selectItem itemLabel="Selecione el horario" itemValue="#{0}" noSelectionOption="true"/>
                                 <f:selectItems value="#{asistenciaView.horarios}" var="horario" 
                                                itemLabel="#{horario.ingresoSalida.resumen()}" itemValue="#{horario.id}">
                                 </f:selectItems>
                             </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+                            
+                            <h:outputLabel for="fecha" value="Fecha: "/>
+                            <p:datePicker id="fecha" value="#{asistenciaView.asistencia.fecha}"
+                                          monthNavigator="true" yearNavigator="true" mindate="01/01/1960"
+                                          pattern="dd/MM/yyyy" required="true" label="Fecha">
+                                <p:ajax listener="#{asistenciaView.cargarDatos}" update="inhorario iningreso insalida"/>
+                            </p:datePicker>
 
                             <h:outputLabel for="iningreso" style="margin-left: 10PX" value="Hoa de ingreso: "/>
                             <p:inputMask  id="iningreso" value="#{asistenciaView.asistencia.ingreso}"
-                                          mask="99:99:99" />
+                                          mask="99:99:99" disabled="#{not empty asistenciaView.asistencia.ingreso}" required="true" />
 
                             <h:outputLabel for="insalida" style="margin-left: 10PX" value="Hora de salida: "/>
                             <p:inputMask  id="insalida" value="#{asistenciaView.asistencia.salida}"
-                                          mask="99:99:99"/>
+                                          mask="99:99:99" disabled="#{not empty asistenciaView.asistencia.salida}"/>
+                        </h:panelGrid>
                         </h:panelGrid>
 
-                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{asistenciaView.guardar()}"
+                        <p:commandButton style="margin-left: 10PX" value="Guardar" icon="pi pi-save" actionListener="#{asistenciaView.guardar()}"
                                          update="dt-asistencia" styleClass="p-mr-2 ui-button-success" process="dt-asistencia @this">
                         </p:commandButton>
                     </h:panelGrid>
 
                 </p:panel>
+                
             </h:form>
         </div>
     </ui:define>

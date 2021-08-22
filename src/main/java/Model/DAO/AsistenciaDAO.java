@@ -84,7 +84,7 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("asistencia",
-                    "reg_hora_salida = " + asistencia.getSalida(),
+                    "reg_hora_salida = '" + asistencia.getSalida() + "'",
                     "id_empleado_puesto = " + asistencia.getEmpleadoPuesto().getId() + " AND reg_hora_ingreso = '" 
                     + asistencia.getIngreso()+ "' AND fecha = '" + asistencia.getFecha() 
                     + "' AND id_detalle_horario = " + asistencia.getDetalleHorario().getId());
