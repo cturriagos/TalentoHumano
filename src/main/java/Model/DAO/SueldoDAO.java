@@ -88,7 +88,7 @@ public class SueldoDAO  implements IDAO<Sueldo> {
         if (conexion.isEstado()) {
             return conexion.modificar("sueldo",
                     "id_empleado = " + sueldo.getEmpleado().getId() + ", valor = " + sueldo.getValor()
-                    + ", fecha_actualizacion = '" + sueldo.getFechaActualizacion()+ "', , estado = " + sueldo.isEstado(),
+                    + ", fecha_actualizacion = '" + sueldo.getFechaActualizacion()+ "', estado = " + sueldo.isEstado(),
                     "id_sueldo = " + sueldo.getId());
         }
         return -1;

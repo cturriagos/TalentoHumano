@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  *
- * @author Arialdo
+ * @author kestradalp
  */
 public class HorarioLaboral {
     private int id;

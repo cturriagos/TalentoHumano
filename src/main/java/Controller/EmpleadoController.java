@@ -8,11 +8,13 @@ package Controller;
 import Model.DAO.CargaFamiliarDAO;
 import Model.DAO.EmpleadoDAO;
 import Model.DAO.EmpleadoPuestoDAO;
+import Model.DAO.EmpleadoReservaDAO;
 import Model.DAO.EmpleadoSucursalDAO;
 import Model.DAO.SueldoDAO;
 import Model.Entidad.CargaFamiliar;
 import Model.Entidad.Empleado;
 import Model.Entidad.EmpleadoPuesto;
+import Model.Entidad.EmpleadoReserva;
 import Model.Entidad.EmpleadoSucursal;
 import Model.Entidad.Sueldo;
 import java.io.File;
@@ -46,10 +48,15 @@ public class EmpleadoController implements Serializable {
     private UploadedFile originalFile;
     private StreamedContent file;
     private Empleado empleado;
+    private String resumeReserva;
 
     @Inject
     private EmpleadoSucursalDAO empleadoSucursalDAO;
     private EmpleadoSucursal empleadoSucursal;
+
+    @Inject
+    private EmpleadoReservaDAO empleadoReservaDAO;
+    private EmpleadoReserva empleadoReserva;
 
     @Inject
     private EmpleadoPuestoDAO empleadoPuestoDAO;
@@ -67,13 +74,23 @@ public class EmpleadoController implements Serializable {
         empleado = new Empleado();
         empleadoPuesto = new EmpleadoPuesto();
         empleadoSucursal = new EmpleadoSucursal();
+        empleadoReserva = new EmpleadoReserva();
         cargaFamiliar = new CargaFamiliar();
         sueldo = new Sueldo();
     }
 
-    @PostConstruct
-    public void constructorEmpleado() {
-
+    public void postLoad(int idEmpleado) {
+        if (idEmpleado > 0) {
+            EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+            empleado = empleadoDAO.buscarPorId(idEmpleado);
+            empleadoSucursal = empleadoSucursalDAO.buscar(empleado);
+            empleadoReserva = empleadoReservaDAO.buscar(empleado);
+            empleadoPuesto = empleadoPuestoDAO.buscar(empleado);
+            cargaFamiliar = cargaFamiliarDAO.buscar(empleado);
+            sueldo = sueldoDAO.Actual(empleado);
+            resumenReserva();
+            PrimeFaces.current().ajax().update(null, "form:dt-empleado");
+        }
     }
 
     public EmpleadoSucursal getEmpleadoSucursal() {
@@ -108,6 +125,14 @@ public class EmpleadoController implements Serializable {
         this.sueldo = sueldo;
     }
 
+    public EmpleadoReserva getEmpleadoReserva() {
+        return empleadoReserva;
+    }
+
+    public void setEmpleadoReserva(EmpleadoReserva empleadoReserva) {
+        this.empleadoReserva = empleadoReserva;
+    }
+
     public StreamedContent getFile() {
         return file;
     }
@@ -119,17 +144,17 @@ public class EmpleadoController implements Serializable {
     public List<Sueldo> historialSueldo() {
         return sueldoDAO.historial(empleado);
     }
+    
+    private void resumenReserva(){
+            if (empleadoReserva.getFormaPago() != 0) {
+                resumeReserva = "$ " + (empleadoReserva.getFormaPago() * sueldo.getValor()) + " (" + (empleadoReserva.getFormaPago() == 1 ? "ANUAL" : "MENSUAL") + ")";
+            } else {
+                resumeReserva = "S/D";
+            }
+    }
 
-    public void postLoad(int idEmpleado) {
-        if (idEmpleado > 0) {
-            EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-            empleado = empleadoDAO.buscarPorId(idEmpleado);
-            empleadoSucursal = empleadoSucursalDAO.buscar(empleado);
-            empleadoPuesto = empleadoPuestoDAO.buscar(empleado);
-            sueldo = sueldoDAO.Actual(empleado);
-            cargaFamiliar = cargaFamiliarDAO.buscar(empleado);
-            PrimeFaces.current().ajax().update(null, "form:dt-empleado");
-        }
+    public String getResumenReserva() {
+        return resumeReserva;
     }
 
     public void handleFileUpload(FileUploadEvent event) {
@@ -201,6 +226,26 @@ public class EmpleadoController implements Serializable {
             mostrarMensajeError(ex.getMessage());
         }
         PrimeFaces.current().executeScript("PF('manageCargaFamiliarDialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
+    }
+
+    public void guardarReserva() {
+        empleadoReservaDAO.setEmpleadoReserva(empleadoReserva);
+        if (resumeReserva.equalsIgnoreCase("S/D")) {
+            if (empleadoReservaDAO.insertar() > 0) {
+                mostrarMensajeInformacion("Los datos se guardarón con éxito");
+            }else{
+                mostrarMensajeError("No se pudierón guardar los datos");
+            }
+        }else{
+            if (empleadoReservaDAO.actualizar() > 0) {
+                mostrarMensajeInformacion("Los datos se actualizarón con éxito");
+            }else{
+                mostrarMensajeError("No se pudierón actualizar los datos");
+            }
+        }
+        resumenReserva();
+        PrimeFaces.current().executeScript("PF('manageReservaDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }
 

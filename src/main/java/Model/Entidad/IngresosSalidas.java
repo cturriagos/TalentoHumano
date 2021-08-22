@@ -5,11 +5,9 @@
  */
 package Model.Entidad;
 
-import java.util.Date;
-
 /**
  *
- * @author Arialdo
+ * @author rturr
  */
 public class IngresosSalidas {
     private int id;

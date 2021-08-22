@@ -86,6 +86,14 @@
                             <h:outputText value="#{empleadoView.cargaFamiliar.faliares}" />
 
                         </h:panelGrid>
+                        <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="width: 100%;">
+
+                            <h:outputText value="Fondos de Reserva: " style="font-weight: bold;" />
+                            <h:outputText value="#{empleadoView.resumenReserva}" />
+
+                        </h:panelGrid>
                         <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
                                      styleClass="ui-panelgrid-blank ui-fluid"
                                      style="border:0px none; background-color:transparent; width: 100%;">
@@ -102,8 +110,9 @@
 
                             <h:outputText value="Observaciones(detalles): " style="font-weight: bold;" />
                             <h:outputText value="Sobre el puesto: #{empleadoView.empleadoPuesto.observaciones}" />
-                            <h:outputText value="Sobre la sucursal: #{empleadoView.empleadoSucursal.detalle}" />
                             <h:outputText value="Sobre la carga Familiar: #{empleadoView.cargaFamiliar.detalle}" />
+                            <h:outputText value="Sobre la sucursal: #{empleadoView.empleadoSucursal.detalle}" />
+                            <h:outputText value="Sobre la reserva: #{empleadoView.empleadoReserva.detalle}" />
                         </h:panelGrid>
                     </p:panel>
                     <p:dialog header="Cambiar Sueldo" minHeight="40" width="350" showEffect="fade" modal="true"
@@ -184,7 +193,44 @@
                                              process="@none" styleClass="p-mr-2" resetValues="true" />
                         </f:facet>
                     </p:dialog>
-                    <p:panel header="Botones de cambios" class="ui-fluid">
+                    <p:dialog header="Fondos de Reserva" minHeight="40" width="350" showEffect="fade" modal="true"
+                              widgetVar="manageReservaDialog" responsive="true">
+                        <p:outputPanel id="manage-reserva-content" class="ui-fluid">
+                            <p:outputPanel >
+                                <div class="card">
+                                    <div class="ui-fluid">
+                                        <div class="p-field">
+                                            <p:outputLabel for="informa" style="font-weight: bold" value="Forma de Pago: " />
+                                            <p:selectOneMenu id="informa" value="#{empleadoView.empleadoReserva.formaPago}"
+                                                             required="true" requiredMessage="Debe elegir una forma de pago"
+                                                             label="Forma de Pago">
+                                                <f:selectItem itemLabel="Selecione el tipo" itemValue="#{0}" noSelectionOption="true"/>
+                                                <f:selectItem itemLabel="ANUAL" itemValue="#{1}"/>
+                                                <f:selectItem itemLabel="MENSUAL" itemValue="#{0.0833}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="indetalleR" style="font-weight: bold" value="Observaciones(Detalle): "/>
+                                            <p:inputTextarea id="indetalleR" value="#{empleadoView.empleadoReserva.detalle}" 
+                                                             required="true" requiredMessage="Campo requerido"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarReserva}"
+                                             update="manage-reserva-content" styleClass="ui-button-success"
+                                             process="manage-reserva-content @this">
+                                <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas guardar los cambios?"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageReservaDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:panel class="ui-fluid">
+                        <h4 >Botones de cambios</h4>
                         <h:panelGrid columns="12"
                                      styleClass="ui-panelgrid-blank ui-fluid"
                                      style="border:0px none; background-color:transparent; width: 100%;">
@@ -197,11 +243,12 @@
                                              oncomplete="PF('manageCargaFamiliarDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this"/>
                             <p:commandButton value="Puesto Laboral" icon="pi pi-pencil" action="EditarPuesto"
-                                             styleClass="edit-button rounded-button ui-button-success">
+                                             styleClass="rounded-button ui-button-success">
                                 <f:setPropertyActionListener value="#{empleadoView.sueldo.empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
-                            <p:commandButton value="Reserva" icon="pi pi-list" 
-                                             styleClass="ui-button-success" style="margin-right: .5rem"/>
+                            <p:commandButton value="Reserva" icon="pi #{empleadoView.empleadoReserva.formaPago == 0 ? 'pi-plus' : 'pi-pencil'}" 
+                                             update=":form:manage-reserva-content" oncomplete="PF('manageReservaDialog').show()"
+                                             styleClass="rounded-button ui-button-success" style="margin-right: .5rem"/>
 
                         </h:panelGrid>
                     </p:panel>
