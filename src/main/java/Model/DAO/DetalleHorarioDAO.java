@@ -7,6 +7,7 @@ package Model.DAO;
 
 import Config.Conexion;
 import Model.Entidad.DetalleHorario;
+import Model.Entidad.EmpleadoPuesto;
 import Model.Interfaces.IDAO;
 import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
@@ -109,6 +110,39 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
     
     public List<DetalleHorario> Listar(int idHorarioLaboral) {
         return buscar("id_horario_laboral = " + idHorarioLaboral , null);
+    }
+
+    public List<DetalleHorario> buscar(EmpleadoPuesto empleadoPuesto) {
+        if (conexion.isEstado()) {
+            ResultSet result;
+            List<DetalleHorario> detalles;
+            try {
+                detalleHorario.setHorarioLaboral(empleadoPuesto.getHorarioLaboral());
+                result = conexion.selecionar("detalle_horario AS dh INNER JOIN public.horario_laboral AS hl ON hl.id_horario_laboral = dh.id_horario_laboral",
+                                             "id_detalle_horario, id_ingreso_salida, dh.id_horario_laboral, id_dia_semana, dh.estado",
+                                             "hl.id_horario_laboral = " + detalleHorario.getHorarioLaboral().getId() 
+                                                     + " AND hl.estado = true AND dh.estado = true",
+                                             null);
+                detalles = new ArrayList<>();
+                DiaSemanaDAO diaDAO = new DiaSemanaDAO();
+                IngresosSalidasDAO ingresoSalidaDAO = new IngresosSalidasDAO();
+                while (result.next()) {
+                    detalles.add(new DetalleHorario(result.getInt("id_detalle_horario"),
+                            ingresoSalidaDAO.buscarPorId(result.getInt("id_ingreso_salida")),
+                            detalleHorario.getHorarioLaboral(),
+                            diaDAO.buscarPorId(result.getInt("id_dia_semana")),
+                            result.getBoolean("estado")
+                    ));
+                }
+                result.close();
+                return detalles;
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return null;
     }
 
     private List<DetalleHorario> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {

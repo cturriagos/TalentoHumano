@@ -5,13 +5,14 @@
  */
 package Model.Entidad;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author cturriagos
  */
-public class Empleado{
+public class Empleado implements Serializable{
     private int id;
     private Persona persona;
     private String nombre1, nombre2, apellido1, apellido2, sexo, genero, detalle;

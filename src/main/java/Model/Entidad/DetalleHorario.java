@@ -5,11 +5,13 @@
  */
 package Model.Entidad;
 
+import java.io.Serializable;
+
 /**
  *
  * @author rturr
  */
-public class DetalleHorario {
+public class DetalleHorario implements Serializable{
 
     private int id;
     private IngresosSalidas ingresoSalida;

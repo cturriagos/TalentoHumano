@@ -19,7 +19,7 @@ import javax.inject.Named;
 
 /**
  *
- * @author Lenin
+ * @author kestradalp
  */
 @Named
 @ApplicationScoped

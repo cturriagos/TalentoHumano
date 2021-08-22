@@ -25,7 +25,7 @@ import org.primefaces.PrimeFaces;
 
 /**
  *
- * @author Arialdo
+ * @author kestradalp
  */
 @Named(value = "puestoLaboralView")
 @ViewScoped

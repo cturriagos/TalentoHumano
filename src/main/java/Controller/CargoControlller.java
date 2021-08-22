@@ -20,7 +20,7 @@ import org.primefaces.event.RowEditEvent;
 
 /**
  *
- * @author Arialdo
+ * @author ClasK7
  */
 @Named(value = "cargoView")
 @ViewScoped

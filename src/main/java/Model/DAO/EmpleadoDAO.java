@@ -149,6 +149,41 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         }
         return empleados;
     }
+    
+    public List<Empleado> activos() {
+        List<Empleado> empleados = new ArrayList<>();
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("empleado AS e INNER JOIN public.persona AS p ON p.id_persona = e.id_persona",
+                                             "id_empleado, e.id_persona, nombre1, nombre2, apellido1, apellido2, sexo, genero, detalle, fecha_nacimiento, fecha_ingreso, fecha_egreso",
+                                             "p.estado = true",
+                                             "nombre1, nombre2, apellido1, apellido2 ASC");
+                while (result.next()) {
+                    empleados.add(new Empleado(
+                            result.getInt("id_empleado"),
+                            personaDAO.buscarPorId(result.getInt("id_persona")),
+                            result.getString("nombre1"),
+                            result.getString("nombre2"),
+                            result.getString("apellido1"),
+                            result.getString("apellido2"),
+                            result.getString("sexo"),
+                            result.getString("genero"),
+                            result.getString("detalle"),
+                            result.getDate("fecha_nacimiento"),
+                            result.getDate("fecha_ingreso"),
+                            result.getDate("fecha_egreso")
+                    ));
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return empleados;
+    }
 
     private List<Empleado> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
         List<Empleado> empleados = new ArrayList<>();

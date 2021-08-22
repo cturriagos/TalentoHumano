@@ -18,7 +18,7 @@ import javax.inject.Named;
 
 /**
  *
- * @author Arialdo
+ * @author ClasK7
  */
 @Named
 @ApplicationScoped
