@@ -92,7 +92,7 @@ public class AsistenciaController implements Serializable {
 
     public void guardar() {
         asistenciaDAO.setAsistencia(asistencia);
-        if (asistencia.getIngreso() != null && asistencia.getSalida() == null) {
+        if (!asistencia.getIngreso().isEmpty() && asistencia.getSalida().isEmpty()) {
             if (asistenciaDAO.insertar() > 0) {
                 mostrarMensajeInformacion("Se marco la hora de ingreso");
             } else {
@@ -100,7 +100,7 @@ public class AsistenciaController implements Serializable {
                 mostrarMensajeError("No se pudo marcar la hora de ingreso");
             }
         } else {
-            if (asistencia.getIngreso() != null && asistencia.getSalida() != null) {
+            if (!asistencia.getIngreso().isEmpty() && !asistencia.getSalida().isEmpty()) {
                 if (asistenciaDAO.actualizar()> 0) {
                     mostrarMensajeInformacion("Se marco la hora de salida");
                 } else {
