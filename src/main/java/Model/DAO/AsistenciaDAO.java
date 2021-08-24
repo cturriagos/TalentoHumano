@@ -8,7 +8,9 @@ package Model.DAO;
 import Config.Conexion;
 import Model.Entidad.Asistencia;
 import Model.Entidad.DetalleHorario;
+import Model.Entidad.DiaSemana;
 import Model.Entidad.EmpleadoPuesto;
+import Model.Entidad.IngresosSalidas;
 import Model.Interfaces.IDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -127,6 +129,30 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
             }
         }
         return asistencia;
+    }
+
+    public List<Asistencia> buscar(EmpleadoPuesto empleadoPuesto) {
+        List<Asistencia> asistencias = new ArrayList<>();
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("asistencia", "fecha, reg_hora_ingreso, reg_hora_salida, id_detalle_horario",
+                                             "id_empleado_puesto = " + empleadoPuesto.getId(), "fecha DESC");
+                DetalleHorarioDAO dhdao = new DetalleHorarioDAO();
+                while (result.next()) {
+                    asistencias.add(new Asistencia( empleadoPuesto, result.getString("reg_hora_ingreso"),
+                                                    result.getString("reg_hora_salida"),  result.getDate("fecha"),
+                                                    dhdao.buscarPorId(result.getInt("id_detalle_horario"),
+                                                    empleadoPuesto.getHorarioLaboral())));
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return asistencias;
     }
 
     @Override

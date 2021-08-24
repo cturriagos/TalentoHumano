@@ -6,41 +6,52 @@
 package Model.Entidad;
 
 import Model.DAO.TipoRubroDAO;
-import java.util.Date;
 
 /**
  *
- * @author ClasK7
+ * @author kestradalp
  */
-public class Sueldo {
-    private int id;
+public class Suspencion {
+    private int id, cantidadDias;
     private Empleado empleado;
     private float valor;
-    private Date fechaActualizacion;
+    private String detalle;
     private boolean estado;
     private TipoRubro tipoRubro;
 
-    public Sueldo() {
+    public Suspencion() {
         this.id = 0;
+        this.cantidadDias = 0;
         this.empleado = new Empleado();
         this.valor = 0;
-        this.fechaActualizacion = new Date();
+        this.detalle = "";
         this.estado = true;
         inicializarTipo();
     }
 
-    public Sueldo(int id, Empleado empleado, float valor, Date fechaActualizacion, boolean estado) {
+    public Suspencion(Empleado empleado) {
+        this.id = 0;
+        this.cantidadDias = 0;
+        this.empleado = empleado;
+        this.valor = 0;
+        this.detalle = "";
+        this.estado = true;
+        inicializarTipo();
+    }
+
+    public Suspencion(int id, int cantidadDias, Empleado empleado, float valor, String detalle, boolean estado) {
         this.id = id;
+        this.cantidadDias = cantidadDias;
         this.empleado = empleado;
         this.valor = valor;
-        this.fechaActualizacion = fechaActualizacion;
+        this.detalle = detalle;
         this.estado = estado;
         inicializarTipo();
     }
 
     private void inicializarTipo(){
         TipoRubroDAO tipoRubroDAO = new TipoRubroDAO();
-        tipoRubro = tipoRubroDAO.buscarPorId(11);
+        tipoRubro = tipoRubroDAO.buscarPorId(12);
     } 
 
     public int getId() {
@@ -49,6 +60,14 @@ public class Sueldo {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getCantidadDias() {
+        return cantidadDias;
+    }
+
+    public void setCantidadDias(int cantidadDias) {
+        this.cantidadDias = cantidadDias;
     }
 
     public Empleado getEmpleado() {
@@ -67,12 +86,12 @@ public class Sueldo {
         this.valor = valor;
     }
 
-    public Date getFechaActualizacion() {
-        return fechaActualizacion;
+    public String getDetalle() {
+        return detalle;
     }
 
-    public void setFechaActualizacion(Date fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
     }
 
     public boolean isEstado() {

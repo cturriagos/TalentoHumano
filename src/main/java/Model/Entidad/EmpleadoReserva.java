@@ -5,6 +5,7 @@
  */
 package Model.Entidad;
 
+import Model.DAO.TipoRubroDAO;
 import java.util.Date;
 
 /**
@@ -16,12 +17,14 @@ public class EmpleadoReserva {
     private Date fechaSolicitud;
     private float formaPago;
     private String detalle;
+    private TipoRubro tipoRubro;
 
     public EmpleadoReserva() {
         this.empleado = new Empleado();
         this.fechaSolicitud = new Date();
         this.formaPago = 0;
         this.detalle = "";
+        inicializarTipo();
     }
 
     public EmpleadoReserva(Empleado empleado, Date fechaSolicitud, float formaPago, String detalle) {
@@ -29,7 +32,13 @@ public class EmpleadoReserva {
         this.fechaSolicitud = fechaSolicitud;
         this.formaPago = formaPago;
         this.detalle = detalle;
+        inicializarTipo();
     }
+
+    private void inicializarTipo(){
+        TipoRubroDAO tipoRubroDAO = new TipoRubroDAO();
+        tipoRubro = tipoRubroDAO.buscarPorId(8);
+    } 
 
     public Empleado getEmpleado() {
         return empleado;
@@ -61,5 +70,9 @@ public class EmpleadoReserva {
 
     public void setDetalle(String detalle) {
         this.detalle = detalle;
+    }
+
+    public TipoRubro getTipoRubro() {
+        return tipoRubro;
     }
 }

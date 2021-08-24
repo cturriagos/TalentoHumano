@@ -36,6 +36,7 @@ public class AsistenciaController implements Serializable {
     @Inject
     private AsistenciaDAO asistenciaDAO;
     private Asistencia asistencia;
+    private List<Asistencia> asistencias;
     @Inject
     private EmpleadoPuestoDAO empleadoPuestoDAO;
     @Inject
@@ -49,6 +50,7 @@ public class AsistenciaController implements Serializable {
         asistencia = new Asistencia();
         empleados = new ArrayList<>();
         horarios = new ArrayList<>();
+        asistencias = new ArrayList<>();
     }
 
     @PostConstruct
@@ -80,10 +82,23 @@ public class AsistenciaController implements Serializable {
         this.horarios = horarios;
     }
 
+    public List<Asistencia> getAsistencias() {
+        return asistencias;
+    }
+
+    public void setAsistencias(List<Asistencia> asistencias) {
+        this.asistencias = asistencias;
+    }
+
     public void empleadoSeleccionado() {
         asistencia.setEmpleadoPuesto(empleadoPuestoDAO.buscar(asistencia.getEmpleadoPuesto().getEmpleado()));
         horarios = detalleHorarioDAO.buscar(asistencia.getEmpleadoPuesto());
         cargarDatos();
+        actualizarAsistencias();
+    }
+    
+    private void actualizarAsistencias(){
+        asistencias = asistenciaDAO.buscar(asistencia.getEmpleadoPuesto());
     }
     
     public void cargarDatos(){
@@ -96,7 +111,6 @@ public class AsistenciaController implements Serializable {
             if (asistenciaDAO.insertar() > 0) {
                 mostrarMensajeInformacion("Se marco la hora de ingreso");
             } else {
-
                 mostrarMensajeError("No se pudo marcar la hora de ingreso");
             }
         } else {
@@ -111,7 +125,8 @@ public class AsistenciaController implements Serializable {
                 mostrarMensajeError("Debe de ingresar un valor en los campos");
             }
         }
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-asistencia");
+        actualizarAsistencias();
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-asistencia form:dt-asistencias");
     }
     
 

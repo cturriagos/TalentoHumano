@@ -6,42 +6,53 @@
 package Model.Entidad;
 
 import Model.DAO.TipoRubroDAO;
-import java.util.Date;
 
 /**
  *
  * @author ClasK7
  */
-public class Sueldo {
+public class Amonestacion {
     private int id;
     private Empleado empleado;
+    private String tipo, detalle;
     private float valor;
-    private Date fechaActualizacion;
     private boolean estado;
     private TipoRubro tipoRubro;
 
-    public Sueldo() {
+    public Amonestacion() {
         this.id = 0;
         this.empleado = new Empleado();
+        this.tipo = "";
+        this.detalle = "";
         this.valor = 0;
-        this.fechaActualizacion = new Date();
         this.estado = true;
         inicializarTipo();
     }
 
-    public Sueldo(int id, Empleado empleado, float valor, Date fechaActualizacion, boolean estado) {
+    public Amonestacion(Empleado empleado) {
+        this.id = 0;
+        this.empleado = empleado;
+        this.tipo = "";
+        this.detalle = "";
+        this.valor = 0;
+        this.estado = true;
+        inicializarTipo();
+    }
+
+    public Amonestacion(int id, Empleado empleado, String tipo, String detalle, float valor, boolean estado) {
         this.id = id;
         this.empleado = empleado;
+        this.tipo = tipo;
+        this.detalle = detalle;
         this.valor = valor;
-        this.fechaActualizacion = fechaActualizacion;
         this.estado = estado;
         inicializarTipo();
     }
 
     private void inicializarTipo(){
         TipoRubroDAO tipoRubroDAO = new TipoRubroDAO();
-        tipoRubro = tipoRubroDAO.buscarPorId(11);
-    } 
+        tipoRubro = tipoRubroDAO.buscarPorId(2);
+    }   
 
     public int getId() {
         return id;
@@ -59,20 +70,28 @@ public class Sueldo {
         this.empleado = empleado;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
     public float getValor() {
         return valor;
     }
 
     public void setValor(float valor) {
         this.valor = valor;
-    }
-
-    public Date getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-
-    public void setFechaActualizacion(Date fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
     }
 
     public boolean isEstado() {

@@ -5,18 +5,21 @@
  */
 package Model.Entidad;
 
+import Model.DAO.TipoRubroDAO;
 import java.util.Date;
+import javax.inject.Inject;
 
 /**
  *
  * @author ClasK7
  */
 public class CargaFamiliar {
+    private TipoRubro tipoRubro;
     private int id, faliares;
     private Empleado empleado;
     private String conyuge, detalle, pathValidation;
     private Date fechaCambio;
-
+    
     public CargaFamiliar() {
         this.id = 0;
         this.faliares = 0;
@@ -25,6 +28,7 @@ public class CargaFamiliar {
         this.detalle = "";
         this.pathValidation = "";
         this.fechaCambio = new Date();
+        inicializarTipo();
     }
 
     public CargaFamiliar(int id, int faliares, Empleado empleado, String conyuge, String detalle, String pathValidation, Date fechaCambio) {
@@ -35,8 +39,14 @@ public class CargaFamiliar {
         this.detalle = detalle;
         this.pathValidation = pathValidation;
         this.fechaCambio = fechaCambio;
+        inicializarTipo();
     }
 
+    private void inicializarTipo(){
+        TipoRubroDAO tipoRubroDAO = new TipoRubroDAO();
+        tipoRubro = tipoRubroDAO.buscarPorId(5);
+    }
+    
     public int getId() {
         return id;
     }
@@ -91,6 +101,9 @@ public class CargaFamiliar {
 
     public void setFechaCambio(Date fechaCambio) {
         this.fechaCambio = fechaCambio;
+    }    
+
+    public TipoRubro getTipoRubro() {
+        return tipoRubro;
     }
-    
 }

@@ -6,42 +6,57 @@
 package Model.Entidad;
 
 import Model.DAO.TipoRubroDAO;
-import java.util.Date;
 
 /**
  *
- * @author ClasK7
+ * @author kestradalp
  */
-public class Sueldo {
+public class Multa {
     private int id;
     private Empleado empleado;
-    private float valor;
-    private Date fechaActualizacion;
+    private float porcentaje, valor;
+    private String detalle;
     private boolean estado;
     private TipoRubro tipoRubro;
 
-    public Sueldo() {
+    public Multa() {
         this.id = 0;
         this.empleado = new Empleado();
+        this.porcentaje = 0;
         this.valor = 0;
-        this.fechaActualizacion = new Date();
+        this.detalle = "";
         this.estado = true;
         inicializarTipo();
     }
 
-    public Sueldo(int id, Empleado empleado, float valor, Date fechaActualizacion, boolean estado) {
+    public Multa(Empleado empleado) {
+        this.id = 0;
+        this.empleado = empleado;
+        this.porcentaje = 0;
+        this.valor = 0;
+        this.detalle = "";
+        this.estado = true;
+        inicializarTipo();
+    }
+
+    public Multa(int id, Empleado empleado, float porcentaje, float valor, String detalle, boolean estado) {
         this.id = id;
         this.empleado = empleado;
+        this.porcentaje = porcentaje;
         this.valor = valor;
-        this.fechaActualizacion = fechaActualizacion;
+        this.detalle = detalle;
         this.estado = estado;
         inicializarTipo();
     }
 
     private void inicializarTipo(){
         TipoRubroDAO tipoRubroDAO = new TipoRubroDAO();
-        tipoRubro = tipoRubroDAO.buscarPorId(11);
+        tipoRubro = tipoRubroDAO.buscarPorId(2);
     } 
+
+    public TipoRubro getTipoRubro() {
+        return tipoRubro;
+    }
 
     public int getId() {
         return id;
@@ -59,6 +74,14 @@ public class Sueldo {
         this.empleado = empleado;
     }
 
+    public float getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(float porcentaje) {
+        this.porcentaje = porcentaje;
+    }
+
     public float getValor() {
         return valor;
     }
@@ -67,12 +90,12 @@ public class Sueldo {
         this.valor = valor;
     }
 
-    public Date getFechaActualizacion() {
-        return fechaActualizacion;
+    public String getDetalle() {
+        return detalle;
     }
 
-    public void setFechaActualizacion(Date fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
     }
 
     public boolean isEstado() {
@@ -81,9 +104,5 @@ public class Sueldo {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
-    }
-
-    public TipoRubro getTipoRubro() {
-        return tipoRubro;
     }
 }

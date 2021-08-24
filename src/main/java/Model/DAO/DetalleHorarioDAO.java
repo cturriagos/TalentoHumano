@@ -8,6 +8,7 @@ package Model.DAO;
 import Config.Conexion;
 import Model.Entidad.DetalleHorario;
 import Model.Entidad.EmpleadoPuesto;
+import Model.Entidad.HorarioLaboral;
 import Model.Interfaces.IDAO;
 import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
@@ -96,11 +97,38 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
 
     @Override
     public DetalleHorario buscarPorId(Object id) {
-        List<DetalleHorario> lista = buscar("id_detalle_horario = " + id + ", id_horario_laboral = " + detalleHorario.getHorarioLaboral().getId(), null);
+        List<DetalleHorario> lista = buscar("id_detalle_horario = " + id + " AND id_horario_laboral = " + detalleHorario.getHorarioLaboral().getId(), null);
         if (lista != null && !lista.isEmpty()) {
             return lista.get(0);
         }
         return null;
+    }
+
+    public DetalleHorario buscarPorId(int id, HorarioLaboral horarioLaboral) {
+        detalleHorario = new DetalleHorario();
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("detalle_horario",
+                                             "id_ingreso_salida, id_dia_semana, estado", "id_horario_laboral = " 
+                                                     + horarioLaboral.getId() + " AND id_detalle_horario = " + id, null);
+                DiaSemanaDAO diaDAO = new DiaSemanaDAO();
+                IngresosSalidasDAO isDAO = new IngresosSalidasDAO();
+                while (result.next()) {
+                    detalleHorario.setId(id);
+                    detalleHorario.setIngresoSalida(isDAO.buscarPorId(result.getInt("id_ingreso_salida")));
+                    detalleHorario.setHorarioLaboral(horarioLaboral);
+                    detalleHorario.setDiaSemana(diaDAO.buscarPorId(result.getInt("id_dia_semana")));
+                    detalleHorario.setEstado(result.getBoolean("estado"));
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return detalleHorario;
     }
 
     @Override

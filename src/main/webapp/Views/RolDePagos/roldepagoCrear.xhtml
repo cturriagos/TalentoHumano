@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/Plantilla/Plantilla.xhtml">
+
+    <ui:define name="Contenido">
+        <h:head>
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{rolPagoCrearView.postLoad(personaBean.empleado)}" />
+            </f:metadata>
+        </h:head>
+        <div class="card">
+            <h:form id="form">
+                <h2>#{rolPagoCrearView.rolPagos.empleado.nombreCompleto()}</h2>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:outputLabel for="mes" value="Mes del pago: " style="font-weight: bold;" />
+                        <p:datePicker id="mes" view="month" style="margin-left: 10px;" value="#{rolPagoCrearView.mes}"
+                                      pattern="MM/yyyy" yearNavigator="true" yearRange="2000:2030">
+                            <p:ajax listener="#{rolPagoCrearView.obtenerDatos}" update="DATOS"/>
+                        </p:datePicker>
+                    </p:toolbarGroup>
+                    <p:toolbarGroup align="right">
+                        <p:linkButton value="Cancelar" icon="pi pi-times" outcome="ListaRoles"
+                                      styleClass="ui-button-success" style="margin-right: .5rem"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+                <p:panel id="DATOS" header="SUELDO $#{rolPagoCrearView.sueldo.valor}" class="ui-fluid">
+                    <p:messages/>
+                    <h:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3"
+                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                 style="border:0px none; background-color:transparent; width: 100%;">
+
+                        <h:outputText value="Horas Laboradas: #{rolPagoCrearView.horasLaboradas} " style="font-weight: bold;" />
+                        <h:outputText value="$ #{rolPagoCrearView.montoHLabboradas} = #{rolPagoCrearView.horasLaboradas} * ((#{rolPagoCrearView.sueldo.valor}/30)/8)" />
+                        
+                        <h:outputText value="Horas Suplementarias: #{rolPagoCrearView.horasSuplementarias} " style="font-weight: bold;" />
+                        <h:outputText value="$ #{rolPagoCrearView.montoHSuplem} = #{rolPagoCrearView.horasSuplementarias} * ((#{rolPagoCrearView.sueldo.valor}/30)/8) * 1.5" />
+                        
+                        <h:outputText value="Horas Extras: " style="font-weight: bold;" />
+                        <h:outputText value="$ 0 = 0 * (((#{rolPagoCrearView.sueldo.valor}/30)/8) * 2)" />
+                        
+                        <h:outputText value="Fondes de reserva: " style="font-weight: bold;" />
+                        <h:outputText value="$ #{rolPagoCrearView.fondosReserva} (#{rolPagoCrearView.empleadoReserva.getFormaPago() == 1 ? 'ANUAL' : 'MENSUAL'})" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="6" columnClasses="ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-3,ui-grid-col-3"
+                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                 style="border:0px none; background-color:transparent; width: 100%;">
+
+                        <h:outputLabel for="cuarto" style="font-weight: bold;" value="Decimo Tercer Sueldo:"/>
+                        <p:selectBooleanCheckbox id="cuarto" value="#{rolPagoCrearView.checkdDecimoCuarto}"
+                                                 itemLabel="  $ #{rolPagoCrearView.decimoTercero}">
+                            <p:ajax update="DATOS" listener="#{rolPagoCrearView.checkedChangeTercero}"/>
+                        </p:selectBooleanCheckbox>
+                        
+                        <h:outputLabel for="tercero" style="font-weight: bold;" value="Decimo Cuarto Sueldo: "/>
+                        <p:selectBooleanCheckbox id="tercero" value="#{rolPagoCrearView.checkdDecimoTercero}"
+                                                 itemLabel="  $ #{rolPagoCrearView.decimoCuarto}">
+                            <p:ajax update="DATOS" listener="#{rolPagoCrearView.checkedChangeCuarto}"/>
+                        </p:selectBooleanCheckbox>
+                    </h:panelGrid>
+                </p:panel>
+                <p:toolbar>
+                    <p:toolbarGroup>
+                    </p:toolbarGroup>
+                    <p:toolbarGroup align="right">
+                        <h:outputLabel style="margin-left: 10PX" for="estado" value="Total: #{rolPagoCrearView.total}"/>
+                    </p:toolbarGroup>
+                </p:toolbar>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
