@@ -162,7 +162,7 @@ public Suspencion buscar(Empleado empleado) {
                     suspenciones.add(new Suspencion(
                             result.getInt("id_suspencion"),
                             result.getInt("cantidad_dias"),
-                            eDAO.buscarPorId(result.getInt("id_empleado")),
+                            (suspencion.getEmpleado().getId()>0? suspencion.getEmpleado() : eDAO.buscarPorId(result.getInt("id_empleado"))),
                             result.getFloat("valor"),
                             result.getString("detalle"),
                             result.getBoolean("estado")));

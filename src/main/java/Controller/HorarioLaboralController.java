@@ -135,7 +135,7 @@ public class HorarioLaboralController implements Serializable {
         dias = diaSemanaDAO.Listar();
         horas = ingresosSalidasDAO.Listar();
         if(horarios.isEmpty()){
-             mostrarMensajeError("Debe definir los los dias y horas de este horario");
+             mostrarMensajeInformacion("Debe definir los los dias y horas de este horario");
         }
     }
 

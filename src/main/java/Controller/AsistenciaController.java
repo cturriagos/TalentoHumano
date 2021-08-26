@@ -12,8 +12,6 @@ import Model.DAO.EmpleadoPuestoDAO;
 import Model.Entidad.Asistencia;
 import Model.Entidad.DetalleHorario;
 import Model.Entidad.Empleado;
-import Model.Entidad.EmpleadoPuesto;
-import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

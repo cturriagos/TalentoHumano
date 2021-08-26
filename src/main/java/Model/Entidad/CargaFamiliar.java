@@ -7,7 +7,6 @@ package Model.Entidad;
 
 import Model.DAO.TipoRubroDAO;
 import java.util.Date;
-import javax.inject.Inject;
 
 /**
  *

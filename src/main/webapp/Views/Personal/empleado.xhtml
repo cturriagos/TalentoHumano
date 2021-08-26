@@ -24,7 +24,7 @@
                                              styleClass="ui-button-success" style="margin-right: .5rem">
                                 <f:setPropertyActionListener value="#{empleadoView.sueldo.empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
-                            <p:commandButton value="Volver a la lista" icon="pi pi-list" action="ListaEmpleado"
+                            <p:linkButton value="Volver a la lista" icon="pi pi-list" outcome="ListaEmpleado"
                                              styleClass="ui-button-success" style="margin-right: .5rem"/>
                         </p:toolbarGroup>
                     </p:toolbar>

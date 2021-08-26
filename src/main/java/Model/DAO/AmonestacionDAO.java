@@ -160,7 +160,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
                 while (result.next()) {
                     amonestaciones.add(new Amonestacion(
                             result.getInt("id_amonestacion"),
-                            eDAO.buscarPorId(result.getInt("id_empleado")),
+                            (amonestacion.getEmpleado().getId()>0? amonestacion.getEmpleado() : eDAO.buscarPorId(result.getInt("id_empleado"))),
                             result.getString("tipo"),
                             result.getString("detalle"),
                             result.getFloat("valor"),

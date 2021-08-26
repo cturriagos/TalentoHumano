@@ -160,7 +160,7 @@ public class MultaDAO implements IDAO<Multa>  {
                 while (result.next()) {
                     multas.add(new Multa(
                             result.getInt("id_multa"),
-                            eDAO.buscarPorId(result.getInt("id_empleado")),
+                            (multa.getEmpleado().getId()>0? multa.getEmpleado() : eDAO.buscarPorId(result.getInt("id_empleado"))),
                             result.getFloat("porcentaje"),
                             result.getFloat("valor"),
                             result.getString("detalle"),

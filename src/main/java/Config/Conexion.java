@@ -31,13 +31,15 @@ public class Conexion {
     private String url = "jdbc:postgresql://localhost:5432/BDPRO";
     private String usuario = "Proyecto_TH";
     private String clave = "123456";
-    private String classForName = "org.postgresql.Driver";
+    private final String classForName;
 
     public Conexion() {
+        this.classForName = "org.postgresql.Driver";
         estado = true;
     }
 
     public Conexion(String user, String pass, String url) {
+        this.classForName = "org.postgresql.Driver";
         usuario = user;
         clave = pass;
         this.url = url;

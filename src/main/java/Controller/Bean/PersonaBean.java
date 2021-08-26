@@ -6,6 +6,7 @@
 package Controller.Bean;
 
 import Model.Entidad.Empleado;
+import Model.Entidad.RolPagos;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -19,6 +20,7 @@ import javax.inject.Named;
 public class PersonaBean implements Serializable{
     private int idPersona, idEmpleado, idNatural;
     private Empleado empleado;
+    private RolPagos rolPago;
     
     public PersonaBean() {
         idPersona = 0;
@@ -56,5 +58,13 @@ public class PersonaBean implements Serializable{
 
     public void setIdNatural(int idNatural) {
         this.idNatural = idNatural;
+    }
+
+    public RolPagos getRolPago() {
+        return rolPago;
+    }
+
+    public void setRolPago(RolPagos rolPago) {
+        this.rolPago = rolPago;
     }
 }

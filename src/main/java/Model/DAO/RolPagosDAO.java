@@ -11,10 +11,7 @@ import Model.Entidad.RolPagos;
 import Model.Interfaces.IDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import static java.time.Instant.now;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
@@ -67,15 +64,15 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            return conexion.insertar("rol_de_pagos",
+            rolPagos.setId( conexion.insertar("rol_de_pagos",
                     "id_empleado, generado_por, fecha_generado, fecha_aprobacion, fecha_pago, detalle, estado, horas_laboradas, horas_suplemt, valor, codigo",
                     rolPagos.getEmpleado().getId() + ",'" + rolPagos.getUsuario() + "','" + rolPagos.getFechaGenerado() + "','"
                     + rolPagos.getFechaAprobacion() + "','" + rolPagos.getFechaPago() + "','" + rolPagos.getDetalle() + "', '"
                     + rolPagos.getEstado() + "', " + rolPagos.getHorasLaboradas() + "," + rolPagos.getHorasSuplemetarias() + ","
                     + rolPagos.getValor() + ",'" + rolPagos.getCodigo() + "'",
-                    "id_rol");
+                    "id_rol"));
         }
-        return -1;
+        return rolPagos.getId();
     }
 
     @Override
@@ -87,11 +84,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
-            return conexion.modificar("detalle_horario",
-                    "fecha_generado = '" + rolPagos.getFechaGenerado() + "', fecha_aprobacion = '" + rolPagos.getFechaAprobacion()
-                    + "', fecha_pago = '" + rolPagos.getFechaPago() + "', detalle = '" + rolPagos.getDetalle() + "', estado = '"
-                    + "', horas_laboradas = " + rolPagos.getHorasLaboradas() + ", horas_suplemt = " + rolPagos.getHorasSuplemetarias()
-                    + ", valor = " + rolPagos.getValor(),
+            return conexion.modificar("rol_de_pagos", "estado = '" + rolPagos.getFechaGenerado() + "'",
                     "id_rol = " + rolPagos.getId() + " AND id_empleado = " + rolPagos.getEmpleado().getId() + " AND generado_por = '"
                     + rolPagos.getUsuario() + " AND codigo = '" + rolPagos.getCodigo() + "'");
         }
@@ -118,9 +111,9 @@ public class RolPagosDAO implements IDAO<RolPagos> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("detalle_horario",
+                result = conexion.selecionar("rol_de_pagos",
                         "fecha_generado, fecha_aprobacion, fecha_pago, detalle, estado, horas_laboradas, horas_suplemt, valor, codigo",
-                        "id_empleado = " + empleado.getId() + " AND id_rol = " + id, null);
+                        "id_empleado = " + empleado.getId() + " AND generado_por = 'ADMINISTRADOR' AND id_rol = " + id, null);
                 while (result.next()) {
                     rolPagos.setId(id);
                     rolPagos.setFechaGenerado(result.getDate("fecha_generado"));
@@ -148,9 +141,8 @@ public class RolPagosDAO implements IDAO<RolPagos> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.ejecutarConsulta("SELECT COALESCE(SUM(valor), 0) AS decimo "
-                        + " FROM rol_de_pagos WHERE fecha_generado between '" + (rolPagos.getFechaGenerado().getYear())
-                        + "-12-01' and '" + (rolPagos.getFechaGenerado().getYear() + 1) + "-11-30' AND id_empleado = " + rolPagos.getEmpleado().getId());
+                result = conexion.ejecutarConsulta("SELECT round(COALESCE(SUM(valor)/12, 0)::numeric, 2) AS decimo FROM rol_de_pagos WHERE id_empleado = " 
+                        + rolPagos.getEmpleado().getId() + " AND fecha_generado between CONCAT(EXTRACT(YEAR FROM NOW())-1, '-12-01')::timestamp AND CONCAT(EXTRACT(YEAR FROM NOW()), '-11-30')::timestamp");
                 while (result.next()) {
                     decimo = result.getFloat("decimo");
                 }
@@ -207,10 +199,23 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     }
 
     public float obtenerDecicmoCuarto() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(rolPagos.getEmpleado().getFechaIngreso());
-        int mesIngreso = calendar.get(Calendar.MONTH);
-        return (400 / 12) * (mesIngreso - (rolPagos.getFechaGenerado().getMonth()));
+        float decimo = 0;
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.ejecutarConsulta("SELECT round(horas_sumplementarias('" +  rolPagos.getFechaGenerado() 
+                        + "'::DATE, " + rolPagos.getEmpleado().getId() + ", 400)::numeric, 2) AS decimo;");
+                while (result.next()) {
+                    decimo = result.getFloat("decimo");
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return decimo;
     }
 
     @Override

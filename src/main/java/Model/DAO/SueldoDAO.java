@@ -175,7 +175,7 @@ public class SueldoDAO  implements IDAO<Sueldo> {
                 while (result.next()) {
                     sueldos.add(new Sueldo(
                             result.getInt("id_sueldo"),
-                            edao.buscarPorId(result.getInt("id_empleado")),
+                            (sueldo.getEmpleado().getId()>0? sueldo.getEmpleado() : edao.buscarPorId(result.getInt("id_empleado"))),
                             result.getFloat("valor"),
                             result.getDate("fecha_actualizacion"),
                             result.getBoolean("estado")

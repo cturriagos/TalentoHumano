@@ -53,6 +53,14 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
         return conexion;
     }
 
+    public DetalleRolPago getDetalleRolPago() {
+        return detalleRolPago;
+    }
+
+    public void setDetalleRolPago(DetalleRolPago detalleRolPago) {
+        this.detalleRolPago = detalleRolPago;
+    }
+
     @Override
     public int insertar() {
         if (conexion.isEstado()) {

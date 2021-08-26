@@ -5,16 +5,13 @@
  */
 package Controller;
 
-import Controller.Bean.PersonaBean;
 import Model.DAO.AmonestacionDAO;
 import Model.DAO.DetalleRolPagoDAO;
-import Model.DAO.EmpleadoDAO;
 import Model.DAO.EmpleadoReservaDAO;
 import Model.DAO.MultaDAO;
 import Model.DAO.RolPagosDAO;
 import Model.DAO.SueldoDAO;
 import Model.DAO.SuspencionDAO;
-import Model.DAO.TipoRubroDAO;
 import Model.Entidad.Amonestacion;
 import Model.Entidad.DetalleRolPago;
 import Model.Entidad.Empleado;
@@ -25,13 +22,15 @@ import Model.Entidad.Sueldo;
 import Model.Entidad.Suspencion;
 import Model.Entidad.TipoRubro;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.commons.math3.util.Precision;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -40,28 +39,24 @@ import javax.inject.Named;
 @Named(value = "rolPagoCrearView")
 @ViewScoped
 public class RolPagoCrearController implements Serializable {
-    
+
     @Inject
     private RolPagosDAO rolPagosDAO;
     private RolPagos rolPagos;
     private Empleado empleado;
     @Inject
     private DetalleRolPagoDAO detalleRolPagoDAO;
-    private List<DetalleRolPago> detalles;
-    @Inject
-    private TipoRubroDAO tipoRubroDAO;
-    private List<TipoRubro> tipos;
 
     private Amonestacion amonestacion;
     private Sueldo sueldo;
     private EmpleadoReserva empleadoReserva;
     private Suspencion suspencion;
     private Multa multa;
-    private float aportesIESS, decimoTercero, decimoCuarto, fondosReserva, montoHLabboradas, montoHSuplem, total;
-    private boolean checkdDecimoTercero, checkdDecimoCuarto;
+    private float aportesIESS, decimoTercero, decimoCuarto, fondosReserva, montoHLabboradas, montoHSuplem, subTotal, total;
+    private boolean checkdDecimoTercero, checkdDecimoCuarto, checkedMulta, checkedSuspencion, checkedAmonestacion;
     private int horasLaboradas, horasSuplementarias;
-    private Date mes;
-        
+    private Date fechaPago;
+
     public RolPagoCrearController() {
         rolPagos = new RolPagos();
         sueldo = new Sueldo();
@@ -69,17 +64,25 @@ public class RolPagoCrearController implements Serializable {
         suspencion = new Suspencion();
         amonestacion = new Amonestacion();
         multa = new Multa();
-        detalles = new ArrayList<>();
-        tipos = new ArrayList<>();
     }
 
     @PostConstruct
     public void constructorRolPago() {
-        total =0;
+        subTotal = 0;
+        total = 0;
+        aportesIESS = 0;
+        decimoTercero = 0;
+        decimoCuarto = 0;
+        checkdDecimoTercero = false;
+        checkdDecimoCuarto = false;
+        checkedMulta = false;
+        checkedSuspencion = false;
+        checkedAmonestacion = false;
     }
-    
-    public void postLoad(Empleado empleado){
+
+    public void postLoad(Empleado empleado) {
         this.empleado = empleado;
+        rolPagos.setEmpleado(this.empleado);
         SueldoDAO sueldoDAO = new SueldoDAO();
         EmpleadoReservaDAO empleadoReservaDAO = new EmpleadoReservaDAO();
         SuspencionDAO suspencionDAO = new SuspencionDAO();
@@ -88,10 +91,17 @@ public class RolPagoCrearController implements Serializable {
         sueldo = sueldoDAO.Actual(empleado);
         empleadoReserva = empleadoReservaDAO.buscar(empleado);
         fondosReserva = empleadoReserva.getFormaPago() * sueldo.getValor();
-        aportesIESS = (float) (sueldo.getValor() * 0.0945);
         suspencion = suspencionDAO.buscar(empleado);
         amonestacion = amonestacionDAO.buscar(empleado);
         multa = multaDAO.buacar(empleado);
+    }
+
+    public Date getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
     }
 
     public Amonestacion getAmonestacion() {
@@ -182,28 +192,49 @@ public class RolPagoCrearController implements Serializable {
         this.horasSuplementarias = horasSuplementarias;
     }
 
-    public Date getMes() {
-        return mes;
-    }
-
-    public void setMes(Date mes) {
-        this.mes = mes;
-    }
-
-    public boolean isCheckdDecimoCuarto() {
-        return checkdDecimoCuarto;
-    }
-
     public boolean isCheckdDecimoTercero() {
         return checkdDecimoTercero;
     }
 
     public void setCheckdDecimoTercero(boolean checkdDecimoTercero) {
         this.checkdDecimoTercero = checkdDecimoTercero;
+        calcularTotal();
+    }
+
+    public boolean isCheckdDecimoCuarto() {
+        return checkdDecimoCuarto;
     }
 
     public void setCheckdDecimoCuarto(boolean checkdDecimoCuarto) {
         this.checkdDecimoCuarto = checkdDecimoCuarto;
+        calcularTotal();
+    }
+
+    public boolean isCheckedMulta() {
+        return checkedMulta;
+    }
+
+    public void setCheckedMulta(boolean checkedMulta) {
+        this.checkedMulta = checkedMulta;
+        calcularTotal();
+    }
+
+    public boolean isCheckedSuspencion() {
+        return checkedSuspencion;
+    }
+
+    public void setCheckedSuspencion(boolean checkedSuspencion) {
+        this.checkedSuspencion = checkedSuspencion;
+        calcularTotal();
+    }
+
+    public boolean isCheckedAmonestacion() {
+        return checkedAmonestacion;
+    }
+
+    public void setCheckedAmonestacion(boolean checkedAmonestacion) {
+        this.checkedAmonestacion = checkedAmonestacion;
+        calcularTotal();
     }
 
     public float getFondosReserva() {
@@ -237,44 +268,119 @@ public class RolPagoCrearController implements Serializable {
     public void setTotal(float total) {
         this.total = total;
     }
-    
-    public void checkedChangeTercero(){
-        /*if(checkdDecimoTercero){
-            decimoTercero = rolPagosDAO.obtenerDecicmoTercero();
-        }else{
-            decimoTercero = 0;
-        }*/
+
+    public float getSubTotal() {
+        return subTotal;
     }
-    
-    public void checkedChangeCuarto(){
-       /* if(checkdDecimoCuarto){
-            decimoCuarto = rolPagosDAO.obtenerDecicmoCuarto();
-        }else{
-            decimoCuarto = 0;
-        }*/
+
+    public void setSubTotal(float subTotal) {
+        this.subTotal = subTotal;
     }
-    
-    public void obtenerDatos(){
-        rolPagosDAO.getRolPagos().setEmpleado(empleado);
-        rolPagosDAO.getRolPagos().setFechaGenerado(mes);
+
+    public void obtenerDatos() {
+        rolPagos.setFechaPago(fechaPago);
+        rolPagosDAO.setRolPagos(rolPagos);
         horasLaboradas = rolPagosDAO.obtenerHorasLaboradas();
         horasSuplementarias = rolPagosDAO.obtenerHorasSuplementarias();
-        montoHLabboradas = horasLaboradas*((sueldo.getValor()/30)/8);
-        montoHSuplem = (float) (horasSuplementarias*((sueldo.getValor()/30)/8)*1.5);
+        montoHLabboradas = Precision.round(horasLaboradas * ((sueldo.getValor() / 30) / 8), 2);
+        montoHSuplem = (float) Precision.round((horasSuplementarias * ((sueldo.getValor() / 30) / 8) * 1.5), 2);
         decimoTercero = rolPagosDAO.obtenerDecicmoTercero();
         decimoCuarto = rolPagosDAO.obtenerDecicmoCuarto();
         calcularTotal();
     }
-    
-    public void calcularTotal(){
-        total = fondosReserva + montoHLabboradas + montoHSuplem + (checkdDecimoTercero? decimoTercero : 0) + (checkdDecimoCuarto? decimoCuarto : 0);
-        //total += 
+
+    public void calcularTotal() {
+        subTotal = fondosReserva * empleadoReserva.getTipoRubro().getCoeficiente() + montoHLabboradas + montoHSuplem + (checkdDecimoTercero ? decimoTercero : 0)
+                + (checkdDecimoCuarto ? decimoCuarto : 0);
+        aportesIESS = (float) Precision.round(subTotal * 0.0945, 2);
+        total = subTotal - aportesIESS + (checkedAmonestacion ? (amonestacion.getValor() * amonestacion.getTipoRubro().getCoeficiente()) : 0)
+                + (checkedSuspencion ? (suspencion.getValor() * suspencion.getTipoRubro().getCoeficiente()) : 0)
+                + (checkedMulta ? (multa.getValor() * multa.getTipoRubro().getCoeficiente()) : 0);
+        PrimeFaces.current().ajax().update("form:messages", "form:DATOS");
     }
-   /* private void resumenReserva(){
-            if (empleadoReserva.getFormaPago() != 0) {
-                resumeReserva = "$ " + (empleadoReserva.getFormaPago() * sueldo.getValor()) + " (" + (empleadoReserva.getFormaPago() == 1 ? "ANUAL" : "MENSUAL") + ")";
+
+    public String guardar() {
+        String mensaje = "";
+        boolean result = false;
+        rolPagos.setEstado("GENERADO");
+        rolPagos.setCodigo(java.util.UUID.randomUUID().toString());
+        rolPagos.setValor(total);
+        rolPagos.setHorasLaboradas(montoHLabboradas);
+        rolPagos.setHorasSuplemetarias(montoHSuplem);
+        rolPagosDAO.setRolPagos(rolPagos);
+        if (rolPagosDAO.insertar() > 0) {
+            rolPagos.setId(rolPagosDAO.getRolPagos().getId());
+            detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, sueldo.getTipoRubro(), sueldo.getId()));
+            if (detalleRolPagoDAO.insertar() > 0) {
+                detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, empleadoReserva.getTipoRubro(), empleadoReserva.getEmpleado().getId()));
+                if (detalleRolPagoDAO.insertar() > 0) {
+                    detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, new TipoRubro(3, 1, ""), 1));
+                    if (detalleRolPagoDAO.insertar() > 0) {
+                        if (checkdDecimoTercero) {
+                            detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, new TipoRubro(7, 1, ""), 1));
+                            result = true;
+                            if (detalleRolPagoDAO.insertar() < 1) {
+                                mensaje = "El detalle no se pudo asignar";
+                                result = false;
+                            }
+                        }
+                        if (checkdDecimoCuarto) {
+                            detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, new TipoRubro(6, 1, ""), 1));
+                            if (detalleRolPagoDAO.insertar() < 1) {
+                                mensaje = "El detalle no se pudo asignar";
+                                result = false;
+                            }
+                        }
+                        if (checkedAmonestacion) {
+                            detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, amonestacion.getTipoRubro(), amonestacion.getId()));
+                            if (detalleRolPagoDAO.insertar() < 1) {
+                                mensaje = "El detalle no se pudo asignar";
+                                result = false;
+                            }
+                        }
+                        if (checkedMulta) {
+                            detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, multa.getTipoRubro(), multa.getId()));
+                            if (detalleRolPagoDAO.insertar() < 1) {
+                                mensaje = "El detalle no se pudo asignar";
+                                result = false;
+                            }
+                        }
+                        if (checkedSuspencion) {
+                            detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, suspencion.getTipoRubro(), suspencion.getId()));
+                            if (detalleRolPagoDAO.insertar() < 1) {
+                                mensaje = "El detalle no se pudo asignar";
+                                result = false;
+                            }
+                        }
+                    } else {
+                        mensaje = "La aportación al IESS no se pudo asignar al detalle";
+                    }
+                } else {
+                    mensaje = "El fondo de reserva no se pudo asignar al detalle";
+                }
             } else {
-                resumeReserva = "S/D";
+                mensaje = "El sueldo no se pudo guardar al detalle";
             }
-    }*/
+        } else {
+            mensaje = "El rol de pagos no se pudo guardar";
+        }
+        if (result) {
+            mostrarMensajeInformacion("Datos guardados correctamente");
+        } else {
+            mostrarMensajeError(mensaje);
+        }
+        PrimeFaces.current().ajax().update("form:messages", "form:DATOS");
+        return result ? "RolDePago" : "";
+    }
+
+    public void mostrarMensajeInformacion(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    //  MENSAJE DE ERROR
+    public void mostrarMensajeError(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 }
