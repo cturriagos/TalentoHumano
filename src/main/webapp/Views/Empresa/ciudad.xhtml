@@ -23,7 +23,7 @@
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>
-                    <p:dataTable id="dt-ciudades" widgetVar="dtCiudades" var="ciudad" value="#{ciudadView.lista}"
+                    <p:dataTable id="dt-ciudades" widgetVar="dtCiudades" var="ciudad" value="#{ciudadView.ciudades}"
                                  reflow="true" size="small" liveResize="true" styleClass="ciudad-table"
                                  rowKey="#{ciudad.id}" paginator="true"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
@@ -31,14 +31,14 @@
                             <h:outputText value="#{ciudad.nombre}"/>
                         </p:column>
                         <p:column headerText="Provincia">
-                            <h:outputText value="#{ciudad.provincia}"/>
+                            <h:outputText value="#{ciudad.provincia.nombre}"/>
                         </p:column>
                         <p:column headerText="Detalle" width="45%">
                             <h:outputText value="#{ciudad.detalle}"/>
                         </p:column>
                         <p:column exportable="false" width="5%">
-                            <p:commandButton icon="pi pi-pencil" update=":form:manage-ciudad-content"
-                                             oncomplete="PF('manageCiudadDialog').show()"
+                            <p:commandButton icon="pi pi-pencil" update=":form:manage-ciudad-content" 
+                                             oncomplete="PF('manageCiudadDialog').show()" actionListener="#{ciudadView.editar(ciudad.id)}"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <f:setPropertyActionListener value="#{ciudad}" target="#{ciudadView.ciudad}"/>
                                 <p:resetInput target=":form:manage-ciudad-content"/>
@@ -52,14 +52,17 @@
                                 <div class="card">
                                     <div class="ui-fluid">
                                         <div class="p-field">
-                                            <p:outputLabel for="horaIngreso" style="font-weight: bold">Nombre: </p:outputLabel>
+                                            <p:outputLabel for="horaIngreso" style="font-weight: bold;">Nombre: </p:outputLabel>
                                             <p:inputText id="horaIngreso" value="#{ciudadView.ciudad.nombre}"
                                                          required="true" requiredMessage="Campo requerido"/>
                                         </div>
                                         <div class="p-field">
-                                            <p:outputLabel for="horaSalida" style="font-weight: bold">Provincia: </p:outputLabel>
-                                            <p:inputText id="horaSalida" value="#{ciudadView.ciudad.provincia}"
-                                                         required="true" requiredMessage="Campo requerido"/>
+                                            <p:outputLabel for="inProvincia" style="font-weight: bold;" value="Dedicación: "/>
+                                            <p:selectOneMenu id="inProvincia" value="#{ciudadView.ciudad.provincia.id}">
+                                                <f:selectItem itemLabel="Seleccione una provincia" itemValue="#{0}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{ciudadView.provincias}" var="provincia" 
+                                                               itemLabel="#{provincia.nombre}" itemValue="#{provincia.id}"/>
+                                            </p:selectOneMenu>
                                         </div>
                                         <div class="p-field">
                                             <p:outputLabel for="observaciones" style="font-weight: bold">Detalle: </p:outputLabel>
@@ -72,8 +75,8 @@
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{ciudadView.enviar}"
                                              update="manage-ciudad-content" styleClass="ui-button-success" process="manage-ciudad-content @this"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageCiudadDialog').hide()"
-                                             class="ui-button-secondary"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{ciudadView.cancelar()}"
+                                             onclick="PF('manageCiudadDialog').hide()" class="ui-button-secondary"/>
                         </f:facet>
                     </p:dialog>
                     <p:confirmDialog global="true" showEffect="fade" width="300">

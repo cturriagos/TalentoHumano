@@ -6,7 +6,9 @@
 package Controller;
 
 import Model.DAO.CiudadDAO;
+import Model.DAO.ProvinciaDAO;
 import Model.Entidad.Ciudad;
+import Model.Entidad.Provincia;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -25,18 +28,27 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class CiudadController implements Serializable {
 
-    private Ciudad ciudad;
+    @Inject
     private CiudadDAO ciudadDAO;
-    private List<Ciudad> lista;
+    private List<Ciudad> ciudades;
+    private Ciudad ciudad;
+    @Inject
+    private ProvinciaDAO provinciaDAO;
+    private List<Provincia> provincias;
+    
+    private int idProvincia;
 
     public CiudadController() {
-        ciudadDAO = new CiudadDAO(new Ciudad());
-        lista = new ArrayList<>();
+        ciudad = new Ciudad();
+        ciudades = new ArrayList<>();
+        provincias = new ArrayList<>();
     }
 
     @PostConstruct
     public void constructorCiudad() {
-        lista = ciudadDAO.Listar();
+        this.idProvincia = 0;
+        this.ciudades = ciudadDAO.Listar();
+        this.provincias = provinciaDAO.Listar();
     }
 
     public Ciudad getCiudad() {
@@ -47,25 +59,55 @@ public class CiudadController implements Serializable {
         this.ciudad = ciudad;
     }
 
-    public List<Ciudad> getLista() {
-        return lista;
+    public List<Ciudad> getCiudades() {
+        return ciudades;
     }
 
-    public void setLista(List<Ciudad> ciudades) {
-        this.lista = ciudades;
+    public void setCiudades(List<Ciudad> ciudades) {
+        this.ciudades = ciudades;
+    }
+
+    public List<Provincia> getProvincias() {
+        return provincias;
+    }
+
+    public void setProvincias(List<Provincia> provincias) {
+        this.provincias = provincias;
+    }
+    
+    public void editar(int id){
+        idProvincia = id;
+    }
+    
+    public void cancelar(){
+        if (idProvincia != 0 ){
+            ciudad.getProvincia().setId(idProvincia);
+            idProvincia = 0;
+        }
+    }
+    
+    public void cargarProvincia(){
+        for(Provincia provincia : provincias){
+            if (provincia.getId() == ciudad.getProvincia().getId()){
+                this.ciudad.getProvincia().setNombre(provincia.getNombre());
+                break;
+            }
+        }
     }
 
     public void abrirNuevo() {
         this.ciudad = new Ciudad();
+        idProvincia = ciudad.getProvincia().getId();
         PrimeFaces.current().ajax().update("form:messages", "form:manage-ciudad-content");
     }
 
     public void enviar() {
+        cargarProvincia();
         ciudadDAO.setCiudad(ciudad);
         if (ciudad.getId() == 0) {
             if (ciudadDAO.insertar() > 0) {
                 mostrarMensajeInformacion("La ciudad se ha guardado con éxito");
-                lista.add(ciudad);
+                ciudades.add(ciudad);
             } else {
                 mostrarMensajeError("La ciudad no se pudo guardar");
             }
@@ -73,6 +115,7 @@ public class CiudadController implements Serializable {
             if (ciudadDAO.actualizar() > 0) {
                 mostrarMensajeInformacion("La ciudad se ha editado con éxito");
             } else {
+                ciudad.getProvincia().setId(idProvincia);
                 mostrarMensajeError("La ciudad no se pudo editar");
             }
         }
@@ -90,5 +133,4 @@ public class CiudadController implements Serializable {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
 }

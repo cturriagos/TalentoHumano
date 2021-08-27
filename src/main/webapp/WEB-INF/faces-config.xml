@@ -86,6 +86,9 @@
         <from-view-id>/Views/Empresa/dedicacion.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
+        <from-view-id>/Views/Empresa/provincia.xhtml</from-view-id>
+    </navigation-rule>
+    <navigation-rule>
         <from-view-id>/Views/cargo.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>

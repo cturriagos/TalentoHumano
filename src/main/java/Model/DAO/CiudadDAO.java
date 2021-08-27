@@ -7,6 +7,7 @@ package Model.DAO;
 
 import Config.Conexion;
 import Model.Entidad.Ciudad;
+import Model.Entidad.Provincia;
 import Model.Interfaces.IDAO;
 import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
@@ -22,7 +23,7 @@ import javax.inject.Named;
  */
 @Named
 @ApplicationScoped
-public class CiudadDAO implements  IDAO<Ciudad>{
+public class CiudadDAO implements IDAO<Ciudad>{
     private final Conexion conexion;
     private Ciudad ciudad;
     
@@ -79,8 +80,8 @@ public class CiudadDAO implements  IDAO<Ciudad>{
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("ciudad",
-                    "provincia= '" + ciudad.getProvincia()+ "', nombre = '" + ciudad.getNombre()+ "', detalle = '" + ciudad.getDetalle()+ "'",
-                    "id_ciudad = " + ciudad.getId());
+                    "id_provincia= " + ciudad.getProvincia().getId() + ", nombre = '" + ciudad.getNombre()+ "', detalle = '"
+                    + ciudad.getDetalle()+ "'", "id_ciudad = " + ciudad.getId());
         }
         return -1;
     }
@@ -105,32 +106,52 @@ public class CiudadDAO implements  IDAO<Ciudad>{
         return buscar(null, "nombre");
     }
     
-    private List<Ciudad> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
+    public List<Ciudad> Listar(Provincia provincia) {
+        List<Ciudad> lista = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
-            List<Ciudad> lista;
             try {
-                result = conexion.selecionar("ciudad", "id_ciudad, provincia, nombre, detalle", restricciones, OrdenarAgrupar);
-                lista = new ArrayList<>();
+                result = conexion.selecionar("ciudad", "id_ciudad, nombre, detalle", 
+                        "id_provincia = " + provincia.getId(), "nombre DESC");
                 while (result.next()) {
-                    lista.add(
-                            new Ciudad(
-                                    result.getInt("id_ciudad"), 
-                                    result.getString("provincia"),
+                    lista.add(new Ciudad(
+                                    result.getInt("id_ciudad"), provincia,
                                     result.getString("nombre"),
                                     result.getString("detalle")
-                            )
-                    );
+                                ));
                 }
                 result.close();
-                return lista;
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
                 conexion.cerrarConexion();
             }
         }
-        return null;
+        return lista;
+    }
     
+    private List<Ciudad> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
+        List<Ciudad> lista = new ArrayList<>();
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("ciudad", "id_ciudad, id_provincia, nombre, detalle", restricciones, OrdenarAgrupar);
+                ProvinciaDAO pdao = new ProvinciaDAO();
+                while (result.next()) {
+                    lista.add(new Ciudad(
+                                    result.getInt("id_ciudad"), 
+                                    pdao.buscarPorId(result.getInt("id_provincia")),
+                                    result.getString("nombre"),
+                                    result.getString("detalle")
+                                ));
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return lista;
     }
 }

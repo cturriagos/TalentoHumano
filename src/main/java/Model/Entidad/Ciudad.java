@@ -8,16 +8,17 @@ package Model.Entidad;
 public class Ciudad {
 
     private int id;
-    private String provincia, nombre, detalle;
+    private Provincia provincia;
+    private String nombre, detalle;
 
     public Ciudad() {
         this.id = 0;
-        this.provincia = "";
+        this.provincia = new Provincia();
         this.nombre = "";
         this.detalle = "";
     }
 
-    public Ciudad(int id, String provincia, String nombre, String detalle) {
+    public Ciudad(int id, Provincia provincia, String nombre, String detalle) {
         this.id = id;
         this.provincia = provincia;
         this.nombre = nombre;
@@ -32,11 +33,11 @@ public class Ciudad {
         this.id = id;
     }
 
-    public String getProvincia() {
+    public Provincia getProvincia() {
         return provincia;
     }
 
-    public void setProvincia(String provincia) {
+    public void setProvincia(Provincia provincia) {
         this.provincia = provincia;
     }
 
@@ -57,7 +58,6 @@ public class Ciudad {
     }
     
     public String resumen(){
-        return nombre + "(" + provincia + ")";
+        return nombre + "(" + provincia.getNombre() + ")";
     }
-
 }
