@@ -63,8 +63,8 @@ public class CiudadDAO implements IDAO<Ciudad>{
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            ciudad.setId(conexion.insertar("ciudad", "provincia, nombre, detalle",
-                    "'" + ciudad.getProvincia()+ "','" + ciudad.getNombre()+ "', '" + ciudad.getDetalle()+ "'", "id_ciudad"));
+            ciudad.setId(conexion.insertar("ciudad", "id_provincia, nombre, detalle",
+                    ciudad.getProvincia().getId() + ",'" + ciudad.getNombre()+ "', '" + ciudad.getDetalle()+ "'", "id_ciudad"));
             return ciudad.getId();
         }
         return -1;
