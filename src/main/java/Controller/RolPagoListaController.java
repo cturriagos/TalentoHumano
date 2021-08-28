@@ -10,12 +10,15 @@ import Model.DAO.RolPagosDAO;
 import Model.Entidad.Empleado;
 import Model.Entidad.RolPagos;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -25,14 +28,15 @@ import javax.inject.Named;
 @ViewScoped
 public class RolPagoListaController implements Serializable {
     
-    private Empleado empleado;
     private List<Empleado> empleados;
-    private List<RolPagos> pagos;
-    
-    @Inject
-    private RolPagosDAO rolPagosDAO;
+    private Empleado empleado;
+    private int idEmpleado;
     @Inject
     private EmpleadoDAO empleadoDAO;
+    
+    private List<RolPagos> pagos;
+    @Inject
+    private RolPagosDAO rolPagosDAO;
 
     public RolPagoListaController() {
         empleado = new Empleado();
@@ -68,13 +72,21 @@ public class RolPagoListaController implements Serializable {
     public void setPagos(List<RolPagos> pagos) {
         this.pagos = pagos;
     }
-    
-    public void nuevoEmpleado(){
-        empleado = new Empleado();
+
+    public int getIdEmpleado() {
+        return idEmpleado;
     }
 
-    public void empleadoSeleccionado() {
-        empleado = empleadoDAO.buscarPorId(empleado.getId());
-        pagos = rolPagosDAO.buscar(empleado);
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
+        if(idEmpleado != 0){
+            empleado = empleadoDAO.buscarPorId(idEmpleado);
+            pagos = rolPagosDAO.buscar(empleado);
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-roles");
+        }
+    }
+    
+    public String darFormato(Date fecha){
+        return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha) : "";
     }
 }

@@ -132,19 +132,20 @@
                                      styleClass="ui-panelgrid-blank ui-fluid"
                                      style="border:0px none; background-color:transparent; width: 100%;">
                             <h:outputText style="font-weight: bold;" value="Detalle (Observación)"/>
-                            <p:inputText value="#{rolPagoCrearView.rolPagos.detalle}" required="true" label="Detalle"/>
+                            <p:inputText value="#{rolPagoCrearView.rolPagos.detalle}" label="Detalle"/>
                         </h:panelGrid>
                     </p:panel>
                     <p:toolbar>
                         <p:toolbarGroup>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
-                            <p:commandButton value="Generar" icon="pi pi-save" action="RolDePago" actionListener="#{rolPagoCrearView.guardar()}"
+                            <p:commandButton value="Generar" icon="pi pi-save" action="RolDePago" actionListener="#{rolPagoCrearView.guardar}"
                                              update="todo" styleClass="p-mr-2 ui-button-success"
                                              process="todo @this">
                                 <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas Generar el Rol de Pago?"
                                            icon="pi pi-exclamation-triangle"/>
-                                <f:setPropertyActionListener value="#{rolPagoCrearView.rolPagos}" target="#{personaBean.rolPago}"/>
+                                <f:setPropertyActionListener value="#{true}" target="#{personaBean.nuevo}"/>
+                                <f:setPropertyActionListener value="#{rolPagoCrearView.rolPagos.id}" target="#{personaBean.idRolDePago}"/>
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>
@@ -153,8 +154,8 @@
                         <h5>IESS = Aporte al IESS    ML = Multa     SP = Suspención    AM = Amonestación</h5>
                     </span>
                     <p:confirmDialog global="true" showEffect="fade" width="300">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                        <p:commandButton value="Yes" label="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" label="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
                                          icon="pi pi-times"/>
                     </p:confirmDialog>
                 </p:panel>

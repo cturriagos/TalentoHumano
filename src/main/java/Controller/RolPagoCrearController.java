@@ -90,7 +90,7 @@ public class RolPagoCrearController implements Serializable {
         MultaDAO multaDAO = new MultaDAO();
         sueldo = sueldoDAO.Actual(empleado);
         empleadoReserva = empleadoReservaDAO.buscar(empleado);
-        fondosReserva = empleadoReserva.getFormaPago() * sueldo.getValor();
+        fondosReserva = Precision.round(empleadoReserva.getFormaPago() * sueldo.getValor(), 2);
         suspencion = suspencionDAO.buscar(empleado);
         amonestacion = amonestacionDAO.buscar(empleado);
         multa = multaDAO.buacar(empleado);
@@ -284,18 +284,18 @@ public class RolPagoCrearController implements Serializable {
         horasSuplementarias = rolPagosDAO.obtenerHorasSuplementarias();
         montoHLabboradas = Precision.round(horasLaboradas * ((sueldo.getValor() / 30) / 8), 2);
         montoHSuplem = (float) Precision.round((horasSuplementarias * ((sueldo.getValor() / 30) / 8) * 1.5), 2);
-        decimoTercero = rolPagosDAO.obtenerDecicmoTercero();
-        decimoCuarto = rolPagosDAO.obtenerDecicmoCuarto();
+        decimoTercero = Precision.round(rolPagosDAO.obtenerDecicmoTercero(), 2);
+        decimoCuarto = Precision.round(rolPagosDAO.obtenerDecicmoCuarto(), 2);
         calcularTotal();
     }
 
     public void calcularTotal() {
-        subTotal = fondosReserva * empleadoReserva.getTipoRubro().getCoeficiente() + montoHLabboradas + montoHSuplem + (checkdDecimoTercero ? decimoTercero : 0)
-                + (checkdDecimoCuarto ? decimoCuarto : 0);
+        subTotal = Precision.round((fondosReserva * empleadoReserva.getTipoRubro().getCoeficiente() + montoHLabboradas + montoHSuplem + (checkdDecimoTercero ? decimoTercero : 0)
+                + (checkdDecimoCuarto ? decimoCuarto : 0)), 2);
         aportesIESS = (float) Precision.round(subTotal * 0.0945, 2);
-        total = subTotal - aportesIESS + (checkedAmonestacion ? (amonestacion.getValor() * amonestacion.getTipoRubro().getCoeficiente()) : 0)
+        total = Precision.round((subTotal - aportesIESS + (checkedAmonestacion ? (amonestacion.getValor() * amonestacion.getTipoRubro().getCoeficiente()) : 0)
                 + (checkedSuspencion ? (suspencion.getValor() * suspencion.getTipoRubro().getCoeficiente()) : 0)
-                + (checkedMulta ? (multa.getValor() * multa.getTipoRubro().getCoeficiente()) : 0);
+                + (checkedMulta ? (multa.getValor() * multa.getTipoRubro().getCoeficiente()) : 0)), 2);
         PrimeFaces.current().ajax().update("form:messages", "form:DATOS");
     }
 
@@ -324,29 +324,33 @@ public class RolPagoCrearController implements Serializable {
                                 result = false;
                             }
                         }
-                        if (checkdDecimoCuarto) {
+                        if (checkdDecimoCuarto && result) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, new TipoRubro(6, 1, ""), 1));
+                            result = true;
                             if (detalleRolPagoDAO.insertar() < 1) {
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }
                         }
-                        if (checkedAmonestacion) {
+                        if (checkedAmonestacion && result) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, amonestacion.getTipoRubro(), amonestacion.getId()));
+                            result = true;
                             if (detalleRolPagoDAO.insertar() < 1) {
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }
                         }
-                        if (checkedMulta) {
+                        if (checkedMulta && result) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, multa.getTipoRubro(), multa.getId()));
+                            result = true;
                             if (detalleRolPagoDAO.insertar() < 1) {
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }
                         }
-                        if (checkedSuspencion) {
+                        if (checkedSuspencion && result) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, suspencion.getTipoRubro(), suspencion.getId()));
+                            result = true;
                             if (detalleRolPagoDAO.insertar() < 1) {
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;

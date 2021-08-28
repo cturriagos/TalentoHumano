@@ -20,9 +20,13 @@ import Model.Entidad.RolPagos;
 import Model.Entidad.Sueldo;
 import Model.Entidad.Suspencion;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,26 +35,27 @@ import org.primefaces.PrimeFaces;
 
 /**
  *
- * @author ClasK7
+ * @author kestradalp
  */
-@Named(value = "rolPagoView")
+@Named(value = "rolDePagoView")
 @ViewScoped
-public class RolPagoController implements Serializable {
-
+public class RolDePagoController implements Serializable{
+    
     @Inject
     private DetalleRolPagoDAO detalleRolPagoDAO;
-    private RolPagos rolPagos;
-    private List<DetalleRolPago> detalles;
-
-    private Amonestacion amonestacion;
-    private Sueldo sueldo;
+    
     private EmpleadoReserva empleadoReserva;
+    private List<DetalleRolPago> detalles;
+    private Amonestacion amonestacion;
     private Suspencion suspencion;
+    private RolPagos rolPagos;
+    private Sueldo sueldo;
     private Multa multa;
+    
     private float aportesIESS, decimoTercero, decimoCuarto, fondosReserva, subTotal, total;
     private int horasLaboradas, horasSuplementarias;
 
-    public RolPagoController() {
+    public RolDePagoController() {
         rolPagos = new RolPagos();
         sueldo = new Sueldo();
         empleadoReserva = new EmpleadoReserva();
@@ -59,21 +64,20 @@ public class RolPagoController implements Serializable {
         multa = new Multa();
         detalles = new ArrayList<>();
     }
-
+    
     @PostConstruct
-    public void constructorRolPago() {
+    public void constructorRolDePago() {
         aportesIESS = 0;
         decimoTercero = 0;
         decimoCuarto = 0;
         fondosReserva = 0;
         subTotal = 0;
         total = 0;
-        
     }
-
-    public void postLoad(RolPagos rolPagos) {
-        this.rolPagos = rolPagos;
-        RolPagosDAO rolPagosDAO = new RolPagosDAO(this.rolPagos);
+    
+    public void postLoad(int idRolDePago, boolean nuevo) {
+        RolPagosDAO rolPagosDAO = new RolPagosDAO();
+        this.rolPagos = rolPagosDAO.buscarPorId(idRolDePago);
         detalles = detalleRolPagoDAO.buscar(rolPagos);
         SueldoDAO sueldoDAO = new SueldoDAO();
         EmpleadoReservaDAO empleadoReservaDAO = new EmpleadoReservaDAO();
@@ -100,14 +104,14 @@ public class RolPagoController implements Serializable {
                     porcentajeIESS = (float) 0.0945;
                     break;
                 case 6:
-                    decimoCuarto = rolPagosDAO.obtenerDecicmoCuarto();
+                    decimoCuarto = Precision.round(rolPagosDAO.obtenerDecicmoCuarto(),2);
                     break;
                 case 7:
-                    decimoTercero = rolPagosDAO.obtenerDecicmoTercero();
+                    decimoTercero = Precision.round(rolPagosDAO.obtenerDecicmoTercero(), 2);
                     break;
                 case 8:
                     empleadoReserva = empleadoReservaDAO.buscar(rolPagos.getEmpleado());
-                    fondosReserva = empleadoReserva.getFormaPago() * sueldo.getValor();
+                    fondosReserva = Precision.round(empleadoReserva.getFormaPago() * sueldo.getValor(), 2);
                     break;
                 case 9:
                     multa.setEmpleado(rolPagos.getEmpleado());
@@ -119,12 +123,15 @@ public class RolPagoController implements Serializable {
                     break;
             }
         }
-        subTotal = fondosReserva * empleadoReserva.getTipoRubro().getCoeficiente() + rolPagos.getHorasLaboradas()
-                + rolPagos.getHorasSuplemetarias() + decimoTercero + decimoCuarto;
+        subTotal = Precision.round((fondosReserva * empleadoReserva.getTipoRubro().getCoeficiente() + rolPagos.getHorasLaboradas()
+                + rolPagos.getHorasSuplemetarias() + decimoTercero + decimoCuarto), 2);
         aportesIESS = (float) Precision.round(subTotal * porcentajeIESS, 2);
-        total = subTotal - aportesIESS + (amonestacion.getValor() * amonestacion.getTipoRubro().getCoeficiente())
+        total = Precision.round((subTotal - aportesIESS + (amonestacion.getValor() * amonestacion.getTipoRubro().getCoeficiente())
                 + (suspencion.getValor() * suspencion.getTipoRubro().getCoeficiente())
-                + (multa.getValor() * multa.getTipoRubro().getCoeficiente());
+                + (multa.getValor() * multa.getTipoRubro().getCoeficiente())), 2);
+        if (nuevo){
+            mostrarMensajeInformacion("Pago Generado");
+        }
         PrimeFaces.current().ajax().update("form:messages", "form:rolPago");
     }
 
@@ -136,76 +143,12 @@ public class RolPagoController implements Serializable {
         this.rolPagos = rolPagos;
     }
 
-    public float getAportesIESS() {
-        return aportesIESS;
-    }
-
-    public void setAportesIESS(float aportesIESS) {
-        this.aportesIESS = aportesIESS;
-    }
-
-    public float getDecimoTercero() {
-        return decimoTercero;
-    }
-
-    public void setDecimoTercero(float decimoTercero) {
-        this.decimoTercero = decimoTercero;
-    }
-
-    public float getDecimoCuarto() {
-        return decimoCuarto;
-    }
-
-    public void setDecimoCuarto(float decimoCuarto) {
-        this.decimoCuarto = decimoCuarto;
-    }
-
-    public float getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(float subTotal) {
-        this.subTotal = subTotal;
-    }
-
-    public float getTotal() {
-        return total;
-    }
-
-    public void setTotal(float total) {
-        this.total = total;
-    }
-
-    public Amonestacion getAmonestacion() {
-        return amonestacion;
-    }
-
-    public void setAmonestacion(Amonestacion amonestacion) {
-        this.amonestacion = amonestacion;
-    }
-
     public Sueldo getSueldo() {
         return sueldo;
     }
 
     public void setSueldo(Sueldo sueldo) {
         this.sueldo = sueldo;
-    }
-
-    public Suspencion getSuspencion() {
-        return suspencion;
-    }
-
-    public void setSuspencion(Suspencion suspencion) {
-        this.suspencion = suspencion;
-    }
-
-    public Multa getMulta() {
-        return multa;
-    }
-
-    public void setMulta(Multa multa) {
-        this.multa = multa;
     }
 
     public float getFondosReserva() {
@@ -230,5 +173,78 @@ public class RolPagoController implements Serializable {
 
     public void setHorasSuplementarias(int horasSuplementarias) {
         this.horasSuplementarias = horasSuplementarias;
+    }
+
+    public float getDecimoTercero() {
+        return decimoTercero;
+    }
+
+    public void setDecimoTercero(float decimoTercero) {
+        this.decimoTercero = decimoTercero;
+    }
+
+    public float getDecimoCuarto() {
+        return decimoCuarto;
+    }
+
+    public void setDecimoCuarto(float decimoCuarto) {
+        this.decimoCuarto = decimoCuarto;
+    }
+
+    public float getAportesIESS() {
+        return aportesIESS;
+    }
+
+    public void setAportesIESS(float aportesIESS) {
+        this.aportesIESS = aportesIESS;
+    }
+
+    public Suspencion getSuspencion() {
+        return suspencion;
+    }
+
+    public void setSuspencion(Suspencion suspencion) {
+        this.suspencion = suspencion;
+    }
+
+    public Amonestacion getAmonestacion() {
+        return amonestacion;
+    }
+
+    public void setAmonestacion(Amonestacion amonestacion) {
+        this.amonestacion = amonestacion;
+    }
+
+    public Multa getMulta() {
+        return multa;
+    }
+
+    public void setMulta(Multa multa) {
+        this.multa = multa;
+    }
+    
+    public String darFormato(Date fecha){
+        return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha) : "";
+    }
+
+    public float getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(float subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    public void mostrarMensajeInformacion(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

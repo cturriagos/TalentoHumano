@@ -65,11 +65,10 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     public int insertar() {
         if (conexion.isEstado()) {
             rolPagos.setId( conexion.insertar("rol_de_pagos",
-                    "id_empleado, generado_por, fecha_generado, fecha_aprobacion, fecha_pago, detalle, estado, horas_laboradas, horas_suplemt, valor, codigo",
+                    "id_empleado, generado_por, fecha_generado, detalle, estado, horas_laboradas, horas_suplemt, valor, codigo",
                     rolPagos.getEmpleado().getId() + ",'" + rolPagos.getUsuario() + "','" + rolPagos.getFechaGenerado() + "','"
-                    + rolPagos.getFechaAprobacion() + "','" + rolPagos.getFechaPago() + "','" + rolPagos.getDetalle() + "', '"
-                    + rolPagos.getEstado() + "', " + rolPagos.getHorasLaboradas() + "," + rolPagos.getHorasSuplemetarias() + ","
-                    + rolPagos.getValor() + ",'" + rolPagos.getCodigo() + "'",
+                    + rolPagos.getDetalle() + "', '" + rolPagos.getEstado() + "', " + rolPagos.getHorasLaboradas() + "," 
+                    + rolPagos.getHorasSuplemetarias() + "," + rolPagos.getValor() + ",'" + rolPagos.getCodigo() + "'",
                     "id_rol"));
         }
         return rolPagos.getId();
@@ -101,7 +100,8 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     public RolPagos buscarPorId(Object id) {
         List<RolPagos> lista = buscar("id_rol = " + id, null);
         if (lista != null && !lista.isEmpty()) {
-            return lista.get(0);
+            rolPagos = lista.get(0);
+            return rolPagos;
         }
         return null;
     }
@@ -230,7 +230,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             try {
                 result = conexion.selecionar("rol_de_pagos",
                         "id_rol, generado_por, fecha_generado, fecha_aprobacion, fecha_pago, detalle, estado, horas_laboradas, horas_suplemt, valor, codigo",
-                        "id_empleado = " + rolPagos.getEmpleado().getId(), null);
+                        "id_empleado = " + empleado.getId(), null);
                 while (result.next()) {
                     roles.add(new RolPagos(result.getInt("id_rol"), empleado, result.getString("detalle"),
                             result.getDate("fecha_generado"), result.getDate("fecha_aprobacion"),
@@ -259,7 +259,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
                 roles = new ArrayList<>();
                 EmpleadoDAO eDAO = new EmpleadoDAO();
                 while (result.next()) {
-                    roles.add(new RolPagos(result.getInt("id_rol"), eDAO.buscarPorId(result.getInt("id_rol")),
+                    roles.add(new RolPagos(result.getInt("id_rol"), eDAO.buscarPorId(result.getInt("id_empleado")),
                             result.getString("detalle"), result.getDate("fecha_generado"),
                             result.getDate("fecha_aprobacion"), result.getDate("fecha_pago"),
                             result.getString("estado"), result.getFloat("horas_laboradas"),

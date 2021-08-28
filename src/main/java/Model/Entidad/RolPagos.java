@@ -25,8 +25,8 @@ public class RolPagos {
         this.empleado = new Empleado();
         this.detalle = "";
         this.fechaGenerado = new Date();
-        this.fechaAprobacion = new Date();
-        this.fechaPago = new Date();
+        this.fechaAprobacion = null;
+        this.fechaPago = null;
         this.estado = "";
         this.horasLaboradas = 0;
         this.horasSuplemetarias = 0;

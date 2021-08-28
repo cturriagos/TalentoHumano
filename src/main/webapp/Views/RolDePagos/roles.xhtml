@@ -7,58 +7,61 @@
                 template="/Plantilla/Plantilla.xhtml">
 
     <ui:define name="Contenido">
-        <div class="card">
-            <h:form id="form">
-                <h2>Roles de Pagos</h2>
-                <p:toolbar>
-                    <p:toolbarGroup>
-                        <h:outputLabel for="empleadolist" value="Empleado: "/>
-                        <p:selectOneMenu style="margin-left: 30px;" id="empleadolist" value="#{rolPagoListaView.empleado.id}"
-                                         required="true" requiredMessage="Debe seleccionar un empleado" label="Empleado"
-                                         filter="true" filterMatchMode="startsWith">
-                            <p:ajax listener="#{rolPagoListaView.empleadoSeleccionado}" update="dt-roles"/>
-                            <f:selectItem itemLabel="Selecione a un empleado" itemValue="#{0}" noSelectionOption="true"/>
-                            <f:selectItems value="#{rolPagoListaView.empleados}" 
-                                           var="empleado" itemLabel="#{empleado.nombreCompleto()}" itemValue="#{empleado.id}"/>
-                        </p:selectOneMenu>
-                    </p:toolbarGroup>
-                    <p:toolbarGroup align="right">
-                        <p:commandButton value="Nuevo Rol de Pago" icon="pi pi-plus" action="CrearRol"
-                                         styleClass="ui-button-success" update="messages empleadolist" style="margin-right: .5rem">
-                            <f:setPropertyActionListener value="#{rolPagoListaView.empleado}" target="#{personaBean.empleado}"/>
-                        </p:commandButton>
-                    </p:toolbarGroup>
-                </p:toolbar>
+        <h:form id="form">
+            <div class="card  crud-demo">
                 <p:growl id="messages" showDetail="true"/>
-                <p:dataTable id="dt-roles" widgetVar="dtRoles" var="rolPago" value="#{rolPagoListaView.pagos}"
-                             reflow="true" size="small" liveResize="true" styleClass="roles-table"
-                             paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
-                    <p:column headerText="Código"  width="25%">
-                        <h:outputText value="#{rolPago.codigo}"/>
-                    </p:column>
-                    <p:column headerText="Valor" >
-                        <h:outputText value="#{rolPago.valor}"/>
-                    </p:column>
-                    <p:column headerText="Generado" >
-                        <h:outputText value="#{rolPago.fechaGenerado}"/>
-                    </p:column>
-                    <p:column headerText="Aprobado" >
-                        <h:outputText value="#{rolPago.fechaAprobacion}"/>
-                    </p:column>
-                    <p:column headerText="Pagado">
-                        <h:outputText value="#{rolPago.fechaPago}"/>
-                    </p:column>
-                    <p:column headerText="Estado">
-                        <h:outputText value="#{rolPago.estado}"/>
-                    </p:column>
-                    <p:column exportable="false">
-                        <p:commandButton icon="pi pi-eye" action="RolDePago" update="dt-roles"
-                                         styleClass="edit-button rounded-button ui-button-success" process="dt-roles @this">
-                            <f:setPropertyActionListener value="#{rolPago}" target="#{personaBean.rolPago}"/>
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </div>
+                <p:panel>
+                    <h2>Roles de Pagos</h2>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <h:outputLabel for="empleadolist" value="Empleado: "/>
+                            <p:selectOneMenu style="margin-left: 30px;" id="empleadolist" value="#{rolPagoListaView.idEmpleado}"
+                                             required="true" requiredMessage="Debe seleccionar un empleado" label="Empleado"
+                                             filter="true" filterMatchMode="startsWith">
+                                <p:ajax update="dt-roles"/>
+                                <f:selectItem itemLabel="Seleccione a un empleado" itemValue="#{0}" noSelectionOption="true"/>
+                                <f:selectItems value="#{rolPagoListaView.empleados}" var="empleado"
+                                               itemLabel="#{empleado.nombreCompleto()}" itemValue="#{empleado.id}"/>
+                            </p:selectOneMenu>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Nuevo Rol de Pago" icon="pi pi-plus" action="CrearRol"
+                                             styleClass="ui-button-success" update="messages empleadolist" style="margin-right: .5rem">
+                                <f:setPropertyActionListener value="#{rolPagoListaView.empleado}" target="#{personaBean.empleado}"/>
+                            </p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <p:dataTable id="dt-roles" widgetVar="dtRoles" var="rolPago" value="#{rolPagoListaView.pagos}"
+                                 reflow="true" size="small" liveResize="true" styleClass="roles-table"
+                                 paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                        <p:column headerText="Código"  width="26%">
+                            <h:outputText value="#{rolPago.codigo}"/>
+                        </p:column>
+                        <p:column headerText="Valor" >
+                            <h:outputText value="$ #{rolPago.valor}"/>
+                        </p:column>
+                        <p:column headerText="Generado" >
+                            <h:outputText value="#{rolPagoListaView.darFormato(rolPago.fechaGenerado)}"/>
+                        </p:column>
+                        <p:column headerText="Aprobado" >
+                            <h:outputText value="#{rolPagoListaView.darFormato(rolPago.fechaAprobacion)}"/>
+                        </p:column>
+                        <p:column headerText="Pagado">
+                            <h:outputText value="#{rolPagoListaView.darFormato(rolPago.fechaPago)}"/>
+                        </p:column>
+                        <p:column headerText="Estado">
+                            <h:outputText value="#{rolPago.estado}"/>
+                        </p:column>
+                        <p:column exportable="false">
+                            <p:commandButton icon="pi pi-eye" action="RolDePago" update="dt-roles"
+                                             styleClass="edit-button rounded-button ui-button-success" process="dt-roles @this">
+                                <f:setPropertyActionListener value="#{rolPago.id}" target="#{personaBean.idRolDePago}"/>
+                                <f:setPropertyActionListener value="#{true}" target="#{personaBean.nuevo}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </div>
+        </h:form>
     </ui:define>
 </ui:composition>

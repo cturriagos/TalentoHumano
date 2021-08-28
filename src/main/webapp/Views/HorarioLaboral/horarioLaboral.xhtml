@@ -34,7 +34,7 @@
                             <h:outputText value="#{horarioLaboral.observaciones}"/>
                         </p:column>
                         <p:column headerText="Creado">
-                            <h:outputText value="#{horarioLaboral.fechaVigencia}"/>
+                            <h:outputLabel value="#{horarioLaboralView.darFormato(horarioLaboral.fechaVigencia)}"/>
                         </p:column>
                         <p:column headerText="Estado">
                             <h:outputText id="inputmarca" value="#{horarioLaboral.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
@@ -71,7 +71,7 @@
                                         <div class="p-field">
                                             <p:outputLabel for="fechav" style="font-weight: bold">Fecha de Vigencia</p:outputLabel>
                                             <p:datePicker id="fechav" value="#{horarioLaboralView.horarioLaboral.fechaVigencia}" 
-                                                          required="true" requiredMessage="Campo requerido"/>
+                                                          pattern="dd/MM/yyyy" required="true" requiredMessage="Campo requerido"/>
                                         </div>
                                         <div class="p-formgroup-inline">
                                             <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>

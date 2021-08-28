@@ -18,7 +18,13 @@ public class HorarioLaboral {
     private String observaciones;
     private Date fechaVigencia;
 
-    public HorarioLaboral(){}
+    public HorarioLaboral(){
+        this.id = 0;
+        this.nombre = "";
+        this.estado = true;
+        this.observaciones = "";
+        this.fechaVigencia = new Date();
+    }
     
     public HorarioLaboral(int id, String nombre, boolean estado, String observaciones, Date fechaVigencia) {
         this.id = id;

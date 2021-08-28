@@ -12,6 +12,7 @@ import Model.Entidad.Cargo;
 import Model.Entidad.Departamento;
 import Model.Entidad.PuestoLaboral;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,6 +107,10 @@ public class PuestoLaboralController implements Serializable {
     public void setIdCargo(int idCargo) {
         this.idCargo = idCargo;
     }
+    
+    public String darFormato(Date fecha){
+        return new SimpleDateFormat("dd/MM/yyyy").format(fecha);
+    }
 
     public void abrirNuevo() {
         idCargo = 0;
@@ -117,11 +122,26 @@ public class PuestoLaboralController implements Serializable {
         this.idCargo = idCargo;
         this.idDepartamento = idDepartamento;
     }
+    
+    
+    public void asignarCargoDepartamento(){
+        for(Cargo cargo : cargos){
+            if(cargo.getId() == idCargo){
+                puestoLaboral.setCargo(cargo);
+                break;
+            }
+        }
+        for(Departamento departamento : departamentos){
+            if(departamento.getId() == idDepartamento){
+                puestoLaboral.setDepartamento(departamento);
+                break;
+            }
+        }
+    }
 
     public void enviar() {
         if (idCargo != 0 && idDepartamento != 0) {
-            puestoLaboral.getCargo().setId(idCargo);
-            puestoLaboral.getDepartamento().setId(idDepartamento);
+            asignarCargoDepartamento();
             puestoLaboralDAO.setPuestoLaboral(puestoLaboral);
             if (puestoLaboral.getId() == 0) {
                 if (puestoLaboralDAO.insertar() > 0) {

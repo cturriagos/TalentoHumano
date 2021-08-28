@@ -18,14 +18,18 @@ import javax.inject.Named;
 @Named
 @SessionScoped
 public class PersonaBean implements Serializable{
-    private int idPersona, idEmpleado, idNatural;
+    private int idPersona, idEmpleado, idRolDePago;
     private Empleado empleado;
     private RolPagos rolPago;
+    private boolean nuevo;
     
     public PersonaBean() {
         idPersona = 0;
         idEmpleado = 0;
-        idNatural = 0;
+        idRolDePago = 0;
+        nuevo = false;
+        empleado = new Empleado();
+        rolPago = new RolPagos();
     }
 
     public int getIdPersona() {
@@ -52,12 +56,12 @@ public class PersonaBean implements Serializable{
         this.empleado = empleado;
     }
 
-    public int getIdNatural() {
-        return idNatural;
+    public int getIdRolDePago() {
+        return idRolDePago;
     }
 
-    public void setIdNatural(int idNatural) {
-        this.idNatural = idNatural;
+    public void setIdRolDePago(int idRolDePago) {
+        this.idRolDePago = idRolDePago;
     }
 
     public RolPagos getRolPago() {
@@ -66,5 +70,13 @@ public class PersonaBean implements Serializable{
 
     public void setRolPago(RolPagos rolPago) {
         this.rolPago = rolPago;
+    }
+
+    public boolean isNuevo() {
+        return nuevo;
+    }
+
+    public void setNuevo(boolean nuevo) {
+        this.nuevo = nuevo;
     }
 }

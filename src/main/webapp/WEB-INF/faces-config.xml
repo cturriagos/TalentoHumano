@@ -8,7 +8,7 @@
         <from-view-id>/Views/Personal/asistencia.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/Views/RolDePagos/roldepago.xhtml</from-view-id>
+        <from-view-id>/Views/RolDePagos/rolDePago.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>ListaRoles</from-outcome>
             <to-view-id>/Views/RolDePagos/roles.xhtml</to-view-id>
@@ -22,14 +22,14 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>RolDePago</from-outcome>
-            <to-view-id>/Views/RolDePagos/roldepago.xhtml</to-view-id>
+            <to-view-id>/Views/RolDePagos/rolDePago.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/Views/RolDePagos/roles.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>RolDePago</from-outcome>
-            <to-view-id>/Views/RolDePagos/roldepago.xhtml</to-view-id>
+            <to-view-id>/Views/RolDePagos/rolDePago.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>CrearRol</from-outcome>

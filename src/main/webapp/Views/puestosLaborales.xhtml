@@ -34,7 +34,7 @@
                             <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
                         </p:column>
                         <p:column headerText="Creado">
-                            <h:outputText value="#{puestoLaboral.fecha_creacion}"/>
+                            <h:outputText value="#{puestoLaboralView.darFormato(puestoLaboral.fecha_creacion)}"/>
                         </p:column>
                         <p:column headerText="Descripción" width="40%">
                             <h:outputText value="#{puestoLaboral.descripcion}"/>

@@ -14,7 +14,9 @@ import Model.Entidad.DiaSemana;
 import Model.Entidad.HorarioLaboral;
 import Model.Entidad.IngresosSalidas;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -137,6 +139,10 @@ public class HorarioLaboralController implements Serializable {
         if(horarios.isEmpty()){
              mostrarMensajeInformacion("Debe definir los los dias y horas de este horario");
         }
+    }
+    
+    public String darFormato(Date fecha){
+        return new SimpleDateFormat("dd/MM/yyyy").format(fecha);
     }
 
     public void nuevoHorario() {

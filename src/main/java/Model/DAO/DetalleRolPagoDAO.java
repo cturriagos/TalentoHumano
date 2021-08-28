@@ -108,26 +108,25 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
     }
 
     public List<DetalleRolPago> buscar(RolPagos rolPagos) {
+        List<DetalleRolPago> detalles = new ArrayList<>();
+        this.detalleRolPago.setRolPagos(rolPagos);
         if (conexion.isEstado()) {
             ResultSet result;
-            List<DetalleRolPago> detalles;
             try {
                 result = conexion.selecionar("detalle_rol", "id_rubro, rubro",
-                                             "id_rol = " + detalleRolPago.getRolPagos().getId(), null);
-                detalles = new ArrayList<>();
+                                             "id_rol = " + rolPagos.getId(), null);
                 TipoRubroDAO tpdao = new TipoRubroDAO();
                 while (result.next()) {
                     detalles.add(new DetalleRolPago(rolPagos, tpdao.buscarPorId(result.getInt("id_rubro")), result.getInt("rubro")));
                 }
                 result.close();
-                return detalles;
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
                 conexion.cerrarConexion();
             }
         }
-        return null;
+        return detalles;
     }
 
     private List<DetalleRolPago> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
