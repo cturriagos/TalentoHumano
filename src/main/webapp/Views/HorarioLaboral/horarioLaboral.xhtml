@@ -33,20 +33,26 @@
                         <p:column headerText="Observaciones" width="35%">
                             <h:outputText value="#{horarioLaboral.observaciones}"/>
                         </p:column>
-                        <p:column headerText="Creado">
+                        <p:column headerText="Creado" width="10%">
                             <h:outputLabel value="#{horarioLaboralView.darFormato(horarioLaboral.fechaVigencia)}"/>
                         </p:column>
-                        <p:column headerText="Estado">
+                        <p:column headerText="Estado" width="10%">
                             <h:outputText id="inputmarca" value="#{horarioLaboral.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
                         </p:column>
-                        <p:column exportable="false" width="15%">
+                        <p:column exportable="false" width="14%">
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-horarioLaboral-content"
                                              oncomplete="PF('manageHorarioLaboralDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <f:setPropertyActionListener value="#{horarioLaboral}" target="#{horarioLaboralView.horarioLaboral}"/>
                                 <p:resetInput target=":form:manage-horarioLaboral-content"/>
                             </p:commandButton>
-                            <p:commandButton value="Detalle" icon="pi pi-list" action="DetalleHorario"
+                            <p:commandButton icon="pi pi-#{horarioLaboral.estado? 'times' : 'check'}"
+                                             styleClass="edit-button rounded-button ui-button-success" 
+                                             actionListener="#{horarioLaboralView.cambiarEstado(horarioLaboral)}"
+                                             update="dt-horarioLaborales" process="dt-horarioLaborales @this">
+                                <f:setPropertyActionListener value="#{!horarioLaboral.estado}" target="#{horarioLaboral.estado}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-list" action="DetalleHorario"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <f:setPropertyActionListener value="#{horarioLaboral}" target="#{horarioLaboralView.horarioLaboral}"/>
                             </p:commandButton>
@@ -72,12 +78,6 @@
                                             <p:outputLabel for="fechav" style="font-weight: bold">Fecha de Vigencia</p:outputLabel>
                                             <p:datePicker id="fechav" value="#{horarioLaboralView.horarioLaboral.fechaVigencia}" 
                                                           pattern="dd/MM/yyyy" required="true" requiredMessage="Campo requerido"/>
-                                        </div>
-                                        <div class="p-formgroup-inline">
-                                            <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>
-                                            <div class="p-field-checkbox">
-                                                <p:selectBooleanCheckbox id="estado" value="#{horarioLaboralView.horarioLaboral.estado}" itemLabel="Habilitar"/>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

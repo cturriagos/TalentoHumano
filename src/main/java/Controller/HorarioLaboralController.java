@@ -215,6 +215,12 @@ public class HorarioLaboralController implements Serializable {
         PrimeFaces.current().executeScript("PF('manageDetalleHorarioDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-detalleHorarios");
     }
+    
+    public void cambiarEstado(HorarioLaboral horarioLaboral){
+        horarioLaboralDAO.setHorarioLaboral(horarioLaboral);
+        horarioLaboralDAO.cambiarEstado();
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
+    }
 
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);

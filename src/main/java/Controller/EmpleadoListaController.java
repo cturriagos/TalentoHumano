@@ -8,7 +8,9 @@ package Controller;
 import Model.DAO.EmpleadoDAO;
 import Model.Entidad.Empleado;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -66,5 +68,9 @@ public class EmpleadoListaController implements Serializable {
             empleado = empleadoDAO.buscarPorId(idEmpleado);
             PrimeFaces.current().ajax().update(null, "form:DATOS");
         }
+    }
+    
+    public String darFormato(Date fecha){
+        return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha):"";
     }
 }

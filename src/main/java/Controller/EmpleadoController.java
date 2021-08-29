@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -246,6 +248,10 @@ public class EmpleadoController implements Serializable {
         resumenReserva();
         PrimeFaces.current().executeScript("PF('manageReservaDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
+    }
+    
+    public String darFormato(Date fecha){
+        return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha):"";
     }
 
     //  MENSAJE DE ERROR

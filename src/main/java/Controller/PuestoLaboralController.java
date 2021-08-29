@@ -170,6 +170,12 @@ public class PuestoLaboralController implements Serializable {
         departamentos.clear();
         cargos.clear();
     }
+    
+    public void cambiarEstado(PuestoLaboral puestoLaboral){
+        puestoLaboralDAO.setPuestoLaboral(puestoLaboral);
+        puestoLaboralDAO.cambiarEstado();
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
+    }
 
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);

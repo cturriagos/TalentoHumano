@@ -33,18 +33,24 @@
                         <p:column headerText="Descripción" width="35%">
                             <h:outputText value="#{departamento.descripcion}"/>
                         </p:column>
-                        <p:column headerText="Creado">
-                            <h:outputText value="#{departamento.fecha_creacion}"/>
+                        <p:column headerText="Creado" width="10%">
+                            <h:outputText value="#{departamentoView.darFormato(departamento.fecha_creacion)}"/>
                         </p:column>
-                        <p:column headerText="Estado">
+                        <p:column headerText="Estado" width="10%">
                             <h:outputText id="inputmarca" value="#{departamento.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
                         </p:column>
-                        <p:column exportable="false" width="5%">
+                        <p:column exportable="false" width="10%">
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-departamento-content"
                                              oncomplete="PF('manageDepartamentoDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <f:setPropertyActionListener value="#{departamento}" target="#{departamentoView.departamento}"/>
                                 <p:resetInput target=":form:manage-departamento-content"/>
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-#{departamento.estado? 'times' : 'check'}"
+                                             styleClass="edit-button rounded-button ui-button-success" 
+                                             actionListener="#{departamentoView.cambiarEstado(departamento)}"
+                                             update="dt-departamentos" process="dt-departamentos @this">
+                                <f:setPropertyActionListener value="#{!departamento.estado}" target="#{departamento.estado}"/>
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -63,12 +69,6 @@
                                             <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
                                             <p:inputTextarea id="description" value="#{departamentoView.departamento.descripcion}" 
                                                              required="true" requiredMessage="Campo requerido"/>
-                                        </div>
-                                        <div class="p-formgroup-inline">
-                                            <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>
-                                            <div class="p-field-checkbox">
-                                                <p:selectBooleanCheckbox id="estado" value="#{departamentoView.departamento.estado}" itemLabel="Habilitar"/>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

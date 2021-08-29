@@ -20,10 +20,11 @@
                             <span style="font-weight: bold" icon="pi pi-table">ROL DE PAGO</span>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
-                            <p:linkButton value="Volver a la lista" icon="pi pi-list" outcome="ListaRoles"
+                            <p:commandButton value="Volver a la lista" icon="pi pi-list" action="ListaRoles"
+                                             update="dt-rolPago" process="dt-rolPago @this"
                                           styleClass="ui-button-success" style="margin-right: .5rem">
                                 <f:setPropertyActionListener value="#{false}" target="#{personaBean.nuevo}"/>
-                            </p:linkButton>
+                            </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>
                     <p:panel id="dt-rolPago" class="ui-fluid">

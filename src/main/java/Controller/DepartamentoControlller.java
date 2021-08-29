@@ -8,7 +8,9 @@ package Controller;
 import Model.DAO.DepartamentoDAO;
 import Model.Entidad.Departamento;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -64,6 +66,16 @@ public class DepartamentoControlller implements Serializable {
         }
         PrimeFaces.current().executeScript("PF('manageDepartamentoDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-departamentos");
+    }
+    
+    public void cambiarEstado(Departamento departamento){
+        departamentoDAO.setDepartamento(departamento);
+        departamentoDAO.cambiarEstado();
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
+    }
+    
+    public String darFormato(Date fecha){
+        return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha):"";
     }
 
     public void abrirNuevo() {

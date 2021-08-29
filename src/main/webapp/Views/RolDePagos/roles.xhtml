@@ -34,22 +34,22 @@
                     <p:dataTable id="dt-roles" widgetVar="dtRoles" var="rolPago" value="#{rolPagoListaView.pagos}"
                                  reflow="true" size="small" liveResize="true" styleClass="roles-table"
                                  paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Código"  width="26%">
+                        <p:column headerText="Código" width="30%">
                             <h:outputText value="#{rolPago.codigo}"/>
                         </p:column>
-                        <p:column headerText="Valor" >
+                        <p:column headerText="Valor" width="10%">
                             <h:outputText value="$ #{rolPago.valor}"/>
                         </p:column>
-                        <p:column headerText="Generado" >
+                        <p:column headerText="Generado" width="10%">
                             <h:outputText value="#{rolPagoListaView.darFormato(rolPago.fechaGenerado)}"/>
                         </p:column>
-                        <p:column headerText="Aprobado" >
+                        <p:column headerText="Aprobado" width="10%">
                             <h:outputText value="#{rolPagoListaView.darFormato(rolPago.fechaAprobacion)}"/>
                         </p:column>
-                        <p:column headerText="Pagado">
+                        <p:column headerText="Pagado" width="10%">
                             <h:outputText value="#{rolPagoListaView.darFormato(rolPago.fechaPago)}"/>
                         </p:column>
-                        <p:column headerText="Estado">
+                        <p:column headerText="Estado" width="10%">
                             <h:outputText value="#{rolPago.estado}"/>
                         </p:column>
                         <p:column exportable="false">

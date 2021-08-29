@@ -33,22 +33,28 @@
                         <p:column headerText="Cargo">
                             <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
                         </p:column>
-                        <p:column headerText="Creado">
+                        <p:column headerText="Creado" width="10%">
                             <h:outputText value="#{puestoLaboralView.darFormato(puestoLaboral.fecha_creacion)}"/>
                         </p:column>
-                        <p:column headerText="Descripción" width="40%">
+                        <p:column headerText="Descripción" width="30%">
                             <h:outputText value="#{puestoLaboral.descripcion}"/>
                         </p:column>
                         <p:column headerText="Estado" width="10%">
                             <h:outputText id="inputestado" value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
                         </p:column>
-                        <p:column exportable="false" width="5%">
+                        <p:column exportable="false" width="10%">
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-puestoLaboral-content"
                                              oncomplete="PF('managePuestoLaboralDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}" />
                                 <f:setPropertyActionListener value="#{puestoLaboral}" target="#{puestoLaboralView.puestoLaboral}"/>
                                 <p:resetInput target=":form:manage-puestoLaboral-content"/>
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-#{puestoLaboral.estado? 'times' : 'check'}"
+                                             styleClass="edit-button rounded-button ui-button-success" 
+                                             actionListener="#{puestoLaboralView.cambiarEstado(puestoLaboral)}"
+                                             update="dt-puestoLaborals" process="dt-puestoLaborals @this">
+                                <f:setPropertyActionListener value="#{!puestoLaboral.estado}" target="#{puestoLaboral.estado}"/>
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -78,12 +84,6 @@
                                             <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
                                             <p:inputTextarea id="description" value="#{puestoLaboralView.puestoLaboral.descripcion}" 
                                                              required="true" requiredMessage="Campo requerido"/>
-                                        </div>
-                                        <div class="p-formgroup-inline">
-                                            <p:outputLabel for="estado" style="font-weight: bold">Estado</p:outputLabel>
-                                            <div class="p-field-checkbox">
-                                                <p:selectBooleanCheckbox id="estado" value="#{puestoLaboralView.puestoLaboral.estado}" itemLabel="Habilitar"/>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

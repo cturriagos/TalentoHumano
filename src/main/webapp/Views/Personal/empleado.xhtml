@@ -66,13 +66,13 @@
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
                             <h:outputText value="Fecha de nacimiento: " style="font-weight: bold;" />
-                            <h:outputText value="#{empleadoView.sueldo.empleado.fechaNacimiento}" />
+                            <h:outputText value="#{empleadoView.darFormato(empleadoView.sueldo.empleado.fechaNacimiento)}" />
 
                             <h:outputText value="Fecha de Ingreso: " style="font-weight: bold;" />
-                            <h:outputText value="#{empleadoView.sueldo.empleado.fechaIngreso}" />
+                            <h:outputText value="#{empleadoView.darFormato(empleadoView.sueldo.empleado.fechaIngreso)}" />
 
                             <h:outputText value="Fecha de Salida: " style="font-weight: bold;" />
-                            <h:outputText value="#{empleadoView.sueldo.empleado.fechaEgreso}" />
+                            <h:outputText value="#{empleadoView.darFormato(empleadoView.sueldo.empleado.fechaEgreso)}" />
 
                         </h:panelGrid>
                         <h:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"

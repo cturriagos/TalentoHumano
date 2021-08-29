@@ -131,10 +131,9 @@ public class DepartamentoDAO implements IDAO<Departamento> {
         return null;
     }
 
-    public int cambiarEstado() {
+    public void cambiarEstado() {
         if (conexion.isEstado()) {
-            return conexion.modificar("departamento", "estado = NOT estado","id_departamento = " + departamento.getId());
+            conexion.modificar("departamento", "estado = NOT estado","id_departamento = " + departamento.getId());
         }
-        return -1;
     }
 }

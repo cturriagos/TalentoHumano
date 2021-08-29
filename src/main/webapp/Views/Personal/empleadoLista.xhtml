@@ -31,10 +31,10 @@
                             <h:outputText value="#{empleado.nombreCompleto()}"/>
                         </p:column>
                         <p:column headerText="Ingreso" width="10%">
-                            <h:outputText value="#{empleado.fechaIngreso}"/>
+                            <h:outputText value="#{empleadoListaView.darFormato(empleado.fechaIngreso)}"/>
                         </p:column>
                         <p:column headerText="Salida" width="10%">
-                            <h:outputText value="#{empleado.fechaEgreso}"/>
+                            <h:outputText value="#{empleadoListaView.darFormato(empleado.fechaEgreso)}"/>
                         </p:column>
                         <p:column exportable="false" width="10%">
                             <p:commandButton icon="pi pi-eye" action="Empleado" 

@@ -92,6 +92,12 @@ public class HorarioLaboralDAO implements IDAO<HorarioLaboral>{
         this.horarioLaboral = entity;
         return actualizar();
     }
+    
+    public void cambiarEstado(){
+        if (conexion.isEstado()) {
+            conexion.modificar("horario_laboral", "estado = NOT estado", "id_horario_laboral = " + horarioLaboral.getId());
+        }
+    }
 
     @Override
     public HorarioLaboral buscarPorId(Object id) {

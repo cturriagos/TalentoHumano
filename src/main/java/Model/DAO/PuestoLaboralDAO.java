@@ -102,6 +102,12 @@ public class PuestoLaboralDAO implements IDAO<PuestoLaboral>{
         }
         return null;
     }
+    
+    public void cambiarEstado(){
+        if (conexion.isEstado()) {
+            conexion.modificar("puesto_laboral", "estado = NOT estado", "id_puesto_laboral = " + puestoLaboral.getId());
+        }
+    }
 
     @Override
     public List<PuestoLaboral> Listar() {
