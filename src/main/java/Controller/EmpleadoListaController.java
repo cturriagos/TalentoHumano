@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -66,11 +68,27 @@ public class EmpleadoListaController implements Serializable {
         if(idEmpleado > 0) {
             EmpleadoDAO empleadoDAO = new EmpleadoDAO();
             empleado = empleadoDAO.buscarPorId(idEmpleado);
-            PrimeFaces.current().ajax().update(null, "form:DATOS");
+            PrimeFaces.current().ajax().update(null, "form:dt-empleados");
         }
     }
     
     public String darFormato(Date fecha){
         return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha):"";
+    }
+    
+    public void cambiarEstado(Empleado empleado){
+        empleadoDAO.setEmpleado(empleado);
+        empleadoDAO.cambiarEstado();
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-empleados");
+    }
+
+    public void mostrarMensajeInformacion(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void mostrarMensajeError(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

@@ -99,6 +99,12 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         }
         return -1;
     }
+    public void cambiarEstado() {
+        if (conexion.isEstado()) {
+            conexion.modificar("persona",
+                               "estado = NOT estado", "id_persona = " + empleado.getPersona().getId());
+        }
+    }
 
     @Override
     public int actualizar(Empleado entity) {

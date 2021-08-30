@@ -37,13 +37,27 @@
                         <p:column headerText="Salida" width="10%">
                             <h:outputText value="#{empleadoListaView.darFormato(empleado.fechaEgreso)}"/>
                         </p:column>
-                        <p:column exportable="false" width="15%">
+                        <p:column headerText="Estado" width="10%">
+                            <h:outputText id="inputmarca" value="#{empleado.persona.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
+                        </p:column>
+                        <p:column exportable="false" width="10%">
                             <p:commandButton icon="pi pi-eye" action="Empleado" 
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <f:setPropertyActionListener value="#{empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
+                            <p:commandButton icon="pi pi-#{empleado.persona.estado? 'times' : 'check'}"
+                                             styleClass="edit-button rounded-button ui-button-success" 
+                                             actionListener="#{empleadoListaView.cambiarEstado(empleado)}"
+                                             update="dt-empleados" process="dt-empleados @this">
+                                <f:setPropertyActionListener value="#{!empleado.persona.estado}" target="#{empleado.persona.estado}"/>
+                            </p:commandButton>
                         </p:column>
                     </p:dataTable>
+                    <p:confirmDialog global="true" showEffect="fade" width="300">
+                        <p:commandButton value="Yes" label="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="No" label="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                         icon="pi pi-times"/>
+                    </p:confirmDialog>
                 </p:panel>
             </div>
         </h:form>
