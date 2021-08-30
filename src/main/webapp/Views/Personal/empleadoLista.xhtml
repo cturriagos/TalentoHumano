@@ -24,6 +24,7 @@
                                  reflow="true" size="small" liveResize="true" styleClass="empleados-table"
                                  rowKey="#{empleado.id}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                        
                         <p:column headerText="Identificación" width="15%">
                             <h:outputText value="#{empleado.persona.identificacion}"/>
                         </p:column>
@@ -36,7 +37,7 @@
                         <p:column headerText="Salida" width="10%">
                             <h:outputText value="#{empleadoListaView.darFormato(empleado.fechaEgreso)}"/>
                         </p:column>
-                        <p:column exportable="false" width="10%">
+                        <p:column exportable="false" width="15%">
                             <p:commandButton icon="pi pi-eye" action="Empleado" 
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <f:setPropertyActionListener value="#{empleado.id}" target="#{personaBean.idEmpleado}"/>

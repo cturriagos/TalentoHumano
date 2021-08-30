@@ -68,14 +68,6 @@
                                         </p:inputText>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel for="inputdedicacion" value="Dedicación: "/>
-                                        <p:selectOneMenu id="inputdedicacion" value="#{empresaView.idDedicacion}">
-                                            <f:selectItem itemLabel="Selecione una dedicación" itemValue="#{0}" noSelectionOption="true"/>
-                                            <f:selectItems value="#{empresaView.dedicaciones}" var="dedicacion" 
-                                                           itemLabel="#{dedicacion.nombre}" itemValue="#{dedicacion.id}"/>
-                                        </p:selectOneMenu>
-                                    </div>
-                                    <div class="p-field">
                                         <p:outputLabel for="inputtipo" style="font-weight: bold">Tipo: </p:outputLabel>
                                         <p:inputText id="inputtipo" value="#{empresaView.empresa.tipo}" 
                                                       required="true" requiredMessage="Campo requerido"/>
@@ -129,7 +121,8 @@
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-sucursal-content"
                                              oncomplete="PF('manageSucursalDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                <p:ajax listener="#{empresaView.editarSucursal(empresaView.idCiudad)}" />
+                                <p:ajax listener="#{empresaView.editarSucursal(sucursal.ciudad.provincia.id, sucursal.ciudad.id)}"
+                                        update=":form:manage-sucursal-content" />
                                 <f:setPropertyActionListener value="#{sucursal}" target="#{empresaView.sucursal}"/>
                                 <p:resetInput target=":form:manage-sucursal-content"/>
                             </p:commandButton>
@@ -142,11 +135,22 @@
                                 <div class="card">
                                     <div class="ui-fluid">
                                         <div class="p-field">
-                                            <p:outputLabel for="inputdia" value="Ciudad: "/>
-                                            <p:selectOneMenu id="inputdia" value="#{empresaView.idCiudad}">
-                                                <f:selectItem itemLabel="Selecione un dia" itemValue="#{0}" noSelectionOption="true"/>
+                                            <p:outputLabel for="inputProvincia" value="Provincia: "/>
+                                            <p:selectOneMenu id="inputProvincia" value="#{empresaView.idProvincia}">
+                                                <p:ajax listener="#{empresaView.provinciaSeleccionada(empresaView.idProvincia)}"
+                                                        update="inputCiudad"/>
+                                                <f:selectItem itemLabel="Selecione una Provincia" itemValue="#{0}"
+                                                              noSelectionOption="true"/>
+                                                <f:selectItems value="#{empresaView.provincias}" var="provincia" 
+                                                               itemLabel="#{provincia.nombre}" itemValue="#{provincia.id}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="p-field">
+                                            <p:outputLabel for="inputCiudad" value="Ciudad: "/>
+                                            <p:selectOneMenu id="inputCiudad" value="#{empresaView.idCiudad}">
+                                                <f:selectItem itemLabel="Selecione un ciudad" itemValue="#{0}" noSelectionOption="true"/>
                                                 <f:selectItems value="#{empresaView.ciudades}" var="ciudad" 
-                                                               itemLabel="#{ciudad.resumen()}" itemValue="#{ciudad.id}"/>
+                                                               itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>
                                             </p:selectOneMenu>
                                         </div>
                                         <div class="p-field">

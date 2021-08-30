@@ -46,7 +46,8 @@
                             <p:commandButton icon="pi pi-pencil" update=":form:manage-puestoLaboral-content"
                                              oncomplete="PF('managePuestoLaboralDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}" />
+                                <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}"
+                                        update=":form:manage-puestoLaboral-content" />
                                 <f:setPropertyActionListener value="#{puestoLaboral}" target="#{puestoLaboralView.puestoLaboral}"/>
                                 <p:resetInput target=":form:manage-puestoLaboral-content"/>
                             </p:commandButton>
@@ -92,8 +93,7 @@
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{puestoLaboralView.enviar}"
                                              update="manage-puestoLaboral-content" styleClass="ui-button-success" process="manage-puestoLaboral-content @this"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{puestoLaboralView.cancelar}"
-                                             onclick="PF('managePuestoLaboralDialog').hide()"
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('managePuestoLaboralDialog').hide()"
                                              process="@none" styleClass="p-mr-2" resetValues="true" />
                         </f:facet>
                     </p:dialog>

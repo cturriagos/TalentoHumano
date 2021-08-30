@@ -12,7 +12,7 @@ public class Empresa {
 
     public Empresa() {
         this.id = 0;
-        this.dedicacion = new Dedicacion();
+        this.dedicacion = new Dedicacion(1, "", 0, "");
         this.ruc = "";
         this.tipo = "";
         this.nombre = "";

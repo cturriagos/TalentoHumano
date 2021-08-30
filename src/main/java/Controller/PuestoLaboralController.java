@@ -162,13 +162,6 @@ public class PuestoLaboralController implements Serializable {
         }
         PrimeFaces.current().executeScript("PF('managePuestoLaboralDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
-        departamentos.clear();
-        cargos.clear();
-    }
-
-    public void cancelar() {
-        departamentos.clear();
-        cargos.clear();
     }
     
     public void cambiarEstado(PuestoLaboral puestoLaboral){

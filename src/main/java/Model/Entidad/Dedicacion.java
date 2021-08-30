@@ -12,7 +12,7 @@ public class Dedicacion {
     private float porcentajeUtilidad;
 
     public Dedicacion() {
-        id = 0;
+        id = 1;
         nombre = "";
         detalle = "";
         porcentajeUtilidad = 0;

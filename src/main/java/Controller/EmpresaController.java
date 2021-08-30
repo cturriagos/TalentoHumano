@@ -8,10 +8,12 @@ package Controller;
 import Model.DAO.CiudadDAO;
 import Model.DAO.DedicacionDAO;
 import Model.DAO.EmpresaDAO;
+import Model.DAO.ProvinciaDAO;
 import Model.DAO.SucursalDAO;
 import Model.Entidad.Ciudad;
 import Model.Entidad.Dedicacion;
 import Model.Entidad.Empresa;
+import Model.Entidad.Provincia;
 import Model.Entidad.Sucursal;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,15 +37,19 @@ public class EmpresaController implements Serializable {
     private Empresa empresa;
     private Sucursal sucursal;
     private List<Sucursal> sucursales;
+    private List<Provincia> provincias;
     private List<Ciudad> ciudades;
     private List<Dedicacion> dedicaciones;
-    private int idCiudad, idDedicacion;
+    private int idCiudad, idProvincia;
 
     @Inject
     private EmpresaDAO empresaDAO;
 
     @Inject
     private SucursalDAO sucursalDAO;
+
+    @Inject
+    private ProvinciaDAO provinciaDAO;
 
     @Inject
     private CiudadDAO ciudadDAO;
@@ -53,6 +59,7 @@ public class EmpresaController implements Serializable {
 
     public EmpresaController() {
         sucursales = new ArrayList<>();
+        provincias = new ArrayList<>();
         ciudades = new ArrayList<>();
         dedicaciones = new ArrayList<>();
     }
@@ -62,7 +69,7 @@ public class EmpresaController implements Serializable {
         empresa = empresaDAO.cargar();
         sucursales = sucursalDAO.Listar();
         dedicaciones = dedicacionDAO.Listar();
-        ciudades = ciudadDAO.Listar();
+        provincias = provinciaDAO.Listar();
     }
 
     public Empresa getEmpresa() {
@@ -79,6 +86,8 @@ public class EmpresaController implements Serializable {
 
     public void setSucursal(Sucursal sucursal) {
         this.sucursal = sucursal;
+        idProvincia = sucursal.getCiudad().getProvincia().getId();
+        idCiudad = sucursal.getCiudad().getId();
     }
 
     public List<Sucursal> getSucursales() {
@@ -97,6 +106,14 @@ public class EmpresaController implements Serializable {
         this.ciudades = ciudades;
     }
 
+    public List<Provincia> getProvincias() {
+        return provincias;
+    }
+
+    public void setProvincias(List<Provincia> provincias) {
+        this.provincias = provincias;
+    }
+
     public List<Dedicacion> getDedicaciones() {
         return dedicaciones;
     }
@@ -113,16 +130,12 @@ public class EmpresaController implements Serializable {
         this.idCiudad = idCiudad;
     }
 
-    public int getIdDedicacion() {
-        return idDedicacion;
+    public int getIdProvincia() {
+        return idProvincia;
     }
 
-    public void setIdDedicacion(int idDedicacion) {
-        this.idDedicacion = idDedicacion;
-    }
-
-    public void editar(int idDedicacion) {
-        this.idDedicacion = idDedicacion;
+    public void setIdProvincia(int idProvincia) {
+        this.idProvincia = idProvincia;
     }
 
     public void postLoad() {
@@ -132,20 +145,34 @@ public class EmpresaController implements Serializable {
             PrimeFaces.current().ajax().update("form:messages", "form:dt-empresa");
         }
     }
+    
+    public void provinciaSeleccionada(int idProvincia){
+        for(Provincia item : provincias){
+            if(item.getId() == idProvincia){
+                ciudades = ciudadDAO.Listar(item);
+                break;
+            }
+        }
+        PrimeFaces.current().ajax().update("form:messages", "inputCiudad");
+    }
 
     public void nuevaSucursal() {
         idCiudad = 0;
+        idProvincia = 0;
         sucursal = new Sucursal();
         sucursal.setEmpresa(empresa);
+        PrimeFaces.current().ajax().update("form:messages", "form:manage-sucursal-content");
     }
 
-    public void editarSucursal(int idCiudad) {
+    public void editarSucursal(int idProvincia, int idCiudad) {
+        this.idProvincia = idProvincia;
         this.idCiudad = idCiudad;
+        provinciaSeleccionada(idProvincia);
     }
 
     public void guardarEmpresa() {
-        if (idDedicacion != 0) {
-            empresa.getDedicacion().setId(idDedicacion);
+        /*if (idDedicacion != 0) {
+            empresa.getDedicacion().setId(idDedicacion);*/
             empresaDAO.setEmpresa(empresa);
             if (empresa.getId() < 1) {
                 if (empresaDAO.insertar() > 0) {
@@ -161,16 +188,21 @@ public class EmpresaController implements Serializable {
                     mostrarMensajeError("Los datos de la empresa no se pudo editar");
                 }
             }
-        } else {
+        /*} else {
             mostrarMensajeError("Debe indicar la dedicación de la empresa");
-        }
+        }*/
         PrimeFaces.current().executeScript("PF('manageEmpresaDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empresa");
     }
 
     public void guardarSucursal() {
         if (idCiudad != 0) {
-            sucursal.getCiudad().setId(idCiudad);
+            for(Ciudad ciudad : ciudades){
+                if(ciudad.getId() == idCiudad){
+                    sucursal.setCiudad(ciudad);
+                    break;
+                }
+            }
             sucursal.setEmpresa(empresa);
             sucursalDAO.setSucursal(sucursal);
             if (sucursal.getId() == 0) {

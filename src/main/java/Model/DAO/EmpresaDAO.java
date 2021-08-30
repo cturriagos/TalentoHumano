@@ -66,8 +66,8 @@ public class EmpresaDAO implements IDAO<Empresa> {
     public int insertar() {
         if (conexion.isEstado()) {
             empresa.setId(conexion.insertar("empresa_matriz",
-                    "id_dedicacion, ruc, tipo, nombre, razon_social, detalle",
-                    empresa.getDedicacion().getId() + ", '" + empresa.getRuc() + "', '" + empresa.getTipo()
+                    "ruc, tipo, nombre, razon_social, detalle",
+                    "'" + empresa.getRuc() + "', '" + empresa.getTipo()
                     + "', '" + empresa.getNombre() + "', '" + empresa.getRazonSocial()
                     + "', '" + empresa.getDetalle() + "'",
                     "id_matriz"));
@@ -86,7 +86,7 @@ public class EmpresaDAO implements IDAO<Empresa> {
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("empresa_matriz",
-                    "id_dedicacion = " + empresa.getDedicacion().getId() + ", ruc = '" + empresa.getRuc() + "', tipo = '"
+                    "ruc = '" + empresa.getRuc() + "', tipo = '"
                     + empresa.getTipo() + "', nombre = '" + empresa.getNombre() + "', razon_social = '"
                     + empresa.getRazonSocial() + "', detalle = '" + empresa.getDetalle() + "'",
                     "id_matriz = " + empresa.getId());
@@ -119,7 +119,7 @@ public class EmpresaDAO implements IDAO<Empresa> {
         if (lista != null && !lista.isEmpty()) {
             return lista.get(0);
         }else{
-            return new Empresa(-1, new Dedicacion(-1, DEFAUL, 0, DEFAUL), "9999999999999", "Comercial", DEFAUL, DEFAUL, DEFAUL);
+            return new Empresa(-1, new Dedicacion(), "9999999999999", "Comercial", DEFAUL, DEFAUL, DEFAUL);
         }
     }
 
@@ -128,12 +128,12 @@ public class EmpresaDAO implements IDAO<Empresa> {
             ResultSet result;
             List<Empresa> empresas;
             try {
-                result = conexion.selecionar("empresa_matriz", "id_matriz, id_dedicacion, ruc, tipo, nombre, razon_social, detalle", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("empresa_matriz", "id_matriz, ruc, tipo, nombre, razon_social, detalle", restricciones, OrdenarAgrupar);
                 empresas = new ArrayList<>();
                 DedicacionDAO ddao = new DedicacionDAO();
                 while (result.next()) {
                     empresas.add(new Empresa(result.getInt("id_matriz"),
-                            ddao.buscarPorId(result.getInt("id_dedicacion")),
+                            new Dedicacion(),
                             result.getString("ruc"),
                             result.getString("tipo"),
                             result.getString("nombre"),
