@@ -67,7 +67,7 @@ public class PersonaDAO implements IDAO<Persona> {
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            persona.setId(conexion.insertar("persona",
+            persona.setId(conexion.insertar("persona_bck_rrhh",
                     "direccion, tipo_identificacion, identificacion, estado, telefono1, telefono2, correo1",
                     "'" + persona.getDireccion() + "', '" + persona.getTipoIdentificacion() + "', '" + persona.getIdentificacion()
                     + "', " + persona.isEstado() + ", '" + persona.getTelefono1() + "', '" + persona.getTelefono2() + "', '"
@@ -87,7 +87,7 @@ public class PersonaDAO implements IDAO<Persona> {
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
-            return conexion.modificar("persona",
+            return conexion.modificar("persona_bck_rrhh",
                     "direccion = '" + persona.getDireccion() + "', tipo_identificacion = '" + persona.getTipoIdentificacion()
                     + "', identificacion = '" + persona.getIdentificacion() + "', estado = " + persona.isEstado()
                     + ", telefono1 = '" + persona.getTelefono1()+ "', telefono2 = '" + persona.getTelefono2() + "', correo1 ='"
@@ -122,7 +122,7 @@ public class PersonaDAO implements IDAO<Persona> {
             ResultSet result;
             List<Persona> personas;
             try {
-                result = conexion.selecionar("persona", "id_persona, identificacion, tipo_identificacion, correo1, telefono1, telefono2, direccion, estado", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("persona_bck_rrhh", "id_persona, identificacion, tipo_identificacion, correo1, telefono1, telefono2, direccion, estado", restricciones, OrdenarAgrupar);
                 personas = new ArrayList<>();
                 while (result.next()) {
                     personas.add(new Persona(

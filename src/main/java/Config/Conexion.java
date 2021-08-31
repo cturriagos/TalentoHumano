@@ -28,9 +28,9 @@ public class Conexion {
         private String classForName = "org.postgresql.Driver";
      */
     //private String url = "jdbc:sqlserver://localhost\\WIN-J31JOLHOPG2\\SQLEXPRESS01:3128;databaseName=VisorPdf";
-    private String url = "jdbc:postgresql://localhost:5432/BDPRO";
-    private String usuario = "Proyecto_TH";
-    private String clave = "123456";
+    private String url = "jdbc:postgresql://190.15.134.7:8080/erpcontableappweb";
+    private String usuario = "appweb";
+    private String clave = "@Aplicaciones@Web@2021";
     private final String classForName;
 
     public Conexion() {

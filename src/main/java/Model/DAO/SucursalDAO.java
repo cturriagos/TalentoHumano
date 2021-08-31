@@ -63,7 +63,7 @@ public class SucursalDAO implements IDAO<Sucursal> {
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            sucursal.setId(conexion.insertar("sucursal", "id_empresa, id_ciudad, direccion, detalle",
+            sucursal.setId(conexion.insertar("sucursal", "id_matriz, id_ciudad, direccion, detalle",
                     sucursal.getEmpresa().getId() + "," + sucursal.getCiudad().getId() + ", '" + sucursal.getDireccion()
                     + "', '" + sucursal.getDetalle() + "'", "id_sucursal"));
             return sucursal.getId();
@@ -80,7 +80,7 @@ public class SucursalDAO implements IDAO<Sucursal> {
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
-            return conexion.modificar("sucursal", "id_empresa = " + sucursal.getEmpresa().getId() + ", id_ciudad = "
+            return conexion.modificar("sucursal", "id_matriz = " + sucursal.getEmpresa().getId() + ", id_ciudad = "
                     + sucursal.getCiudad().getId() + ", direccion = '" + sucursal.getDireccion() + "', detalle = '"
                     + sucursal.getDetalle() + "'", "id_sucursal = " + sucursal.getId());
         }
@@ -112,13 +112,13 @@ public class SucursalDAO implements IDAO<Sucursal> {
             ResultSet result;
             List<Sucursal> sucursales;
             try {
-                result = conexion.selecionar("sucursal", "id_sucursal, id_empresa, id_ciudad, direccion, detalle", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("sucursal", "id_sucursal, id_matriz, id_ciudad, direccion, detalle", restricciones, OrdenarAgrupar);
                 sucursales = new ArrayList<>();
                 EmpresaDAO edao = new EmpresaDAO();
                 CiudadDAO cdao = new CiudadDAO();
                 while (result.next()) {
                     sucursales.add(new Sucursal(result.getInt("id_sucursal"),
-                            edao.buscarPorId(result.getInt("id_empresa")),
+                            edao.buscarPorId(result.getInt("id_matriz")),
                             cdao.buscarPorId(result.getInt("id_ciudad")),
                             result.getString("direccion"),
                             result.getString("detalle")
