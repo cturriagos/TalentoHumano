@@ -278,7 +278,7 @@ public class RolPagoCrearController implements Serializable {
     }
 
     public void obtenerDatos() {
-        rolPagos.setFechaPago(fechaPago);
+        rolPagos.setFechaGenerado(fechaPago);
         rolPagosDAO.setRolPagos(rolPagos);
         horasLaboradas = rolPagosDAO.obtenerHorasLaboradas();
         horasSuplementarias = rolPagosDAO.obtenerHorasSuplementarias();
